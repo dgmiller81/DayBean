@@ -11,6 +11,7 @@ const Schema = z.object({
   CRON_SECRET: z.string().min(1).optional(),
   DATABASE_URL: z.string().min(1),
   SIMPLE_PASSWORD_HASH: optStr,
+  ADMIN_EMAIL: optStr,
 
   // --- LLM env-var fallback (optional). Used only when the user has no
   //     per-user LlmCredential row. Lets you self-host with a single shared

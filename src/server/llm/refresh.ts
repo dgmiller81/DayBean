@@ -56,6 +56,8 @@ export async function refreshDailyContent(
     name: user?.name ?? null,
     jobTitle: pref?.jobTitle ?? null,
     bio: pref?.bio ?? null,
+    faith: pref?.faith ?? null,
+    scripturePref: pref?.scripturePref ?? null,
     contentInterests: interests,
     recentJournalThemes: journalSignal.themes,
     journalThemeWeights: journalSignal.weights,

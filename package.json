@@ -7,7 +7,7 @@
     "dev": "next dev -p 4111 --turbopack",
     "build": "next build",
     "start": "next start -H 0.0.0.0",
-    "start:railway": "prisma migrate deploy && next start -H 0.0.0.0",
+    "start:railway": "prisma migrate deploy && pnpm db:seed && next start -H 0.0.0.0",
     "lint": "eslint src tests",
     "test": "vitest run",
     "test:watch": "vitest",
@@ -20,6 +20,9 @@
   "author": "",
   "license": "ISC",
   "packageManager": "pnpm@10.25.0",
+  "engines": {
+    "node": ">=20"
+  },
   "dependencies": {
     "@ai-sdk/anthropic": "^3.0.74",
     "@ai-sdk/openai": "^3.0.58",

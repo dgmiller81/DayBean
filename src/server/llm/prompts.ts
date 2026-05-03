@@ -152,6 +152,15 @@ export function buildUserPrompt(ctx: LlmContext): string {
   if (ctx.contentInterests.length) {
     lines.push(`Content interests: ${ctx.contentInterests.join(", ")}.`);
   }
+  if (ctx.faith && ctx.faith !== "none") {
+    const faithLabel =
+      ctx.faith === "christian" && ctx.scripturePref
+        ? `${ctx.faith} (scripture: ${ctx.scripturePref.toUpperCase()})`
+        : ctx.faith;
+    lines.push(`Spiritual practice: ${faithLabel}.`);
+  } else if (ctx.faith === "none") {
+    lines.push(`Spiritual practice: none — keep mindfulness content secular.`);
+  }
 
   if (ctx.recentJournalThemes.length) {
     lines.push("");

@@ -5,13 +5,17 @@ import { BookmarksList } from "./BookmarksList";
 import { DrawerJournal } from "./DrawerJournal";
 import { countOpenTasks } from "@/server/queries/tasks";
 import { getLastDrawerTab } from "@/server/queries/drawer";
-import { getCurrentUserId } from "@/server/auth-context";
+import { getCurrentUserIdOrNull } from "@/server/auth-context";
 import { listJournalEntriesForDay } from "@/server/queries/journal";
 import { listBookmarks } from "@/server/queries/bookmarks";
 import { todayISO } from "@/lib/dates";
 
 export async function DrawerHost() {
-  const userId = await getCurrentUserId();
+  const userId = await getCurrentUserIdOrNull();
+  if (!userId) {
+    // Layout renders for unauthenticated routes (e.g. /login); skip the drawer.
+    return null;
+  }
   const iso = todayISO();
   const [openCount, lastTab, entries, bookmarks] = await Promise.all([
     countOpenTasks(userId),

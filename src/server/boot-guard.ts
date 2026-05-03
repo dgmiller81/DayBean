@@ -40,4 +40,9 @@ export function runBootGuard(): void {
       "AUTH_MODE=simple requires SIMPLE_PASSWORD_HASH — generate with: pnpm exec tsx scripts/hash-password.ts",
     );
   }
+
+  // simple mode is multi-user — admin email identifies the bootstrap admin
+  if (env.AUTH_MODE === "simple" && !env.ADMIN_EMAIL) {
+    throw new Error("AUTH_MODE=simple requires ADMIN_EMAIL");
+  }
 }

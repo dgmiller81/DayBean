@@ -4,10 +4,35 @@ import { DEFAULT_GOALS, compositeGoalId } from "../src/lib/default-goals";
 const db = new PrismaClient();
 
 async function main() {
+  // Bootstrap the admin user from env. AUTH_MODE=simple expects ADMIN_EMAIL +
+  // SIMPLE_PASSWORD_HASH to be set; we promote the existing local-default row
+  // (or create it) so all pre-existing data carries over to the admin.
+  const adminEmail = process.env.ADMIN_EMAIL?.trim().toLowerCase() || null;
+  const adminPasswordHash = process.env.SIMPLE_PASSWORD_HASH?.trim() || null;
+  const isSimpleMode = process.env.AUTH_MODE === "simple";
+
+  const existing = await db.user.findUnique({ where: { id: "local-default" } });
+
+  // Once an admin sets their own password, never clobber it with the env hash.
+  // Only seed passwordHash on initial create or when it's still null.
+  const shouldSeedPassword = isSimpleMode && !existing?.passwordHash && !!adminPasswordHash;
+
   const user = await db.user.upsert({
     where: { id: "local-default" },
-    update: {},
-    create: { id: "local-default", name: "You" },
+    update: isSimpleMode
+      ? {
+          email: adminEmail,
+          isAdmin: true,
+          ...(shouldSeedPassword ? { passwordHash: adminPasswordHash } : {}),
+        }
+      : {},
+    create: {
+      id: "local-default",
+      name: "You",
+      email: isSimpleMode ? adminEmail : null,
+      isAdmin: isSimpleMode,
+      passwordHash: shouldSeedPassword ? adminPasswordHash : null,
+    },
   });
 
   await db.pref.upsert({

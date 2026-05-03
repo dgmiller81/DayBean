@@ -11,7 +11,7 @@ import { PersonalPanel } from "@/components/panels/PersonalPanel";
 import { OverviewPanel } from "@/components/panels/OverviewPanel";
 import { todayISO } from "@/lib/dates";
 import { db } from "@/server/db";
-import { getCurrentUserId } from "@/server/auth-context";
+import { getCurrentUserIdOrNull } from "@/server/auth-context";
 import { getDailyContentWithMeta } from "@/server/queries/daily-content";
 import { getSettings } from "@/server/actions/settings";
 import { hasRefreshedToday } from "@/server/queries/refresh-status";
@@ -64,7 +64,17 @@ export default async function Page({
   const theme: Theme = rawTheme && VALID_THEMES.has(rawTheme as Theme) ? (rawTheme as Theme) : "light";
   const tab = (c.get("mm_tab")?.value as Tab | undefined) ?? "mindfulness";
 
-  const userId = await getCurrentUserId();
+  const userId = await getCurrentUserIdOrNull();
+  if (!userId) {
+    redirect("/login");
+  }
+  const meCheck = await db.user.findUnique({
+    where: { id: userId },
+    select: { onboardedAt: true },
+  });
+  if (!meCheck?.onboardedAt) {
+    redirect("/onboarding");
+  }
   const [user, settings] = await Promise.all([
     db.user.findUnique({ where: { id: userId } }),
     getSettings(),

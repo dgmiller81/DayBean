@@ -6,6 +6,10 @@ export interface LlmContext {
   name: string | null;
   jobTitle: string | null;
   bio: string | null;
+  /** 'none' | 'mindfulness' | 'christian' | 'jewish' | 'muslim' | 'spiritual' | custom. */
+  faith: string | null;
+  /** Set only when faith==='christian'. e.g. 'kjv', 'niv'. */
+  scripturePref: string | null;
   contentInterests: string[];
   /** Theme names sorted by hit count (desc). Empty if no journal hits. */
   recentJournalThemes: string[];

@@ -9,11 +9,28 @@ export function LoginForm() {
   return (
     <form action={formAction} style={{ display: "grid", gap: 12 }}>
       <label style={{ display: "grid", gap: 4 }}>
+        <span style={{ fontSize: 12, color: "var(--ink-soft)" }}>Email</span>
+        <input
+          name="email"
+          type="email"
+          autoFocus
+          autoComplete="username"
+          required
+          style={{
+            padding: "10px 14px",
+            borderRadius: "var(--radius-sm)",
+            border: "1px solid var(--line)",
+            background: "var(--surface-2)",
+            color: "var(--ink)",
+            fontSize: 14,
+          }}
+        />
+      </label>
+      <label style={{ display: "grid", gap: 4 }}>
         <span style={{ fontSize: 12, color: "var(--ink-soft)" }}>Password</span>
         <input
           name="password"
           type="password"
-          autoFocus
           autoComplete="current-password"
           required
           style={{
