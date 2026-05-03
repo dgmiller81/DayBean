@@ -1,0 +1,1573 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Stillpoint × Pulse · for Dallas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#f5f2ec; --bg-grad-1:#f7f3ec; --bg-grad-2:#ebe7df;
+  --surface:rgba(255,255,255,0.74); --surface-solid:#fff; --surface-2:#fafaf6;
+  --ink:#1a1f1c; --ink-soft:#5a655e; --ink-muted:#8a948d;
+  --line:rgba(35,50,42,0.08); --line-strong:rgba(35,50,42,0.16);
+  --sage:#5d7a6c; --sage-deep:#3e5a4d; --sage-soft:#dde6df;
+  --gold:#b08d57; --gold-soft:#e8dec9; --rose:#c97b6e;
+  --accent:#c2410c; --accent-soft:#fef0e6;
+  --paper:#f4ead8; --paper-2:#ede0c4; --paper-ink:#3a2e1c; --paper-line:#c9b48a;
+  --shadow-sm:0 1px 2px rgba(20,30,25,.04),0 2px 8px rgba(20,30,25,.04);
+  --shadow-md:0 2px 4px rgba(20,30,25,.05),0 12px 32px rgba(20,30,25,.06);
+  --radius:18px; --radius-sm:10px;
+}
+[data-theme="dark"] {
+  --bg:#131614; --bg-grad-1:#161a18; --bg-grad-2:#0e110f;
+  --surface:rgba(28,33,30,0.72); --surface-solid:#1c211e; --surface-2:#20251f;
+  --ink:#ece7da; --ink-soft:#a8b1aa; --ink-muted:#6f7872;
+  --line:rgba(236,231,218,0.08); --line-strong:rgba(236,231,218,0.18);
+  --sage:#95b3a2; --sage-deep:#b8d3c3; --sage-soft:rgba(149,179,162,0.15);
+  --gold:#d3b070; --gold-soft:rgba(211,176,112,0.18);
+  --accent:#f97316; --accent-soft:#2d1d10;
+  --paper:#1f1a12; --paper-2:#251f15; --paper-ink:#e8dcbf; --paper-line:#5a4626;
+  --shadow-sm:0 1px 2px rgba(0,0,0,.3),0 2px 8px rgba(0,0,0,.2);
+  --shadow-md:0 2px 4px rgba(0,0,0,.3),0 12px 32px rgba(0,0,0,.25);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+  color:var(--ink); background:var(--bg);
+  -webkit-font-smoothing:antialiased; line-height:1.6; letter-spacing:-.005em;
+}
+body {
+  min-height:100vh;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -10%, var(--sage-soft) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 90% 10%, var(--gold-soft) 0%, transparent 50%),
+    linear-gradient(180deg, var(--bg-grad-1) 0%, var(--bg-grad-2) 100%);
+  background-attachment:fixed;
+}
+.serif { font-family:'Fraunces',serif; letter-spacing:-.015em; }
+a { color: var(--sage-deep); text-decoration: none; }
+a:hover { color: var(--ink); }
+button { font-family: inherit; cursor: pointer; }
+
+/* Icons */
+.ic { width:16px; height:16px; flex-shrink:0; vertical-align:-2px; }
+.ic-sm { width:12px; height:12px; }
+.ic-lg { width:20px; height:20px; }
+
+/* Section dots */
+.sec-dot { display:inline-block; width:8px; height:8px; border-radius:999px; margin-right:8px; vertical-align:1px; flex-shrink:0; }
+.sec-mindfulness { background: var(--sage); }
+.sec-business    { background: var(--accent); }
+.sec-personal    { background: var(--gold); }
+.sec-general     { background: var(--ink-muted); }
+.sec-icon { display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px; border-radius:999px; background:var(--surface-2); flex-shrink:0; }
+.sec-icon.sec-mindfulness { color: var(--sage); }
+.sec-icon.sec-business    { color: var(--accent); }
+.sec-icon.sec-personal    { color: var(--gold); }
+
+.app { max-width:1180px; margin:0 auto; padding:32px 28px 100px; }
+
+/* Topbar */
+.topbar { display:flex; align-items:center; justify-content:space-between; margin-bottom:28px; gap:16px; flex-wrap:wrap; }
+.brand { display:flex; align-items:center; gap:12px; }
+.brand-mark { width:38px; height:38px; border-radius:12px; background:linear-gradient(135deg, var(--sage) 0%, var(--sage-deep) 100%); display:flex; align-items:center; justify-content:center; box-shadow:var(--shadow-sm); color:white; }
+.brand-mark svg { width:18px; height:18px; }
+.brand-name { font-family:'Fraunces',serif; font-weight:500; font-size:1.18rem; letter-spacing:-.02em; }
+.brand-name span { color:var(--ink-muted); font-weight:300; }
+.topbar-tools { display:flex; align-items:center; gap:8px; }
+.icon-btn { width:38px; height:38px; border:1px solid var(--line); background:var(--surface); backdrop-filter:blur(20px); border-radius:12px; display:flex; align-items:center; justify-content:center; color:var(--ink-soft); transition:all .2s; }
+.icon-btn:hover { color:var(--ink); border-color:var(--line-strong); transform:translateY(-1px); }
+.icon-btn svg { width:18px; height:18px; }
+.streak-pill { display:inline-flex; align-items:center; gap:8px; padding:8px 14px; border-radius:999px; background:var(--gold-soft); color:var(--gold); font-weight:600; font-size:.85rem; border:1px solid var(--line); }
+.streak-pill svg { width:14px; height:14px; }
+
+/* Hero */
+.hero { margin-bottom:28px; }
+.greeting { font-size:.85rem; color:var(--ink-muted); text-transform:uppercase; letter-spacing:.18em; margin-bottom:8px; font-weight:500; }
+.hero h1 { font-family:'Fraunces',serif; font-size:clamp(2.2rem,4.5vw,3.4rem); font-weight:400; line-height:1.05; letter-spacing:-.025em; color:var(--ink); }
+.hero h1 em { font-style:italic; color:var(--sage); font-weight:300; }
+.date-sub { color:var(--ink-soft); font-size:.95rem; margin-top:6px; }
+
+/* Tabs */
+.tabs { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:24px; }
+@media (max-width:700px) { .tabs { grid-template-columns:repeat(2,1fr); } }
+.tab-btn { background:var(--surface-solid); border:1px solid var(--line); border-radius:var(--radius); padding:14px 16px; text-align:left; display:flex; align-items:center; gap:12px; transition:all .2s; box-shadow:var(--shadow-sm); color:var(--ink); }
+.tab-btn:hover { border-color:var(--line-strong); transform:translateY(-1px); box-shadow:var(--shadow-md); }
+.tab-btn[aria-selected="true"] { border-color:var(--sage); box-shadow:0 0 0 3px var(--sage-soft), var(--shadow-md); }
+.tab-icon { display:flex; align-items:center; justify-content:center; width:36px; height:36px; flex-shrink:0; color:var(--sage); }
+.tab-btn[aria-selected="true"] .tab-icon { color:var(--sage-deep); }
+.tab-meta { display:flex; flex-direction:column; min-width:0; }
+.tab-meta .eyebrow { font-size:.68rem; text-transform:uppercase; letter-spacing:.14em; color:var(--ink-muted); font-weight:600; }
+.tab-meta .name { font-weight:600; font-size:.98rem; }
+
+.panel { display:none; }
+.panel.active { display:block; animation:fadeUp .45s ease both; }
+@keyframes fadeUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+
+/* Cards */
+.grid-2 { display:grid; grid-template-columns:1.6fr 1fr; gap:22px; }
+.grid-4 { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+@media (max-width:880px) { .grid-2 { grid-template-columns:1fr; } .grid-4 { grid-template-columns:repeat(2,1fr); } }
+.card { background:var(--surface-solid); border:1px solid var(--line); border-radius:var(--radius); padding:24px; box-shadow:var(--shadow-sm); transition:box-shadow .2s; }
+.card:hover { box-shadow:var(--shadow-md); }
+.card-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; gap:12px; }
+.card-eyebrow { font-size:.72rem; font-weight:600; text-transform:uppercase; letter-spacing:.16em; color:var(--gold); }
+.card-title { font-family:'Fraunces',serif; font-size:1.35rem; font-weight:500; letter-spacing:-.02em; margin-top:4px; color:var(--ink); }
+
+/* God hero */
+.god-card { position:relative; overflow:hidden;
+  background: linear-gradient(135deg, rgba(176,141,87,.08) 0%, rgba(93,122,108,.05) 100%), var(--surface-solid);
+  border:1px solid var(--line); border-radius:var(--radius); padding:34px; margin-bottom:22px; }
+.god-card::before { content:''; position:absolute; top:-40px; right:-40px; width:220px; height:220px; background:radial-gradient(circle, var(--gold-soft) 0%, transparent 70%); pointer-events:none; }
+.god-card-inner { position:relative; }
+.god-card .opening { font-family:'Fraunces',serif; font-style:italic; font-weight:300; font-size:1.08rem; color:var(--ink-soft); margin:14px 0 22px; line-height:1.55; }
+.prayer { background:var(--surface-2); border-left:3px solid var(--gold); border-radius:0 var(--radius-sm) var(--radius-sm) 0; padding:20px 24px; margin:20px 0; font-family:'Fraunces',serif; font-size:1rem; line-height:1.7; color:var(--ink); font-style:italic; }
+.carry { display:inline-flex; align-items:center; gap:10px; background:var(--sage-soft); color:var(--sage-deep); padding:12px 18px; border-radius:999px; font-family:'Fraunces',serif; font-size:.95rem; font-style:italic; }
+.carry svg { width:14px; height:14px; flex-shrink:0; }
+
+/* Scripture preview card */
+.scripture-card {
+  position:relative;
+  background:linear-gradient(135deg, var(--paper) 0%, var(--paper-2) 100%);
+  color:var(--paper-ink); border:1px solid var(--paper-line);
+  border-radius:var(--radius); padding:22px 26px; margin-bottom:22px;
+  cursor:pointer; transition:all .2s; box-shadow:var(--shadow-sm);
+  display:flex; align-items:center; gap:22px;
+}
+.scripture-card:hover { transform:translateY(-1px); box-shadow:var(--shadow-md); }
+.scripture-card .scripture-decor { width:42px; height:42px; flex-shrink:0; color:var(--paper-line); }
+.scripture-card .scripture-info { flex:1; min-width:0; }
+.scripture-card .scripture-eyebrow { font-size:.68rem; text-transform:uppercase; letter-spacing:.18em; font-weight:700; opacity:.7; }
+.scripture-card .scripture-ref { font-family:'Fraunces',serif; font-size:1.25rem; font-weight:600; margin-top:2px; }
+.scripture-card .scripture-snippet { font-family:'Fraunces',serif; font-style:italic; font-size:.98rem; opacity:.85; margin-top:6px; }
+.scripture-card .scripture-theme { font-size:.72rem; text-transform:uppercase; letter-spacing:.14em; font-weight:600; opacity:.7; margin-top:8px; }
+.scripture-card .scripture-cta { display:inline-flex; align-items:center; gap:6px; font-size:.85rem; font-weight:600; padding:8px 14px; border-radius:999px; background:rgba(58,46,28,.08); color:var(--paper-ink); flex-shrink:0; }
+[data-theme="dark"] .scripture-card .scripture-cta { background: rgba(232,220,191,.12); }
+
+/* Reflections */
+.reflection { padding:22px 0; border-top:1px solid var(--line); }
+.reflection:first-child { border-top:none; padding-top:4px; }
+.reflection-head { display:flex; align-items:baseline; gap:14px; margin-bottom:10px; }
+.reflection-num { font-family:'Fraunces',serif; font-size:.78rem; font-weight:500; color:var(--gold); letter-spacing:.12em; text-transform:uppercase; flex-shrink:0; }
+.reflection-title { font-family:'Fraunces',serif; font-size:1.18rem; font-weight:500; }
+.reflection-body { color:var(--ink-soft); font-size:.97rem; margin-bottom:14px; }
+.reflection-practice { display:flex; align-items:flex-start; gap:10px; font-size:.92rem; color:var(--sage-deep); background:var(--sage-soft); padding:12px 16px; border-radius:var(--radius-sm); font-style:italic; }
+.reflection-practice svg { width:16px; height:16px; flex-shrink:0; margin-top:3px; }
+
+/* Notes */
+.notes { width:100%; min-height:130px; border:1px solid var(--line); border-radius:var(--radius-sm); padding:16px 18px; font-family:'Fraunces',serif; font-size:1rem; line-height:1.7; color:var(--ink); background:var(--surface-2); resize:vertical; transition:all .2s; }
+.notes:focus { outline:none; border-color:var(--sage); box-shadow:0 0 0 3px var(--sage-soft); }
+.notes::placeholder { color:var(--ink-muted); font-style:italic; }
+.save-status { display:flex; align-items:center; gap:6px; font-size:.78rem; color:var(--sage); margin-top:10px; min-height:18px; font-style:italic; }
+.save-status svg { width:12px; height:12px; }
+
+/* Goals */
+.goal { display:flex; align-items:center; gap:14px; padding:14px 0; border-top:1px solid var(--line); }
+.goal:first-child { border-top:none; }
+.goal-check { width:24px; height:24px; border:2px solid var(--line-strong); border-radius:8px; background:transparent; flex-shrink:0; display:flex; align-items:center; justify-content:center; transition:all .2s cubic-bezier(.34,1.56,.64,1); }
+.goal-check svg { width:14px; height:14px; color:white; opacity:0; transform:scale(.5); transition:all .2s; }
+.goal-check.done { background:var(--sage); border-color:var(--sage); }
+.goal-check.done svg { opacity:1; transform:scale(1); }
+.goal-check:hover { border-color:var(--sage); }
+.goal-name { flex:1; font-size:.96rem; color:var(--ink); }
+.goal-progress { flex-shrink:0; min-width:48px; text-align:right; font-size:.78rem; color:var(--ink-muted); font-variant-numeric:tabular-nums; }
+.goal.is-done .goal-name { color:var(--ink-muted); text-decoration:line-through; text-decoration-color:var(--line-strong); }
+.streak-badge { display:inline-flex; align-items:center; gap:4px; font-size:.78rem; color:var(--gold); background:var(--gold-soft); padding:3px 9px; border-radius:999px; font-weight:500; flex-shrink:0; }
+.streak-badge svg { width:11px; height:11px; }
+.goal-remove { background:none; border:0; color:var(--ink-muted); padding:4px; border-radius:6px; display:flex; opacity:0; transition:opacity .15s; }
+.goal:hover .goal-remove { opacity:1; }
+.goal-remove:hover { color:var(--rose); }
+.goal-remove svg { width:14px; height:14px; }
+.add-goal-row { display:flex; gap:8px; margin-top:18px; padding-top:18px; border-top:1px dashed var(--line-strong); }
+.add-goal-row input { flex:1; padding:10px 14px; border:1px solid var(--line); border-radius:10px; font-family:inherit; font-size:.92rem; background:var(--surface-2); color:var(--ink); }
+.add-goal-row input:focus { outline:none; border-color:var(--sage); box-shadow:0 0 0 3px var(--sage-soft); }
+.add-goal-row button { padding:0 18px; background:var(--sage); color:white; border:0; border-radius:10px; font-size:.88rem; font-weight:500; display:flex; align-items:center; gap:6px; }
+.add-goal-row button:hover { background:var(--sage-deep); }
+.add-goal-row button svg { width:14px; height:14px; }
+
+/* Rings */
+.rings-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; }
+.ring-stat { background:var(--surface-2); border-radius:var(--radius-sm); padding:16px; display:flex; flex-direction:column; align-items:center; text-align:center; border:1px solid var(--line); }
+.ring-svg { width:74px; height:74px; transform:rotate(-90deg); margin-bottom:4px; }
+.ring-svg .ring-bg { fill:none; stroke:var(--line-strong); stroke-width:6; }
+.ring-svg .ring-fg { fill:none; stroke:var(--sage); stroke-width:6; stroke-linecap:round; transition:stroke-dashoffset .6s ease; }
+.ring-svg.gold .ring-fg { stroke:var(--gold); }
+.ring-num { font-family:'Fraunces',serif; font-size:1.5rem; font-weight:500; color:var(--ink); line-height:1; }
+.ring-num small { font-size:.8rem; color:var(--ink-muted); font-weight:400; }
+.ring-label { font-size:.7rem; color:var(--ink-muted); text-transform:uppercase; letter-spacing:.1em; margin-top:6px; font-weight:500; }
+
+/* Heatmap */
+.heatmap { display:grid; grid-template-columns:repeat(20,1fr); gap:4px; margin:14px 0; }
+.heat-cell { aspect-ratio:1; background:var(--line); border-radius:4px; position:relative; transition:transform .15s; }
+.heat-cell:hover { transform:scale(1.3); z-index:5; box-shadow:0 4px 12px rgba(0,0,0,.12); }
+.heat-cell.l1 { background: rgba(93,122,108,.25); }
+.heat-cell.l2 { background: rgba(93,122,108,.45); }
+.heat-cell.l3 { background: rgba(93,122,108,.7); }
+.heat-cell.l4 { background: var(--sage); }
+.heat-cell.is-today { box-shadow: 0 0 0 2px var(--gold); }
+.heat-cell:hover::after { content: attr(data-tooltip); position:absolute; bottom:130%; left:50%; transform:translateX(-50%); background:var(--ink); color:var(--bg); padding:5px 9px; border-radius:6px; font-size:.72rem; white-space:nowrap; pointer-events:none; z-index:10; }
+.heat-legend { display:flex; align-items:center; gap:8px; font-size:.75rem; color:var(--ink-muted); margin-top:8px; justify-content:flex-end; }
+.heat-legend .dots { display:flex; gap:3px; }
+.heat-legend .dots span { width:10px; height:10px; border-radius:3px; }
+
+/* Pulse hero */
+.pulse-hero { background:linear-gradient(135deg, rgba(194,65,12,.06) 0%, rgba(93,122,108,.04) 100%), var(--surface-solid); border:1px solid var(--line); border-radius:var(--radius); padding:26px; margin-bottom:22px; }
+.pulse-hero h2 { font-family:'Fraunces',serif; font-size:1.55rem; font-weight:500; margin-top:4px; }
+.briefing { margin-top:14px; padding:14px 18px; background:var(--accent-soft); border-left:3px solid var(--accent); border-radius:6px; font-size:.92rem; color:var(--ink-soft); }
+.briefing strong { color: var(--accent); }
+
+.top-stories { display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:14px; margin-bottom:18px; }
+@media (max-width:880px) { .top-stories { grid-template-columns:1fr; } }
+.top-card { background:var(--surface-solid); border:1px solid var(--line); border-radius:var(--radius); padding:18px; display:flex; flex-direction:column; gap:8px; transition:all .2s; text-decoration:none; color:inherit; }
+.top-card:hover { border-color:var(--line-strong); transform:translateY(-2px); box-shadow:var(--shadow-md); color:inherit; }
+.top-card.lead { background:linear-gradient(180deg, var(--surface-solid), var(--surface-2)); border-color:var(--gold-soft); }
+.top-card .top-eyebrow { font-size:.7rem; text-transform:uppercase; letter-spacing:.14em; color:var(--accent); font-weight:700; }
+.top-card h3 { font-family:'Fraunces',serif; font-size:1.08rem; font-weight:600; line-height:1.3; }
+.top-card.lead h3 { font-size:1.22rem; }
+.top-card p { font-size:.9rem; color:var(--ink-soft); line-height:1.55; }
+.top-card .src { font-size:.78rem; color:var(--ink-muted); margin-top:auto; }
+
+.scan-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:6px 22px; padding:0; list-style:none; counter-reset:scan; }
+@media (max-width:700px) { .scan-grid { grid-template-columns:1fr; } }
+.scan-grid li { counter-increment:scan; padding:8px 0 8px 30px; position:relative; border-bottom:1px dashed var(--line); font-size:.92rem; color:var(--ink-soft); }
+.scan-grid li:before { content:counter(scan, decimal-leading-zero); position:absolute; left:0; top:9px; font-variant-numeric:tabular-nums; font-size:.72rem; color:var(--accent); font-weight:700; }
+
+.cards-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:14px; }
+.article-card { border:1px solid var(--line); background:var(--surface-2); border-radius:var(--radius-sm); padding:16px; display:flex; flex-direction:column; gap:8px; transition:all .2s; text-decoration:none; color:inherit; }
+.article-card:hover { border-color:var(--sage); transform:translateY(-1px); box-shadow:var(--shadow-sm); color:inherit; }
+.article-card .card-head { display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+.article-card h3 { font-size:.95rem; font-weight:600; line-height:1.35; color:var(--ink); }
+.article-card p { font-size:.88rem; color:var(--ink-soft); line-height:1.55; }
+.article-card .src { margin-top:auto; font-size:.78rem; color:var(--ink-muted); }
+
+/* Badges */
+.badge { display:inline-block; padding:2px 8px; border-radius:999px; font-size:.66rem; font-weight:700; letter-spacing:.05em; text-transform:uppercase; border:1px solid transparent; white-space:nowrap; }
+.b-product   { background:#eef2ff; color:#3a40a3; border-color:#d7defb; }
+.b-model     { background:#f1ecf8; color:#5e3aa3; border-color:#ddd2ee; }
+.b-open      { background:#ecf6ee; color:#2c6c3b; border-color:#cfe6d3; }
+.b-research  { background:#e8f0fc; color:#1a4f9a; border-color:#cddff5; }
+.b-security  { background:#fdebec; color:#a32424; border-color:#f4ced0; }
+.badge.tag { background:transparent; color:var(--ink-muted); border-color:var(--line); }
+[data-theme="dark"] .b-product   { background:#1c1f3d; color:#b6c1ff; border-color:#2e3565; }
+[data-theme="dark"] .b-model     { background:#261c3a; color:#c8b3ec; border-color:#3d2f55; }
+[data-theme="dark"] .b-open      { background:#14271a; color:#8fd9a0; border-color:#235a30; }
+[data-theme="dark"] .b-research  { background:#16223a; color:#92b6f0; border-color:#2a3c5e; }
+[data-theme="dark"] .b-security  { background:#2e1517; color:#f49aa1; border-color:#5a262c; }
+
+.quote-card { background:var(--surface-2); border-left:3px solid var(--gold); border-radius:0 var(--radius-sm) var(--radius-sm) 0; padding:14px 18px; display:flex; flex-direction:column; gap:6px; border-top:1px solid var(--line); border-right:1px solid var(--line); border-bottom:1px solid var(--line); text-decoration:none; color:inherit; }
+.quote-text { font-family:'Fraunces',serif; font-size:.98rem; color:var(--ink); font-style:italic; line-height:1.5; }
+.quote-meta { font-size:.78rem; color:var(--ink-muted); }
+
+.repo { display:flex; gap:12px; padding:12px 0; border-top:1px solid var(--line); text-decoration:none; color:inherit; }
+.repo:first-child { border-top:none; padding-top:0; }
+.repo-name { font-family:'Fraunces',serif; font-weight:600; font-size:1rem; }
+.repo-name .org { color:var(--ink-muted); font-weight:400; }
+.repo-meta { font-size:.78rem; color:var(--ink-muted); margin-top:3px; display:flex; gap:10px; flex-wrap:wrap; }
+.repo-meta strong { color:var(--gold); font-weight:600; }
+.repo-pitch { font-size:.88rem; color:var(--ink-soft); margin-top:4px; line-height:1.5; }
+
+/* Personal */
+.stat-card { background:var(--surface-solid); border:1px solid var(--line); border-radius:var(--radius); padding:18px; box-shadow:var(--shadow-sm); }
+.stat-card .lbl { font-size:.7rem; color:var(--ink-muted); text-transform:uppercase; letter-spacing:.12em; font-weight:600; }
+.stat-card h3 { font-family:'Fraunces',serif; font-size:1.05rem; font-weight:500; margin-top:4px; }
+.health-toggles { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:14px; }
+.health-toggle { padding:12px 6px; border-radius:var(--radius-sm); background:var(--surface-2); border:1px solid var(--line); text-align:center; transition:all .15s; display:flex; flex-direction:column; gap:4px; align-items:center; color:var(--ink-muted); }
+.health-toggle:hover { border-color:var(--sage); }
+.health-toggle.on { background:var(--sage-soft); border-color:var(--sage); color:var(--sage-deep); }
+.health-toggle .lbl { font-size:.68rem; }
+.fin-inputs { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:14px; }
+.fin-inputs label { font-size:.68rem; color:var(--ink-muted); text-transform:uppercase; letter-spacing:.1em; }
+.fin-inputs input { margin-top:4px; width:100%; padding:8px 10px; border:1px solid var(--line); border-radius:8px; background:var(--surface-2); color:var(--ink); font-family:inherit; font-size:.92rem; font-variant-numeric:tabular-nums; }
+.fin-inputs input:focus { outline:none; border-color:var(--sage); }
+.disc-mins { font-family:'Fraunces',serif; font-size:1.7rem; font-weight:500; color:var(--ink); }
+.disc-mins span { font-size:.8rem; color:var(--ink-muted); margin-left:6px; font-family:'Inter',sans-serif; font-weight:400; }
+.disc-buttons { display:flex; gap:6px; flex-wrap:wrap; margin-top:10px; }
+.disc-btn { padding:6px 14px; border-radius:999px; background:var(--sage-soft); color:var(--sage-deep); border:1px solid var(--line); font-size:.8rem; font-weight:600; transition:all .15s; }
+.disc-btn:hover { background:var(--sage); color:white; border-color:var(--sage); }
+.disc-btn.minus { background:var(--surface-2); color:var(--ink-muted); }
+.win-area { margin-top:14px; width:100%; min-height:80px; border:1px solid var(--line); border-radius:var(--radius-sm); padding:12px; resize:vertical; font-family:'Fraunces',serif; font-size:.95rem; font-style:italic; color:var(--ink); background:var(--surface-2); }
+.win-area:focus { outline:none; border-color:var(--sage); }
+
+/* Goals overview */
+.section-pct { display:flex; align-items:center; gap:14px; padding:14px 0; border-top:1px solid var(--line); }
+.section-pct:first-child { border-top:none; }
+.section-pct .name { flex:1; font-weight:500; }
+.section-pct .num { font-family:'Fraunces',serif; font-weight:500; min-width:54px; text-align:right; }
+.bar-track { height:8px; background:var(--line); border-radius:999px; overflow:hidden; flex:2; }
+.bar-fill { height:100%; background:linear-gradient(90deg, var(--sage), var(--gold)); border-radius:999px; transition:width .6s ease; }
+.filter-row { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:14px; }
+.filter-btn { padding:5px 12px; border-radius:999px; background:var(--surface-2); border:1px solid var(--line); font-size:.78rem; color:var(--ink-soft); transition:all .15s; display:inline-flex; align-items:center; }
+.filter-btn:hover { color:var(--ink); border-color:var(--line-strong); }
+.filter-btn.active { background:var(--sage); color:white; border-color:var(--sage); }
+
+/* Closing */
+.closing { text-align:center; margin:60px auto 0; max-width:580px; padding:0 20px; }
+.closing-divider { width:32px; height:1px; background:var(--gold); margin:0 auto 18px; }
+.closing-text { font-family:'Fraunces',serif; font-style:italic; font-weight:300; font-size:1.05rem; color:var(--ink-soft); line-height:1.8; }
+
+/* FAB + Drawer */
+.fab { position:fixed; bottom:22px; right:22px; z-index:30; background:var(--sage); color:white; border:0; border-radius:999px; padding:14px 22px; font-weight:600; font-size:.92rem; display:flex; align-items:center; gap:8px; box-shadow:var(--shadow-md); transition:all .15s; }
+.fab:hover { background:var(--sage-deep); transform:translateY(-1px); }
+.fab .badge-count { background:rgba(255,255,255,.22); padding:2px 8px; border-radius:999px; font-size:.72rem; margin-left:4px; display:none; }
+.fab .badge-count.show { display:inline-block; }
+.scrim { position:fixed; inset:0; z-index:40; background:rgba(0,0,0,.4); display:none; }
+.scrim.show { display:block; }
+.drawer { position:fixed; left:0; right:0; bottom:0; z-index:50; transform:translateY(100%); transition:transform .35s cubic-bezier(.2,.8,.2,1); }
+.drawer.open { transform:translateY(0); }
+.drawer-inner { margin:0 auto; max-width:760px; background:var(--surface-solid); border:1px solid var(--line); border-radius:24px 24px 0 0; box-shadow:0 -10px 40px rgba(0,0,0,.15); padding:18px 20px 26px; }
+.drawer-handle { width:44px; height:4px; border-radius:999px; background:var(--line-strong); margin:0 auto 14px; }
+.drawer-tabs { display:inline-flex; gap:4px; padding:4px; background:var(--surface-2); border:1px solid var(--line); border-radius:999px; }
+.drawer-tab { background:transparent; border:0; padding:6px 16px; border-radius:999px; font-size:.85rem; font-weight:600; color:var(--ink-muted); transition:all .15s; }
+.drawer-tab[aria-selected="true"] { background:var(--surface-solid); color:var(--ink); box-shadow:var(--shadow-sm); }
+.drawer-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
+.drawer-close { background:transparent; border:0; font-size:.85rem; color:var(--ink-muted); }
+.drawer-close:hover { color:var(--ink); }
+.task-form { display:flex; gap:8px; }
+.task-form input { flex:1; padding:11px 14px; border:1px solid var(--line); border-radius:12px; background:var(--surface-2); color:var(--ink); font-family:inherit; font-size:.92rem; }
+.task-form input:focus { outline:none; border-color:var(--sage); box-shadow:0 0 0 3px var(--sage-soft); }
+.task-form select { padding:0 14px; border:1px solid var(--line); border-radius:12px; background:var(--surface-2); color:var(--ink); font-family:inherit; font-size:.88rem; }
+.task-form button { padding:0 20px; background:var(--sage); color:white; border:0; border-radius:12px; font-weight:600; font-size:.88rem; }
+.task-form button:hover { background:var(--sage-deep); }
+.drawer-list { margin-top:14px; max-height:50vh; overflow-y:auto; padding-right:4px; }
+.task-item { display:flex; align-items:center; gap:12px; padding:10px 12px; margin-bottom:6px; background:var(--surface-2); border:1px solid var(--line); border-radius:var(--radius-sm); }
+.task-name { flex:1; font-size:.92rem; }
+.task-name.done { color:var(--ink-muted); text-decoration:line-through; }
+.task-section-tag { font-size:.68rem; color:var(--ink-muted); text-transform:uppercase; letter-spacing:.1em; padding:2px 8px; background:var(--surface-solid); border-radius:999px; border:1px solid var(--line); }
+.task-delete { background:none; border:0; color:var(--ink-muted); padding:4px; }
+.task-delete:hover { color:var(--rose); }
+.empty-state { text-align:center; padding:30px 16px; color:var(--ink-muted); font-style:italic; font-size:.92rem; }
+
+/* Bible modal */
+.bible-scrim { position:fixed; inset:0; z-index:60; background:rgba(20,15,5,.78); backdrop-filter: blur(3px); display:none; }
+.bible-scrim.show { display:block; animation:fadeIn .2s ease; }
+@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+.bible-modal { position:fixed; inset:0; z-index:61; display:none; align-items:center; justify-content:center; padding:20px; }
+.bible-modal.show { display:flex; animation:fadeIn .25s ease; }
+.bible-page {
+  width:100%; max-width:1100px; max-height:90vh;
+  background:
+    radial-gradient(circle at 30% 20%, rgba(58,46,28,.05) 0%, transparent 60%),
+    radial-gradient(circle at 70% 80%, rgba(58,46,28,.05) 0%, transparent 60%),
+    linear-gradient(135deg, var(--paper) 0%, var(--paper-2) 100%);
+  color:var(--paper-ink);
+  border:1px solid var(--paper-line);
+  border-radius:8px; overflow:hidden;
+  box-shadow:0 40px 100px rgba(0,0,0,.65), 0 0 0 1px rgba(58,46,28,.18);
+  display:flex; flex-direction:column;
+}
+.bible-page-head {
+  padding:18px 28px; border-bottom:1px solid var(--paper-line);
+  display:flex; align-items:center; justify-content:space-between; gap:14px;
+  background:linear-gradient(180deg, rgba(58,46,28,.04), transparent);
+}
+.bible-page-head .lbl { font-size:.68rem; text-transform:uppercase; letter-spacing:.18em; opacity:.85; font-weight:700; }
+.bible-page-head h2 { font-family:'Fraunces',serif; font-size:1.5rem; font-weight:600; margin-top:2px; }
+.bible-page-head .theme-pill { display:inline-block; font-size:.7rem; text-transform:uppercase; letter-spacing:.16em; font-weight:700; background:rgba(58,46,28,.14); padding:4px 10px; border-radius:999px; }
+[data-theme="dark"] .bible-page-head .theme-pill { background:rgba(232,220,191,.15); }
+.bible-close { background:transparent; border:0; color:var(--paper-ink); font-size:1.2rem; padding:6px 10px; border-radius:8px; }
+.bible-close:hover { background:rgba(58,46,28,.08); }
+
+.bible-cols { flex:1; display:grid; grid-template-columns:1fr 1fr; overflow:hidden; }
+@media (max-width:760px) { .bible-cols { grid-template-columns:1fr; } }
+.bible-col { padding:24px 28px; overflow-y:auto; }
+.bible-col + .bible-col { border-left:1px solid var(--paper-line); }
+@media (max-width:760px) { .bible-col + .bible-col { border-left:0; border-top:1px solid var(--paper-line); } }
+.bible-col h3 { font-family:'Fraunces',serif; font-size:.78rem; font-weight:700; text-transform:uppercase; letter-spacing:.18em; opacity:.85; margin-bottom:14px; }
+
+.passage { font-family:'Fraunces',serif; font-size:1.05rem; line-height:1.85; color:var(--paper-ink); }
+.passage .verse { display:block; margin-bottom:6px; padding-left:1.6em; text-indent:-1.6em; }
+.passage .verse-num { font-size:.7em; font-weight:700; vertical-align:super; margin-right:.5em; opacity:.85; font-family:'Inter',sans-serif; color:var(--gold); }
+
+.commentary { display:flex; flex-direction:column; gap:18px; }
+.commentary-block h4 { font-family:'Fraunces',serif; font-size:1rem; font-weight:600; margin-bottom:6px; }
+.commentary-block p { font-size:.92rem; line-height:1.65; }
+
+.bible-page-foot { padding:14px 28px; border-top:1px solid var(--paper-line); display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; font-size:.82rem; }
+.bible-page-foot a { color:var(--paper-ink); border-bottom:1px dashed var(--paper-line); }
+
+/* Toast */
+.toast { position:fixed; bottom:90px; right:22px; z-index:70; background:var(--ink); color:var(--bg); padding:10px 16px; border-radius:10px; font-size:.88rem; box-shadow:var(--shadow-md); opacity:0; transition:opacity .2s; pointer-events:none; }
+.toast.show { opacity:1; }
+
+::-webkit-scrollbar { width:8px; height:8px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:var(--line-strong); border-radius:4px; }
+::-webkit-scrollbar-thumb:hover { background:var(--ink-muted); }
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     DAILY_CONTENT — Updated daily.
+     Ask Claude: "Refresh today's content for my dashboard"
+     ============================================================ -->
+<script id="daily-content-data" type="application/json">
+{
+  "date": "2026-05-01",
+  "subhead": "A new month. A clean page.",
+  "god": {
+    "opening": "Before anything else today — before any list or plan or affirmation — return to the One who holds it all. He is the source. He is the foundation. He is the Savior who walks with you through every part of this day.",
+    "prayer": "Lord, thank you for this day and the breath in my lungs. Thank you for my children, my family, my friends, and the work you've placed in my hands. Make me an instrument of your love today. Where I am proud, humble me. Where I am anxious, steady me. Where I am self-focused, turn my eyes outward. Let everything I do today be a small offering back to you. Amen.",
+    "carry": "He goes before me. He walks beside me. He is my Savior."
+  },
+  "mindfulness": {
+    "articles": [
+      { "title": "The Underrated Power of a 10-Minute Morning Sit", "source": "Mindful.org", "url": "https://www.mindful.org/", "summary": "Why short, consistent practice beats marathon sessions — and a simple framework to keep returning." },
+      { "title": "How Reflection Compounds: A Journaling Practice for Builders", "source": "Farnam Street", "url": "https://fs.blog/", "summary": "A weekly review template that turns scattered thoughts into clarity over months." },
+      { "title": "Awe as Medicine: Brief Awe Experiences and Anxiety", "source": "Greater Good", "url": "https://greatergood.berkeley.edu/", "summary": "Brief experiences of awe measurably reduce stress markers — and you don't need a mountain to find them." }
+    ]
+  },
+  "business": {
+    "headline": "Open weights are loud, the dev base is split, and the supply chain just got hit.",
+    "briefing": "<strong>Today's thread.</strong> The dev community is loud and the open-source camp is on fire. DeepSeek V4 (MIT, 1M context) lands and r/LocalLLaMA has eval threads up within 24 hours. Hermes Agent crosses 110K stars in 10 weeks behind self-evolving skills. Cursor 3 splits the dev base over 'manage agents vs. write code.' Frontier capability keeps compounding. On the risk side, the PyTorch Lightning PyPI compromise is the highest-blast-radius supply-chain hit on the AI training stack this year.",
+    "topStories": [
+      { "kind":"lead", "eyebrow":"Story of the day", "badges":[["b-product","Product"],["tag","Microsoft"]], "title":"Microsoft Agent 365 hits general availability", "body":"The enterprise control plane for AI agents launches today inside the new M365 E7 SKU, with registry sync into AWS Bedrock and Google Cloud agents.", "url":"https://www.microsoft.com/en-us/security/blog/2026/05/01/microsoft-agent-365-now-generally-available-expands-capabilities-and-integrations/", "src":"microsoft.com" },
+      { "kind":"", "eyebrow":"Open-source story", "badges":[["b-open","Open"],["tag","DeepSeek"]], "title":"DeepSeek V4 lands as MIT open weights with 1M context", "body":"V4-Pro (1.6T/49B active) and V4-Flash (284B/13B active) — both 1M tokens, MIT license. Benchmarks hit 25–35 tok/s on V4-Flash via MLX.", "url":"https://api-docs.deepseek.com/news/news260424", "src":"api-docs.deepseek.com" },
+      { "kind":"", "eyebrow":"Risk story", "badges":[["b-security","Security"],["tag","PyPI"]], "title":"PyTorch Lightning compromised on PyPI", "body":"Versions 2.6.2/2.6.3 published April 30 silently steal SSH keys and cloud credentials on import. Highest-blast-radius PyPI incident of the year.", "url":"https://thehackernews.com/2026/04/pytorch-lightning-compromised-in-pypi.html", "src":"thehackernews.com" }
+    ],
+    "scan": [
+      "Microsoft Agent 365 GA — enterprise control plane for AI agents.",
+      "DeepSeek V4-Pro/Flash drop as MIT open weights with 1M context.",
+      "Hermes Agent crosses 110K GitHub stars in 10 weeks.",
+      "Claude Opus 4.7 takes #1 on SWE-bench Verified at 87.6%.",
+      "OpenAI ships GPT-5.5 nine days later — capability arms race in real time.",
+      "Cursor 3 'Agents Window' splits the dev base over manage-vs-write.",
+      "PyTorch Lightning PyPI supply-chain attack — credential theft on import.",
+      "Anthropic Mythos found 2,000+ unknown vulnerabilities; NSA reportedly testing."
+    ],
+    "articles": [
+      { "badges":[["b-model","Model"],["tag","Anthropic"]], "title":"Claude Opus 4.7 — leads SWE-bench Verified at 87.6%", "summary":"Step-up over 4.6 on hard SE tasks, sharper instruction-following, higher-resolution vision input.", "url":"https://www.anthropic.com/news/claude-opus-4-7", "src":"anthropic.com" },
+      { "badges":[["b-model","Model"],["tag","OpenAI"]], "title":"GPT-5.5 ships with major agentic-coding gains", "summary":"Big jumps in agentic coding, computer use, and long-horizon research. Engineers report nearly-complete 12-diff stacks for re-architecture asks.", "url":"https://openai.com/index/introducing-gpt-5-5/", "src":"openai.com" },
+      { "badges":[["b-product","Dev Tool"],["tag","Cursor"]], "title":"Cursor 3 — an Agents Window for parallel coding agents", "summary":"Anysphere's rebuild reframes the IDE around managing many local + cloud agents at once.", "url":"https://cursor.com/blog/cursor-3", "src":"cursor.com" },
+      { "badges":[["b-research","Architecture"],["tag","DeepSeek"]], "title":"CSA + HCA hybrid attention — 1M context for 27% inference FLOPs", "summary":"DeepSeek V4 details Compressed Sparse + Heavily Compressed Attention. 27% of single-token FLOPs vs V3.2.", "url":"https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro/blob/main/DeepSeek_V4.pdf", "src":"huggingface.co" }
+    ],
+    "quotes": [
+      { "text":"Cursor 3 is not an IDE update. It's a bet that you'll manage agents, not write code.", "source":"Han Heloir Yan, PhD", "target":"Medium analysis", "url":"https://medium.com/@han.heloir/cursor-3-is-not-an-ide-update-its-a-bet-that-you-ll-manage-agents-not-write-code-0d2bc51f0dcb" },
+      { "text":"I asked GPT-5.5 to re-architect a comment system end-to-end. It came back with a nearly-complete 12-diff stack.", "source":"Senior engineer", "target":"GPT-5.5 dev test", "url":"https://www.mindstudio.ai/blog/gpt-55-vs-claude-opus-47-coding-comparison" }
+    ],
+    "repos": [
+      { "name":"OpenClaw", "org":"openclaw", "stars":"347K", "weekly":"+12K/day peak", "license":"MIT", "lang":"Python/TS", "pitch":"Self-extending desktop AI agent — browses, runs shell, writes its own new skills.", "url":"https://www.clawbot.blog/blog/openclaw-the-rise-of-an-open-source-ai-agent-framework-april-2026-update/" },
+      { "name":"hermes-agent", "org":"NousResearch", "stars":"110K", "weekly":"+32.5K (week of Apr 13)", "license":"Apache-2.0", "lang":"Python", "pitch":"Closed-loop self-evolution — extracts skills, refines via DSPy + GEPA.", "url":"https://github.com/nousresearch/hermes-agent" },
+      { "name":"skills", "org":"karpathy", "stars":"+44K (week)", "weekly":"Top trending Apr 22", "license":"MIT", "lang":"Python", "pitch":"Triggered the Skills framework ecosystem — drop-in skill packs.", "url":"https://www.shareuhack.com/en/posts/github-trending-weekly-2026-04-22" }
+    ],
+    "watchlist": [
+      "MCP server marketplaces — interop maturity",
+      "Long-context evals beyond needle-in-haystack",
+      "On-device frontier models (memory + latency tradeoffs)",
+      "AI Act applicability date (Aug 2, 2026)"
+    ]
+  },
+  "personal": {
+    "headline": "Small, repeated wins beat dramatic, sporadic ones.",
+    "motivation": { "text": "Discipline is choosing between what you want now and what you want most.", "author": "Abraham Lincoln (attributed)" },
+    "articles": [
+      { "title":"The 1% Rule: Why Tiny Daily Disciplines Compound", "source":"James Clear", "url":"https://jamesclear.com/", "summary":"The math behind atomic habits, and three friction-reducing tweaks to your morning routine." },
+      { "title":"Sleep, Recovery, and the CEO Brain", "source":"Huberman Lab", "url":"https://www.hubermanlab.com/", "summary":"Why founders systematically underestimate sleep debt — and a simple recovery audit." },
+      { "title":"Designing a Tech-Free Hour That Actually Sticks", "source":"Calm Newsletter", "url":"https://www.calm.com/blog", "summary":"A 4-step protocol to make a daily disconnect period feel like reward, not restriction." }
+    ]
+  }
+}
+</script>
+
+<div class="app">
+
+  <!-- Topbar -->
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M2 12h20"/></svg></div>
+      <div class="brand-name">Stillpoint × Pulse <span>· for Dallas</span></div>
+    </div>
+    <div class="topbar-tools">
+      <div class="streak-pill" title="Daily streak">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67zM11.71 19c-1.78 0-3.22-1.4-3.22-3.14 0-1.62 1.05-2.76 2.81-3.12 1.77-.36 3.6-1.21 4.62-2.58.39 1.29.59 2.65.59 4.04 0 2.65-2.15 4.8-4.8 4.8z"/></svg>
+        <span><span id="streakCount">0</span>-day streak</span>
+      </div>
+      <button class="icon-btn" id="theme-toggle" title="Toggle theme">
+        <svg id="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="greeting" id="greeting">Good morning</div>
+    <h1 id="hero-date">—<br><em>—</em></h1>
+    <div class="date-sub" id="hero-sub">—</div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs" role="tablist">
+    <button class="tab-btn" role="tab" aria-selected="true"  data-tab="mindfulness">
+      <span class="tab-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12c4 0 6 3 9 3s5-3 9-3M12 3v18"/></svg></span>
+      <span class="tab-meta"><span class="eyebrow">Section 1</span><span class="name">Mindfulness</span></span>
+    </button>
+    <button class="tab-btn" role="tab" aria-selected="false" data-tab="business">
+      <span class="tab-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>
+      <span class="tab-meta"><span class="eyebrow">Section 2</span><span class="name">Business / AI</span></span>
+    </button>
+    <button class="tab-btn" role="tab" aria-selected="false" data-tab="personal">
+      <span class="tab-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.5 19 2c1 2 2 4.2 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6"/></svg></span>
+      <span class="tab-meta"><span class="eyebrow">Section 3</span><span class="name">Personal</span></span>
+    </button>
+    <button class="tab-btn" role="tab" aria-selected="false" data-tab="goals">
+      <span class="tab-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></span>
+      <span class="tab-meta"><span class="eyebrow">Section 4</span><span class="name">Goals Overview</span></span>
+    </button>
+  </div>
+
+  <!-- ===================== MINDFULNESS ===================== -->
+  <div id="panel-mindfulness" class="panel active">
+
+    <div class="god-card">
+      <div class="god-card-inner">
+        <div class="card-eyebrow">Begin here</div>
+        <div class="card-title" style="margin-top:2px;">Daily God, My Savior</div>
+        <p class="opening" id="god-opening">—</p>
+        <div class="prayer" id="god-prayer">—</div>
+        <div class="carry">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span id="god-carry">—</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Daily Scripture (KJV) — opens Bible modal -->
+    <div class="scripture-card" id="scriptureCard" role="button" tabindex="0">
+      <svg class="scripture-decor" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2zM22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7z"/></svg>
+      <div class="scripture-info">
+        <div class="scripture-eyebrow">Daily scripture · KJV</div>
+        <div class="scripture-ref" id="scriptureRef">—</div>
+        <div class="scripture-snippet" id="scriptureSnippet">—</div>
+        <div class="scripture-theme" id="scriptureTheme">—</div>
+      </div>
+      <div class="scripture-cta">
+        Open
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div>
+        <div class="card" style="margin-bottom:22px;">
+          <div class="card-header"><div><div class="card-eyebrow">Today's reflections</div><div class="card-title">A few thoughts to carry</div></div></div>
+          <div id="reflections"></div>
+        </div>
+
+        <div class="card" style="margin-bottom:22px;">
+          <div class="card-header">
+            <div><div class="card-eyebrow">Today's reading</div><div class="card-title">Three small windows</div></div>
+            <span style="font-size:.78rem; color:var(--ink-muted);">Click an article to count it toward goals</span>
+          </div>
+          <div id="mfArticles" class="cards-grid"></div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><div><div class="card-eyebrow">Journal</div><div class="card-title">My reflection for the day</div></div></div>
+          <textarea class="notes" id="daily-notes" placeholder="One thing I'm grateful for, one thing I noticed, one thing to do better tomorrow… Mention themes like 'humility' or 'contentment' to bias future scriptures."></textarea>
+          <div class="save-status" id="save-status"></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="card" style="margin-bottom:22px;">
+          <div class="card-header"><div><div class="card-eyebrow">Daily intentions</div><div class="card-title">Mindfulness goals</div></div></div>
+          <div id="mfGoals"></div>
+          <div class="add-goal-row">
+            <input type="text" id="mfGoalInput" placeholder="Add an intention…" maxlength="80">
+            <button data-add-goal="mindfulness"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><div><div class="card-eyebrow">Practice</div><div class="card-title">Breathe</div></div></div>
+          <p style="color:var(--ink-soft); font-size:.92rem; margin-bottom:14px;">4 in, 7 hold, 8 out. One round at a stoplight resets your day.</p>
+          <button id="breathBtn" style="background:var(--sage); color:white; border:0; border-radius:999px; padding:10px 20px; font-weight:600; font-size:.88rem; display:inline-flex; align-items:center; gap:8px;">
+            <svg id="breathIcon" class="ic" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"/></svg>
+            <span id="breathLabel">Start 4-7-8</span>
+          </button>
+          <div id="breathStage" style="display:none; margin-top:14px; padding:18px; border-radius:var(--radius-sm); background:var(--surface-2); text-align:center;">
+            <div style="font-size:.7rem; color:var(--ink-muted); text-transform:uppercase; letter-spacing:.14em;" id="breathPhase">Inhale</div>
+            <div class="serif" style="font-size:2.6rem; margin-top:6px; font-variant-numeric:tabular-nums;" id="breathCount">4</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== BUSINESS ===================== -->
+  <div id="panel-business" class="panel">
+    <div class="pulse-hero">
+      <div class="card-eyebrow" style="color:var(--accent);">Edge of the day</div>
+      <h2 id="bizHeadline">—</h2>
+      <div class="briefing" id="briefing">—</div>
+    </div>
+    <div class="top-stories" id="topStories"></div>
+
+    <div class="card" style="margin-bottom:22px;">
+      <div class="card-header"><div><div class="card-eyebrow">Quick scan</div><div class="card-title">Today, in 8 lines</div></div></div>
+      <ol class="scan-grid" id="quickScan"></ol>
+    </div>
+
+    <div class="grid-2">
+      <div>
+        <div class="card" style="margin-bottom:22px;">
+          <div class="card-header"><div><div class="card-eyebrow">AI / Engineering reading</div><div class="card-title">Curated picks</div></div></div>
+          <div id="bizArticles" class="cards-grid"></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div><div class="card-eyebrow">GitHub buzz</div><div class="card-title">What devs are starring</div></div></div>
+          <div id="repos"></div>
+        </div>
+      </div>
+      <div>
+        <div class="card" style="margin-bottom:22px;">
+          <div class="card-header"><div><div class="card-eyebrow">Voice of the devs</div><div class="card-title">What people are saying</div></div></div>
+          <div id="quotes" style="display:flex; flex-direction:column; gap:10px;"></div>
+        </div>
+        <div class="card" style="margin-bottom:22px;">
+          <div class="card-header"><div><div class="card-eyebrow">R&amp;D watchlist</div><div class="card-title">Things to watch</div></div></div>
+          <ul id="watchlist" style="list-style:none; display:flex; flex-direction:column; gap:8px;"></ul>
+        </div>
+        <div class="card">
+          <div class="card-header"><div><div class="card-eyebrow">Business goals</div><div class="card-title">Today's intentions</div></div></div>
+          <div id="bizGoals"></div>
+          <div class="add-goal-row">
+            <input type="text" id="bizGoalInput" placeholder="Add a business goal…" maxlength="80">
+            <button data-add-goal="business"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== PERSONAL ===================== -->
+  <div id="panel-personal" class="panel">
+    <div class="pulse-hero" style="background:linear-gradient(135deg, rgba(93,122,108,.08) 0%, rgba(176,141,87,.05) 100%), var(--surface-solid);">
+      <div class="card-eyebrow" style="color:var(--sage);">Today's lift</div>
+      <h2 id="perHeadline">—</h2>
+      <p style="margin-top:14px; font-style:italic; color:var(--ink-soft);" id="perMotivation">—</p>
+    </div>
+
+    <div class="grid-4" style="margin-bottom:22px;">
+      <div class="stat-card">
+        <div class="lbl">Financial</div><h3>YNAB · USBank · IBKR</h3>
+        <p style="font-size:.78rem; color:var(--ink-muted); margin-top:6px;">Manual until connectors are wired.</p>
+        <div class="fin-inputs">
+          <label>Net <input type="text" data-fin="net" placeholder="$—"></label>
+          <label>Cash <input type="text" data-fin="cash" placeholder="$—"></label>
+          <label>Invest <input type="text" data-fin="invest" placeholder="$—"></label>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="lbl">Health</div><h3>Sleep · Move · Eat</h3>
+        <div class="health-toggles">
+          <button class="health-toggle" data-health="slept"><span data-health-icon="slept"></span><span class="lbl">Slept 7h+</span></button>
+          <button class="health-toggle" data-health="moved"><span data-health-icon="moved"></span><span class="lbl">Moved 30m</span></button>
+          <button class="health-toggle" data-health="ate"><span data-health-icon="ate"></span><span class="lbl">Ate well</span></button>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="lbl">Disconnect</div><h3>Phone-down minutes</h3>
+        <div style="margin-top:14px;">
+          <div class="disc-mins"><span id="discMins">0</span><span>min today</span></div>
+          <div class="disc-buttons">
+            <button class="disc-btn" data-disc="15">+15</button>
+            <button class="disc-btn" data-disc="30">+30</button>
+            <button class="disc-btn" data-disc="60">+60</button>
+            <button class="disc-btn minus" data-disc="-15">−15</button>
+          </div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="lbl">Success</div><h3>Win of the day</h3>
+        <textarea class="win-area" id="winArea" placeholder="One small thing you'll be proud of by tonight…"></textarea>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-header"><div><div class="card-eyebrow">Self-help reading</div><div class="card-title">Three to start with</div></div></div>
+        <div id="perArticles" class="cards-grid"></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div><div class="card-eyebrow">Personal goals</div><div class="card-title">Today's intentions</div></div></div>
+        <div id="perGoals"></div>
+        <div class="add-goal-row">
+          <input type="text" id="perGoalInput" placeholder="Add a personal goal…" maxlength="80">
+          <button data-add-goal="personal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Add</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== GOALS OVERVIEW ===================== -->
+  <div id="panel-goals" class="panel">
+    <div class="pulse-hero">
+      <div class="card-eyebrow">Whole-life view</div>
+      <h2>Your goals, all in one place.</h2>
+      <p style="margin-top:14px; color:var(--ink-soft);">Check goals off here or from any section — it all syncs. Articles read, disconnect minutes, and check-ins flow up automatically.</p>
+    </div>
+
+    <div class="card" style="margin-bottom:22px;">
+      <div class="card-header"><div><div class="card-eyebrow">Progress</div><div class="card-title">How you're showing up</div></div></div>
+      <div class="rings-grid" id="ringsGrid"></div>
+      <div style="margin-top:22px;">
+        <div style="font-size:.72rem; color:var(--ink-muted); text-transform:uppercase; letter-spacing:.12em; font-weight:600; margin-bottom:10px;">Last 60 days</div>
+        <div class="heatmap" id="heatmap"></div>
+        <div class="heat-legend">
+          Less
+          <div class="dots">
+            <span style="background:var(--line);"></span>
+            <span style="background:rgba(93,122,108,0.25);"></span>
+            <span style="background:rgba(93,122,108,0.45);"></span>
+            <span style="background:rgba(93,122,108,0.7);"></span>
+            <span style="background:var(--sage);"></span>
+          </div>
+          More
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-header"><div><div class="card-eyebrow">By section</div><div class="card-title">Today's progress</div></div></div>
+        <div id="sectionPcts"></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div><div class="card-eyebrow">All goals</div><div class="card-title">Filterable view</div></div></div>
+        <div class="filter-row">
+          <button class="filter-btn active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="mindfulness"><span class="sec-dot sec-mindfulness"></span>Mindfulness</button>
+          <button class="filter-btn" data-filter="business"><span class="sec-dot sec-business"></span>Business</button>
+          <button class="filter-btn" data-filter="personal"><span class="sec-dot sec-personal"></span>Personal</button>
+        </div>
+        <div id="allGoals"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="closing">
+    <div class="closing-divider"></div>
+    <div class="closing-text">"I am here. I am enough. I am loved. I am loving.<br>I am exactly where I need to be."</div>
+  </div>
+</div>
+
+<!-- Floating Tasks button -->
+<button class="fab" id="fab">
+  <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+  Tasks <span class="badge-count" id="fabCount">0</span>
+</button>
+
+<!-- Slide-up drawer -->
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-hidden="true">
+  <div class="drawer-inner">
+    <div class="drawer-handle"></div>
+    <div class="drawer-head">
+      <div class="drawer-tabs">
+        <button class="drawer-tab" data-drawer-tab="tasks" aria-selected="true">Tasks</button>
+        <button class="drawer-tab" data-drawer-tab="goals" aria-selected="false">All goals</button>
+      </div>
+      <button class="drawer-close" id="drawerClose">Close</button>
+    </div>
+    <div id="drawer-tasks">
+      <form class="task-form" id="taskForm">
+        <input id="taskInput" type="text" placeholder="Add a task… e.g. Read 1 AI article, walk Parker, check budget" />
+        <select id="taskSection">
+          <option value="general">General</option>
+          <option value="mindfulness">Mindfulness</option>
+          <option value="business">Business</option>
+          <option value="personal">Personal</option>
+        </select>
+        <button type="submit">Add</button>
+      </form>
+      <div class="drawer-list" id="taskList"></div>
+      <div class="empty-state" id="taskEmpty">Nothing yet. Add one tiny thing — momentum loves small wins.</div>
+    </div>
+    <div id="drawer-goals" style="display:none;">
+      <form class="task-form" id="goalForm">
+        <input id="goalTitleInput" type="text" placeholder="Add a goal across any section…" />
+        <select id="goalSectionInput">
+          <option value="mindfulness">Mindfulness</option>
+          <option value="business">Business</option>
+          <option value="personal">Personal</option>
+        </select>
+        <button type="submit">Add</button>
+      </form>
+      <div class="drawer-list" id="goalListAll"></div>
+    </div>
+  </div>
+</aside>
+
+<!-- Bible modal -->
+<div class="bible-scrim" id="bibleScrim"></div>
+<div class="bible-modal" id="bibleModal" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="bible-page">
+    <div class="bible-page-head">
+      <div>
+        <div class="lbl">Holy Bible · King James Version</div>
+        <h2 id="bibleRef">—</h2>
+      </div>
+      <span class="theme-pill" id="bibleTheme">—</span>
+      <button class="bible-close" id="bibleClose" aria-label="Close">✕</button>
+    </div>
+    <div class="bible-cols">
+      <div class="bible-col">
+        <h3>The Passage</h3>
+        <div class="passage" id="biblePassage"></div>
+      </div>
+      <div class="bible-col">
+        <h3>Notes &amp; Commentary</h3>
+        <div class="commentary" id="bibleCommentary"></div>
+      </div>
+    </div>
+    <div class="bible-page-foot">
+      <span id="bibleFootHint">Mention a theme in your journal — humility, contentment, anxiety — and tomorrow's scripture will follow.</span>
+      <button class="bible-close" id="bibleCloseFoot">Close</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ====================================================================
+   REFLECTIONS — 15 from Stillpoint digest, rotating daily
+   ==================================================================== */
+const REFLECTIONS = [
+  { title:"On being a father of four", body:"You are raising four humans across two homes — three with Cari and one with Stace. That is not a complication; that is an abundance. Each of those kids is watching how you show up, not what you say. The most powerful thing you can give them today is not advice or activities — it is your undivided attention for ten minutes. Phone down. Eyes up.", practice:"My presence is the inheritance." },
+  { title:"On being present", body:"Presence is not a feeling — it is a decision you make hundreds of times a day. The mind will drift to email, to the next meeting, to a conversation from yesterday. That is not failure; that is the mind. The practice is noticing the drift and gently coming back.", practice:"When you feel yourself spinning, place one hand on your chest and say silently, \"I am here.\"" },
+  { title:"On selflessness — without disappearing", body:"Selflessness does not mean self-erasure. The most generous people in the world are the ones who have filled their own well. You cannot pour from an empty cup. Take care of your body, your mind, your sleep — not as indulgence, but as the foundation that makes generosity possible.", practice:"I serve others best when I am also tending to myself." },
+  { title:"On not overcommitting", body:"Every \"yes\" you give is a \"no\" to something else — usually to your kids, your sleep, or your peace. Before agreeing to anything new, pause and ask: \"If this were happening tomorrow, would I be glad I said yes?\" If the answer isn't a clear yes, it's a no.", practice:"Build a 24-hour rule. Don't commit to anything new for a full day." },
+  { title:"On Cari's three and Stace's one", body:"Each child needs something different. The temptation is to be \"fair\" by treating them all the same — but real fairness is meeting each one where they are. One needs your patience. One needs your goofiness. One needs to be told they are seen. One just needs you to sit beside them quietly.", practice:"Spend ten minutes one-on-one with each child. No agenda." },
+  { title:"On parents and loved ones", body:"The people who raised you are not infinite. Call them. Not for a reason — just to hear their voice. The grown child who calls without a crisis is the rarest gift a parent receives. You will not regret the time you spent.", practice:"Send one text to a parent or loved one. No purpose. Just \"thinking of you.\"" },
+  { title:"On your friendships", body:"Lenny, John, Tyler, Jared, Kayla, Jocelyn, Korto, Brian, Jamie, Klint, Sue. Most adult friendships die not from conflict but from neglect. The friends you named are people who would show up for you. They deserve to be reminded that you would show up for them too.", practice:"Rotate through them. One real check-in per week." },
+  { title:"On Melanie, Stephanie, Rainey", body:"Some people belong in your life in seasons, and some are slow-burn lifelong. Don't measure friendship by frequency — measure it by quality of presence when you do connect. A good friend you see twice a year is still a good friend.", practice:"Who am I overdue to thank?" },
+  { title:"On Parker and Kittle", body:"Your dogs do not have a five-year plan. They are not optimizing. They are not behind on anything. When you walk Parker and Kittle, let them teach you. Notice what they notice. Smell the air. The walk is a pocket of pure presence already built into your day.", practice:"On their next walk, leave the phone inside. Just walk." },
+  { title:"On career — SigmaEra, Dale, Bo", body:"Your career is a long arc, not a single sprint. The people you build with are not just colleagues; they are part of the chapter of your life this work is writing. Show up with integrity. Do excellent work. Treat the people around you the way you'd want your kids to be treated by their bosses one day.", practice:"I bring my full self to my work without letting work become my full self." },
+  { title:"On meditation as anchor", body:"You don't need an hour. You don't need a cushion. Five minutes of sitting quietly, watching your breath, letting thoughts come and go without grabbing them — that is enough. Done daily, it changes the texture of your mind.", practice:"Five minutes. Notice breath, then sounds, then body, then thoughts, then just sit." },
+  { title:"On growth — daily, not dramatic", body:"Real growth is incremental and unglamorous. It is one slightly better choice today than yesterday: one more page read, one less impulsive reply, one extra minute of patience with a kid who is melting down. Trust the compounding.", practice:"Today I will be 1% better than yesterday at one specific thing." },
+  { title:"On changing the world", body:"The phrase \"change the world\" can feel paralyzing. But the world is changed at the kitchen table, in the carpool, in how you treat the person at the checkout, in whether you teach your kids that the right thing is worth doing when no one is watching. Tend to your sphere well.", practice:"What is one small thing I can do today that ripples outward?" },
+  { title:"On stillness in a noisy life", body:"Between four kids, work, friendships, and the ordinary chaos of being alive, stillness will not find you — you have to make a place for it. Five minutes in the car before you walk into the house. The first sip of coffee before the phone comes out. A walk without a podcast.", practice:"Find one pocket of silence today. Even sixty seconds. Do not fill it." },
+  { title:"On forgiveness — including for yourself", body:"You will fail at all of this. You will overcommit. You will check the phone when your kid is talking. You will snap when you are tired. The practice is not perfection; the practice is noticing, forgiving yourself, and beginning again — without the long detour of self-criticism.", practice:"I am doing the best I can with what I have today. Tomorrow I will try again." }
+];
+
+/* ====================================================================
+   SCRIPTURES — KJV passages tagged by theme. Theme detection from
+   journal entries biases the daily pick. Add more entries here freely.
+   ==================================================================== */
+const SCRIPTURES = [
+  {
+    ref: "Philippians 4:11-13", theme: "Contentment",
+    themes: ["contentment","content","peace","enough"],
+    passage: [
+      { v:11, text:"Not that I speak in respect of want: for I have learned, in whatsoever state I am, therewith to be content." },
+      { v:12, text:"I know both how to be abased, and I know how to abound: every where and in all things I am instructed both to be full and to be hungry, both to abound and to suffer need." },
+      { v:13, text:"I can do all things through Christ which strengtheneth me." }
+    ],
+    commentary: [
+      { title:"Contentment is learned, not given", body:"Paul says he has 'learned' to be content — it is a discipline acquired through both abundance and need. The wealthy and the broke face the same temptation: to make their state their identity." },
+      { title:"v.13 in context", body:"This famous verse is often quoted alone, but it is about strength to endure both the highs and the lows — not strength to win. The 'all things' Paul refers to is the abasement and the abundance of v.12." }
+    ]
+  },
+  {
+    ref: "Micah 6:8", theme: "Humility",
+    themes: ["humble","humility","pride","prideful","arrogant","ego"],
+    passage: [
+      { v:8, text:"He hath shewed thee, O man, what is good; and what doth the Lord require of thee, but to do justly, and to love mercy, and to walk humbly with thy God?" }
+    ],
+    commentary: [
+      { title:"The whole obligation in one line", body:"This verse is often called the most concise summary of the whole prophetic message. Three things — justice, mercy, humility — and the third sits underneath the first two. You cannot do justice or love mercy without first walking humbly." },
+      { title:"'Walk humbly' is a posture, not a moment", body:"The Hebrew word translated 'humbly' carries the sense of carefulness — bending the knee inwardly even when no one sees. Humility is not low self-esteem; it is right-sized self-perception in the presence of God." }
+    ]
+  },
+  {
+    ref: "Matthew 6:25-27, 33-34", theme: "Anxiety",
+    themes: ["anxious","anxiety","worry","worried","stressed","overwhelm","fear"],
+    passage: [
+      { v:25, text:"Therefore I say unto you, Take no thought for your life, what ye shall eat, or what ye shall drink; nor yet for your body, what ye shall put on. Is not the life more than meat, and the body than raiment?" },
+      { v:26, text:"Behold the fowls of the air: for they sow not, neither do they reap, nor gather into barns; yet your heavenly Father feedeth them. Are ye not much better than they?" },
+      { v:27, text:"Which of you by taking thought can add one cubit unto his stature?" },
+      { v:33, text:"But seek ye first the kingdom of God, and his righteousness; and all these things shall be added unto you." },
+      { v:34, text:"Take therefore no thought for the morrow: for the morrow shall take thought for the things of itself. Sufficient unto the day is the evil thereof." }
+    ],
+    commentary: [
+      { title:"Anxiety as a question of identity", body:"Jesus is not dismissing real needs — He is reordering them. Worry isn't a moral failure but a misdirection of attention. The fowls feed because someone outside their control feeds them. The argument is from lesser to greater: if Him for them, then surely Him for you." },
+      { title:"v.34 — the daily portion", body:"'Sufficient unto the day is the evil thereof.' Tomorrow's troubles do not require today's strength. The grace is given as the moment arrives, not in advance." }
+    ]
+  },
+  {
+    ref: "1 Thessalonians 5:16-18", theme: "Gratitude",
+    themes: ["grateful","gratitude","thankful","thanks","blessing"],
+    passage: [
+      { v:16, text:"Rejoice evermore." },
+      { v:17, text:"Pray without ceasing." },
+      { v:18, text:"In every thing give thanks: for this is the will of God in Christ Jesus concerning you." }
+    ],
+    commentary: [
+      { title:"Three commands, one rhythm", body:"Rejoice — pray — give thanks. Together they form a posture, not a checklist. Gratitude is not a feeling waiting on circumstances; it is a discipline of seeing." },
+      { title:"'In every thing'", body:"Not 'for' every thing — 'in' every thing. Even the hard moments are containers in which thanks can be given. The hard does not become good by gratitude, but it becomes bearable." }
+    ]
+  },
+  {
+    ref: "Colossians 3:12-14", theme: "Forgiveness",
+    themes: ["forgive","forgiveness","grudge","resent","resentment","bitter"],
+    passage: [
+      { v:12, text:"Put on therefore, as the elect of God, holy and beloved, bowels of mercies, kindness, humbleness of mind, meekness, longsuffering;" },
+      { v:13, text:"Forbearing one another, and forgiving one another, if any man have a quarrel against any: even as Christ forgave you, so also do ye." },
+      { v:14, text:"And above all these things put on charity, which is the bond of perfectness." }
+    ],
+    commentary: [
+      { title:"'As Christ forgave you' is the standard", body:"The measure of the forgiveness owed is not the offense itself but the forgiveness already received. The math always favors release over grievance." },
+      { title:"Charity is the binding agent", body:"Without love, the other virtues fragment. Love is not one virtue alongside the others — it is the cord that ties them into a useable whole." }
+    ]
+  },
+  {
+    ref: "Proverbs 3:5-6", theme: "Trust",
+    themes: ["trust","trusting","control","controlling","plan","plans","uncertain"],
+    passage: [
+      { v:5, text:"Trust in the Lord with all thine heart; and lean not unto thine own understanding." },
+      { v:6, text:"In all thy ways acknowledge him, and he shall direct thy paths." }
+    ],
+    commentary: [
+      { title:"The danger of partial trust", body:"'With all thine heart' rules out the modern instinct to keep a side door open. Trust is not the absence of thought — it is the refusal to make your own thought the final court." },
+      { title:"Direction follows acknowledgment", body:"The promise of v.6 is conditional. Direction comes after acknowledgment, not before. Most people want guidance before surrender; Scripture flips the order." }
+    ]
+  },
+  {
+    ref: "Galatians 6:9", theme: "Perseverance",
+    themes: ["discipline","consistent","persevere","quit","give up","tired","weary"],
+    passage: [
+      { v:9, text:"And let us not be weary in well doing: for in due season we shall reap, if we faint not." }
+    ],
+    commentary: [
+      { title:"The harvest is delayed, not denied", body:"The verse hinges on 'in due season.' Faithfulness is not measured by today's results but by the long arc. Most quitting happens about an inch before the breakthrough." },
+      { title:"'Weary in well doing'", body:"There is a fatigue that comes from doing the right things without seeing the fruit. The promise here is not that the weariness disappears, but that the harvest will." }
+    ]
+  },
+  {
+    ref: "Ephesians 6:4", theme: "Fatherhood",
+    themes: ["kids","children","dad","father","cari","stace","parent","parenting"],
+    passage: [
+      { v:4, text:"And, ye fathers, provoke not your children to wrath: but bring them up in the nurture and admonition of the Lord." }
+    ],
+    commentary: [
+      { title:"What 'provoke' looks like", body:"The Greek points to exasperating, embittering — the slow erosion of a child's heart through disregard, harshness, or inconsistency. Fathers are warned because the wound from a father shapes a soul more deeply than most." },
+      { title:"Two halves: nurture and admonition", body:"'Nurture' is the cultivating side — encouragement, instruction, formation. 'Admonition' is the corrective side — warning, calling back, redirection. A father who only nurtures spoils; a father who only admonishes hardens." }
+    ]
+  },
+  {
+    ref: "Colossians 3:23-24", theme: "Work",
+    themes: ["career","work","job","sigmaera","project","team","leadership","ceo","cto"],
+    passage: [
+      { v:23, text:"And whatsoever ye do, do it heartily, as to the Lord, and not unto men;" },
+      { v:24, text:"Knowing that of the Lord ye shall receive the reward of the inheritance: for ye serve the Lord Christ." }
+    ],
+    commentary: [
+      { title:"The audience is the work", body:"When the audience is people, the work bends to flattery or fear. When the audience is the Lord, the work straightens. Same task, different center of gravity." },
+      { title:"The reward is delayed, the meaning is now", body:"The inheritance comes later. The dignity of doing the work 'heartily' arrives the moment you choose your audience." }
+    ]
+  },
+  {
+    ref: "2 Corinthians 9:7", theme: "Generosity",
+    themes: ["generous","generosity","giving","selfless","tithe","share"],
+    passage: [
+      { v:7, text:"Every man according as he purposeth in his heart, so let him give; not grudgingly, or of necessity: for God loveth a cheerful giver." }
+    ],
+    commentary: [
+      { title:"The heart is the meter, not the amount", body:"Two people can give the same dollar amount and only one of them be giving in the way this verse describes. The text measures the inward purpose, not the outward number." },
+      { title:"Cheerful, not coerced", body:"God loves a cheerful giver because cheerful giving reflects His own nature: He gave His Son out of love, not necessity. Reluctant generosity is still generosity, but it is not yet worship." }
+    ]
+  },
+  {
+    ref: "Psalm 23:1-4", theme: "Stillness",
+    themes: ["still","stillness","rest","quiet","silence","calm","peace"],
+    passage: [
+      { v:1, text:"The Lord is my shepherd; I shall not want." },
+      { v:2, text:"He maketh me to lie down in green pastures: he leadeth me beside the still waters." },
+      { v:3, text:"He restoreth my soul: he leadeth me in the paths of righteousness for his name's sake." },
+      { v:4, text:"Yea, though I walk through the valley of the shadow of death, I will fear no evil: for thou art with me; thy rod and thy staff they comfort me." }
+    ],
+    commentary: [
+      { title:"'Maketh me to lie down'", body:"The verb is causative — there are seasons in which the Shepherd compels rest because we will not take it ourselves. Sometimes a forced lying-down is mercy in disguise." },
+      { title:"Through, not around", body:"The valley is not bypassed. The Psalm does not promise the absence of darkness; it promises company through it. 'I will fear no evil' is grounded in 'thou art with me,' not in any change to the terrain." }
+    ]
+  },
+  {
+    ref: "Psalm 46:10", theme: "Stillness",
+    themes: ["still","stillness","rest","silence","quiet","sabbath"],
+    passage: [
+      { v:10, text:"Be still, and know that I am God: I will be exalted among the heathen, I will be exalted in the earth." }
+    ],
+    commentary: [
+      { title:"Stillness as theology", body:"'Be still' is not just a self-help instruction — it is a theological one. Knowing comes through ceasing. The first move of faith is often a stop." },
+      { title:"Ten letters", body:"Two short clauses, fewer than ten words in Hebrew. A whole life of practice is folded inside them: stop, see, surrender." }
+    ]
+  }
+];
+
+/* Theme keyword detection — scans last 7 days of journal notes
+   and biases scripture pick toward themes the user has mentioned. */
+const THEME_KEYWORDS = {
+  Contentment: ["content","contentment","enough","satisfied","comparison","jealous","envy"],
+  Humility: ["humble","humility","pride","prideful","arrogant","ego"],
+  Anxiety: ["anxious","anxiety","worry","worried","stressed","overwhelm","fear","fearful","dread"],
+  Gratitude: ["grateful","gratitude","thankful","thanks","blessing","bless"],
+  Forgiveness: ["forgive","forgiveness","grudge","resent","resentment","bitter","bitterness"],
+  Trust: ["trust","control","controlling","plan","uncertain","uncertainty","doubt"],
+  Perseverance: ["discipline","consistent","persevere","quit","give up","tired","weary","burnout"],
+  Fatherhood: ["kids","children","dad","father","cari","stace","parent","parenting"],
+  Work: ["career","work","job","sigmaera","project","team","leadership","ceo","cto","dale","bo"],
+  Generosity: ["generous","generosity","giving","selfless","tithe","share"],
+  Stillness: ["still","stillness","rest","quiet","silence","calm","sabbath"]
+};
+
+/* ================== DEFAULT GOALS ================== */
+const DEFAULT_GOALS = [
+  { id:'g_god',          section:'mindfulness', title:'Time with God / prayer',                       type:'check', target:1 },
+  { id:'g_meditate',     section:'mindfulness', title:'Meditate (5+ minutes)',                        type:'check', target:1 },
+  { id:'g_present_kids', section:'mindfulness', title:'Be fully present with my kids',                type:'check', target:1 },
+  { id:'g_family',       section:'mindfulness', title:'Connect with family or a friend',              type:'check', target:1 },
+  { id:'g_no_overcommit',section:'mindfulness', title:'Said no to something I should have',           type:'check', target:1 },
+  { id:'g_selfless',     section:'mindfulness', title:'One selfless act today',                       type:'check', target:1 },
+  { id:'g_walk',         section:'mindfulness', title:'Walk Parker & Kittle without my phone',        type:'check', target:1 },
+  { id:'g_mf_read',      section:'mindfulness', title:'Read 1 mindfulness article',                   type:'count', target:1 },
+  { id:'g_learn',        section:'business',    title:'Continuous improvement — read 3+ AI articles', type:'count', target:3 },
+  { id:'g_strategy',     section:'business',    title:'30 min on AI strategy & competitive scanning', type:'check', target:1 },
+  { id:'g_customer',     section:'business',    title:'Talk to a customer (call, email, shadow)',     type:'check', target:1 },
+  { id:'g_product',      section:'business',    title:'Move the top product bet forward by one step', type:'check', target:1 },
+  { id:'g_team',         section:'business',    title:'Unblock or coach one teammate',                type:'check', target:1 },
+  { id:'g_demos',        section:'business',    title:'Try one new AI tool / model / agent',          type:'check', target:1 },
+  { id:'g_money',        section:'personal',    title:'Check finances (YNAB / accounts)',             type:'check', target:1 },
+  { id:'g_move',         section:'personal',    title:'Move 30 minutes',                              type:'check', target:1 },
+  { id:'g_disconnect',   section:'personal',    title:'Disconnect 60 minutes',                        type:'time',  target:60 },
+  { id:'g_writing',      section:'personal',    title:'Write something (memo, doc, post, journal)',   type:'check', target:1 },
+  { id:'g_per_read',     section:'personal',    title:'Read 1 self-help / motivation article',        type:'count', target:1 }
+];
+
+/* ================== STORAGE ================== */
+const KEYS = { theme:'mm_theme', goals:'mm_goals', tasks:'mm_tasks', days:'mm_days', clicks:'mm_clicks', filter:'mm_filter' };
+const lsGet = (k, fb) => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : fb; } catch { return fb; } };
+const lsSet = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} };
+
+const DAILY = JSON.parse(document.getElementById('daily-content-data').textContent);
+
+let state = {
+  theme: lsGet(KEYS.theme, 'light'),
+  goals: lsGet(KEYS.goals, null) || DEFAULT_GOALS.slice(),
+  tasks: lsGet(KEYS.tasks, []),
+  days: lsGet(KEYS.days, {}),
+  clicks: lsGet(KEYS.clicks, {}),
+  filter: lsGet(KEYS.filter, 'all'),
+  activeTab: 'mindfulness',
+  drawerTab: 'tasks'
+};
+function todayISO(){ const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function shiftISO(iso, n){ const d=new Date(iso+'T00:00:00'); d.setDate(d.getDate()+n); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function fmtShort(iso){ return new Date(iso+'T00:00:00').toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'}); }
+function dayName(iso){ return new Date(iso+'T00:00:00').toLocaleDateString(undefined,{weekday:'long'}); }
+function prettyDate(iso){ return new Date(iso+'T00:00:00').toLocaleDateString(undefined,{month:'long',day:'numeric',year:'numeric'}); }
+function timeGreeting(){ const h=new Date().getHours(); if(h<5)return'Late night'; if(h<12)return'Good morning'; if(h<17)return'Good afternoon'; if(h<21)return'Good evening'; return'Late night'; }
+function escapeHTML(s){ return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"})[c]); }
+function getDay(iso){
+  if(!state.days[iso]) state.days[iso]={ goals:{}, notes:'', health:{}, disconnect:0, win:'', fin:{net:'',cash:'',invest:''} };
+  const d=state.days[iso];
+  if(!d.health) d.health={};
+  if(typeof d.disconnect!=='number') d.disconnect=0;
+  if(!d.fin) d.fin={net:'',cash:'',invest:''};
+  return d;
+}
+function persist(){
+  lsSet(KEYS.goals, state.goals); lsSet(KEYS.tasks, state.tasks);
+  lsSet(KEYS.days, state.days); lsSet(KEYS.clicks, state.clicks);
+  lsSet(KEYS.filter, state.filter);
+}
+const today = todayISO();
+
+/* ================== THEME ================== */
+function applyTheme(){
+  document.documentElement.setAttribute('data-theme', state.theme);
+  const moon='<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+  const sun='<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
+  document.getElementById('theme-icon').innerHTML = state.theme==='dark'?sun:moon;
+  lsSet(KEYS.theme, state.theme);
+}
+document.getElementById('theme-toggle').addEventListener('click',()=>{ state.theme=state.theme==='dark'?'light':'dark'; applyTheme(); });
+
+/* ================== HERO ================== */
+function renderHero(){
+  document.getElementById('greeting').textContent = `${timeGreeting()}, Dallas`;
+  document.getElementById('hero-date').innerHTML = `${dayName(today)}<br><em>${prettyDate(today)}</em>`;
+  document.getElementById('hero-sub').textContent = DAILY.subhead || 'A clean page. Begin gently.';
+}
+
+/* ================== TABS ================== */
+function setTab(name){
+  state.activeTab=name;
+  document.querySelectorAll('.tab-btn').forEach(b=>b.setAttribute('aria-selected', b.dataset.tab===name));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active', p.id==='panel-'+name));
+}
+document.querySelectorAll('.tab-btn').forEach(b=>b.addEventListener('click',()=>setTab(b.dataset.tab)));
+
+/* ================== MINDFULNESS ================== */
+function renderMindfulness(){
+  document.getElementById('god-opening').textContent = DAILY.god.opening;
+  document.getElementById('god-prayer').textContent = DAILY.god.prayer;
+  document.getElementById('god-carry').textContent = DAILY.god.carry;
+  // 5 reflections seeded by date
+  const d = new Date(today+'T00:00:00');
+  const dayNum = Math.floor(d.getTime()/(1000*60*60*24));
+  const seed = ((dayNum%REFLECTIONS.length)+REFLECTIONS.length)%REFLECTIONS.length;
+  const list=[]; for(let i=0;i<5;i++) list.push(REFLECTIONS[(seed+i*3)%REFLECTIONS.length]);
+  document.getElementById('reflections').innerHTML = list.map((r,i)=>`
+    <div class="reflection">
+      <div class="reflection-head"><span class="reflection-num">№ ${String(i+1).padStart(2,'0')}</span><span class="reflection-title">${escapeHTML(r.title)}</span></div>
+      <div class="reflection-body">${escapeHTML(r.body)}</div>
+      <div class="reflection-practice"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>${escapeHTML(r.practice)}</div>
+    </div>`).join('');
+  document.getElementById('mfArticles').innerHTML = (DAILY.mindfulness.articles||[]).map(a=>articleCardHTML(a,'mindfulness')).join('');
+  renderScripturePreview();
+}
+
+/* ================== BUSINESS ================== */
+function renderBusiness(){
+  document.getElementById('bizHeadline').textContent = DAILY.business.headline||'';
+  document.getElementById('briefing').innerHTML = DAILY.business.briefing||'';
+  document.getElementById('topStories').innerHTML = (DAILY.business.topStories||[]).map(s=>`
+    <a class="top-card ${s.kind==='lead'?'lead':''}" href="${escapeHTML(s.url)}" target="_blank" rel="noopener" data-track-cat="business">
+      <div class="top-eyebrow">${escapeHTML(s.eyebrow||'')}</div>
+      <div style="display:flex; gap:6px; flex-wrap:wrap;">${(s.badges||[]).map(b=>`<span class="badge ${b[0]}">${escapeHTML(b[1])}</span>`).join('')}</div>
+      <h3>${escapeHTML(s.title)}</h3><p>${escapeHTML(s.body||'')}</p>
+      <div class="src">${escapeHTML(s.src||'')}</div>
+    </a>`).join('');
+  document.getElementById('quickScan').innerHTML = (DAILY.business.scan||[]).map(s=>`<li>${escapeHTML(s)}</li>`).join('');
+  document.getElementById('bizArticles').innerHTML = (DAILY.business.articles||[]).map(a=>articleCardHTML(a,'business')).join('');
+  document.getElementById('repos').innerHTML = (DAILY.business.repos||[]).map(r=>`
+    <a class="repo" href="${escapeHTML(r.url)}" target="_blank" rel="noopener" data-track-cat="business">
+      <div style="flex:1; min-width:0;">
+        <div class="repo-name">${escapeHTML(r.name)} <span class="org">${escapeHTML(r.org)}</span></div>
+        <div class="repo-meta"><svg class="ic ic-sm" viewBox="0 0 24 24" fill="currentColor" style="color:var(--gold);"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> <strong>${escapeHTML(r.stars)}</strong> · ${escapeHTML(r.weekly)} · ${escapeHTML(r.license)} · ${escapeHTML(r.lang)}</div>
+        <div class="repo-pitch">${escapeHTML(r.pitch)}</div>
+      </div>
+    </a>`).join('');
+  document.getElementById('quotes').innerHTML = (DAILY.business.quotes||[]).map(q=>`
+    <a class="quote-card" href="${escapeHTML(q.url)}" target="_blank" rel="noopener" data-track-cat="business">
+      <div class="quote-text">"${escapeHTML(q.text)}"</div>
+      <div class="quote-meta">— ${escapeHTML(q.source)} · ${escapeHTML(q.target)}</div>
+    </a>`).join('');
+  document.getElementById('watchlist').innerHTML = (DAILY.business.watchlist||[]).map(w=>`
+    <li style="display:flex; gap:10px; align-items:flex-start;"><svg class="ic ic-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--gold); margin-top:5px;"><polyline points="9 18 15 12 9 6"/></svg><span>${escapeHTML(w)}</span></li>`).join('');
+}
+
+/* ================== PERSONAL ================== */
+function renderPersonal(){
+  document.getElementById('perHeadline').textContent = DAILY.personal.headline||'';
+  document.getElementById('perMotivation').textContent = DAILY.personal.motivation ? `"${DAILY.personal.motivation.text}" — ${DAILY.personal.motivation.author}` : '';
+  document.getElementById('perArticles').innerHTML = (DAILY.personal.articles||[]).map(a=>articleCardHTML(a,'personal')).join('');
+  const day = getDay(today);
+  ['slept','moved','ate'].forEach(k=>{
+    const el=document.querySelector(`[data-health-icon="${k}"]`);
+    if(el) el.innerHTML = day.health[k]
+      ? '<svg class="ic ic-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>'
+      : '<svg class="ic ic-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/></svg>';
+    const btn=document.querySelector(`[data-health="${k}"]`);
+    if(btn) btn.classList.toggle('on', !!day.health[k]);
+  });
+  document.getElementById('discMins').textContent = day.disconnect||0;
+  document.getElementById('winArea').value = day.win||'';
+  ['net','cash','invest'].forEach(k=>{ const el=document.querySelector(`[data-fin="${k}"]`); if(el) el.value = day.fin[k]||''; });
+}
+
+/* ================== ARTICLES ================== */
+function articleCardHTML(a, section){
+  const badges=(a.badges||[]).map(b=>`<span class="badge ${b[0]}">${escapeHTML(b[1])}</span>`).join('');
+  return `<a class="article-card" href="${escapeHTML(a.url)}" target="_blank" rel="noopener" data-track-cat="${section}">
+    ${badges?`<div class="card-head">${badges}</div>`:''}
+    <h3>${escapeHTML(a.title)}</h3>
+    <p>${escapeHTML(a.summary||'')}</p>
+    <div class="src">${escapeHTML(a.source||a.src||'')}</div>
+  </a>`;
+}
+document.addEventListener('click',(e)=>{
+  const a=e.target.closest('a[data-track-cat]');
+  if(!a) return;
+  const sec=a.dataset.trackCat;
+  state.clicks[today]=state.clicks[today]||{};
+  state.clicks[today][sec]=(state.clicks[today][sec]||0)+1;
+  ['g_mf_read','g_per_read','g_learn'].forEach(gid=>{
+    const map={g_mf_read:'mindfulness',g_per_read:'personal',g_learn:'business'};
+    if(map[gid]!==sec) return;
+    getDay(today).goals[gid]=state.clicks[today][sec]||0;
+  });
+  persist(); renderAll(); toast(`+1 article in ${sec}`);
+});
+
+/* ================== HEALTH / DISCONNECT / WIN / FIN ================== */
+document.addEventListener('click',(e)=>{
+  const h=e.target.closest('[data-health]');
+  if(h){ const day=getDay(today); day.health[h.dataset.health]=!day.health[h.dataset.health]; persist(); renderPersonal(); renderGoals(); renderProgress(); return; }
+  const d=e.target.closest('[data-disc]');
+  if(d){ const day=getDay(today); day.disconnect=Math.max(0,(day.disconnect||0)+parseInt(d.dataset.disc,10)); persist(); renderPersonal(); renderGoals(); renderProgress(); return; }
+});
+document.getElementById('winArea').addEventListener('input',(e)=>{ getDay(today).win=e.target.value; persist(); });
+document.querySelectorAll('[data-fin]').forEach(el=>{
+  el.addEventListener('input',()=>{ getDay(today).fin[el.dataset.fin]=el.value; persist(); });
+});
+
+/* ================== GOALS ================== */
+function progressFor(g, iso){
+  const day=getDay(iso);
+  if(g.type==='check') return { current: day.goals[g.id]?1:0, target:1, pct: day.goals[g.id]?100:0 };
+  if(g.type==='count'){
+    let v=0;
+    if(g.id==='g_mf_read') v=(state.clicks[iso]||{}).mindfulness||0;
+    else if(g.id==='g_per_read') v=(state.clicks[iso]||{}).personal||0;
+    else if(g.id==='g_learn') v=(state.clicks[iso]||{}).business||0;
+    else v=day.goals[g.id]||0;
+    const t=g.target||1;
+    return { current:Math.min(v,t), target:t, pct:Math.min(100,(v/t)*100) };
+  }
+  if(g.type==='time'){
+    let v = (g.id==='g_disconnect') ? (day.disconnect||0) : (day.goals[g.id]||0);
+    const t=g.target||1;
+    return { current:Math.min(v,t), target:t, pct:Math.min(100,(v/t)*100) };
+  }
+  return { current:0, target:g.target||1, pct:0 };
+}
+function streakFor(gid){
+  let n=0; let cur=today;
+  while(n<365){
+    if(!state.days[cur]) break;
+    const g=state.goals.find(x=>x.id===gid); if(!g) break;
+    if(progressFor(g,cur).pct>=100){ n++; cur=shiftISO(cur,-1); } else break;
+  }
+  return n;
+}
+function dailyStreak(){
+  let n=0; let cur=today;
+  while(n<365){
+    if(!state.days[cur]) break;
+    const anyDone=state.goals.some(g=>progressFor(g,cur).pct>=100);
+    if(anyDone){ n++; cur=shiftISO(cur,-1); } else break;
+  }
+  return n;
+}
+function bumpStreak(){ document.getElementById('streakCount').textContent = dailyStreak(); }
+
+function goalRowHTML(g, opts={}){
+  const p=progressFor(g,today);
+  const done=p.pct>=100;
+  const dot=`<span class="sec-dot sec-${g.section}"></span>`;
+  const streak=streakFor(g.id);
+  const isCustom = !DEFAULT_GOALS.find(d=>d.id===g.id);
+  return `<div class="goal ${done?'is-done':''}">
+    <button class="goal-check ${done?'done':''}" data-toggle-goal="${g.id}" aria-label="Toggle">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+    </button>
+    <span class="goal-name">${opts.showSection?dot:''}${escapeHTML(g.title)}</span>
+    <span class="goal-progress">${p.current}/${p.target}</span>
+    ${streak>0?`<span class="streak-badge"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67zM11.71 19c-1.78 0-3.22-1.4-3.22-3.14 0-1.62 1.05-2.76 2.81-3.12 1.77-.36 3.6-1.21 4.62-2.58.39 1.29.59 2.65.59 4.04 0 2.65-2.15 4.8-4.8 4.8z"/></svg>${streak}</span>`:''}
+    ${(isCustom||opts.deletable)?`<button class="goal-remove" data-delete-goal="${g.id}" title="Remove"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>`:''}
+  </div>`;
+}
+function renderGoals(){
+  ['mindfulness','business','personal'].forEach(sec=>{
+    const id=sec==='mindfulness'?'mfGoals':(sec==='business'?'bizGoals':'perGoals');
+    document.getElementById(id).innerHTML=state.goals.filter(g=>g.section===sec).map(g=>goalRowHTML(g)).join('');
+  });
+  const filtered=state.filter==='all'?state.goals:state.goals.filter(g=>g.section===state.filter);
+  document.getElementById('allGoals').innerHTML=filtered.map(g=>goalRowHTML(g,{showSection:true,deletable:true})).join('');
+  document.getElementById('goalListAll').innerHTML=state.goals.map(g=>goalRowHTML(g,{showSection:true,deletable:true})).join('');
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.toggle('active', b.dataset.filter===state.filter));
+}
+
+function ringStat(pct, num, label, cls){
+  const r=30, c=2*Math.PI*r;
+  const offset=c-(pct/100)*c;
+  return `<div class="ring-stat">
+    <svg class="ring-svg ${cls==='gold'?'gold':''}" viewBox="0 0 76 76">
+      <circle class="ring-bg" cx="38" cy="38" r="${r}"></circle>
+      <circle class="ring-fg" cx="38" cy="38" r="${r}" stroke-dasharray="${c}" stroke-dashoffset="${offset}"></circle>
+    </svg>
+    <div class="ring-num">${num}</div><div class="ring-label">${label}</div>
+  </div>`;
+}
+function sectionPctRow(emoji, name, pct){
+  return `<div class="section-pct">${emoji}<span class="name">${name}</span><span class="bar-track"><span class="bar-fill" style="width:${pct}%"></span></span><span class="num">${Math.round(pct)}%</span></div>`;
+}
+function renderProgress(){
+  const total=state.goals.length;
+  const completed=state.goals.filter(g=>progressFor(g,today).pct>=100).length;
+  const todayPct=total?(completed/total)*100:0;
+  let weekTotal=0, weekDone=0;
+  for(let i=0;i<7;i++){ const iso=shiftISO(today,-i); state.goals.forEach(g=>{ weekTotal++; if(progressFor(g,iso).pct>=100) weekDone++; }); }
+  const weekPct=weekTotal?Math.round((weekDone/weekTotal)*100):0;
+  let bestStreak=0; state.goals.forEach(g=>{ bestStreak=Math.max(bestStreak,streakFor(g.id)); });
+  const daysJournaled=Object.keys(state.days).filter(iso=>{
+    const d=state.days[iso]; return (d.notes&&d.notes.trim())||(d.goals&&Object.values(d.goals).some(v=>v));
+  }).length;
+  document.getElementById('ringsGrid').innerHTML = `
+    ${ringStat(todayPct, `${completed}<small>/${total}</small>`, 'Today', 'sage')}
+    ${ringStat(weekPct, `${weekPct}<small>%</small>`, 'Last 7 days', 'sage')}
+    ${ringStat(Math.min(bestStreak/30*100,100), `${bestStreak}`, 'Best streak', 'gold')}
+    ${ringStat(Math.min(daysJournaled/30*100,100), `${daysJournaled}`, 'Days journaled', 'gold')}`;
+  const pctOf = sec => {
+    const arr=state.goals.filter(g=>g.section===sec);
+    if(!arr.length) return 0;
+    return arr.reduce((s,g)=>s+progressFor(g,today).pct,0)/arr.length;
+  };
+  const mfIcon='<span class="sec-icon sec-mindfulness"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12c4 0 6 3 9 3s5-3 9-3M12 3v18"/></svg></span>';
+  const bizIcon='<span class="sec-icon sec-business"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>';
+  const perIcon='<span class="sec-icon sec-personal"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.5 19 2c1 2 2 4.2 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6"/></svg></span>';
+  document.getElementById('sectionPcts').innerHTML = `
+    ${sectionPctRow(mfIcon,'Mindfulness', pctOf('mindfulness'))}
+    ${sectionPctRow(bizIcon,'Business / AI', pctOf('business'))}
+    ${sectionPctRow(perIcon,'Personal', pctOf('personal'))}`;
+  renderHeatmap(); bumpStreak();
+}
+function renderHeatmap(){
+  const cells=[];
+  for(let i=59;i>=0;i--){
+    const iso=shiftISO(today,-i);
+    const day=state.days[iso]; let level=0; let completedCount=0;
+    if(day){
+      const total=state.goals.length;
+      state.goals.forEach(g=>{ if(progressFor(g,iso).pct>=100) completedCount++; });
+      const ratio=total?completedCount/total:0;
+      if(ratio>0&&ratio<0.34) level=1;
+      else if(ratio<0.67) level=2;
+      else if(ratio<1) level=3;
+      else if(ratio===1&&completedCount>0) level=4;
+      if(level===0&&day.notes&&day.notes.trim()) level=1;
+    }
+    const tip=`${fmtShort(iso)} · ${completedCount}/${state.goals.length} goals`;
+    cells.push(`<div class="heat-cell ${level?'l'+level:''} ${iso===today?'is-today':''}" data-tooltip="${tip}"></div>`);
+  }
+  document.getElementById('heatmap').innerHTML = cells.join('');
+}
+
+document.addEventListener('click',(e)=>{
+  const t=e.target.closest('[data-toggle-goal]');
+  if(t){
+    const id=t.dataset.toggleGoal;
+    const g=state.goals.find(x=>x.id===id); if(!g) return;
+    const day=getDay(today);
+    if(g.type==='check') day.goals[id]=!day.goals[id];
+    else if(g.type==='count'){
+      if(['g_mf_read','g_per_read','g_learn'].includes(id)) toast('Counts up automatically when you click an article');
+      else day.goals[id]=(day.goals[id]||0)+1;
+    } else if(g.type==='time'){
+      if(id==='g_disconnect') toast('Use the +15/+30/+60 buttons under Disconnect');
+      else { day.goals[id]=(day.goals[id]||0)+15; toast('+15 min recorded'); }
+    }
+    persist(); renderAll(); return;
+  }
+  const d=e.target.closest('[data-delete-goal]');
+  if(d){ state.goals=state.goals.filter(g=>g.id!==d.dataset.deleteGoal); persist(); renderAll(); toast('Goal removed'); return; }
+  const f=e.target.closest('[data-filter]');
+  if(f){ state.filter=f.dataset.filter; persist(); renderGoals(); return; }
+});
+
+document.querySelectorAll('[data-add-goal]').forEach(btn=>{
+  btn.addEventListener('click',(e)=>{
+    e.preventDefault();
+    const sec=btn.dataset.addGoal;
+    const inputId=sec==='mindfulness'?'mfGoalInput':(sec==='business'?'bizGoalInput':'perGoalInput');
+    const inp=document.getElementById(inputId);
+    const title=(inp.value||'').trim(); if(!title) return;
+    state.goals.push({ id:'g_'+sec.slice(0,3)+'_'+Date.now(), section:sec, title, type:'check', target:1 });
+    inp.value=''; persist(); renderAll(); toast('Goal added');
+  });
+});
+['mfGoalInput','bizGoalInput','perGoalInput'].forEach(id=>{
+  document.getElementById(id).addEventListener('keydown',(e)=>{
+    if(e.key==='Enter'){
+      e.preventDefault();
+      const sec=id==='mfGoalInput'?'mindfulness':(id==='bizGoalInput'?'business':'personal');
+      document.querySelector(`[data-add-goal="${sec}"]`).click();
+    }
+  });
+});
+
+/* ================== TASKS + DRAWER ================== */
+function renderTasks(){
+  const ul=document.getElementById('taskList');
+  const sorted=state.tasks.slice().sort((a,b)=>(a.done!==b.done)?(a.done?1:-1):((b.createdAt||0)-(a.createdAt||0)));
+  ul.innerHTML=sorted.map(t=>{
+    const dot=`<span class="sec-dot sec-${t.section||'general'}"></span>`;
+    return `<div class="task-item">
+      <button class="goal-check ${t.done?'done':''}" data-toggle-task="${t.id}" style="border-radius:8px;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </button>
+      <span class="task-section-tag">${dot}${escapeHTML(t.section||'general')}</span>
+      <span class="task-name ${t.done?'done':''}">${escapeHTML(t.title)}</span>
+      <button class="task-delete" data-delete-task="${t.id}"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>`;
+  }).join('');
+  document.getElementById('taskEmpty').style.display = state.tasks.length?'none':'block';
+  const open=state.tasks.filter(t=>!t.done).length;
+  const fc=document.getElementById('fabCount'); fc.textContent=open; fc.classList.toggle('show', open>0);
+}
+document.getElementById('taskForm').addEventListener('submit',(e)=>{
+  e.preventDefault();
+  const title=(document.getElementById('taskInput').value||'').trim(); if(!title) return;
+  const section=document.getElementById('taskSection').value;
+  state.tasks.unshift({ id:'t_'+Date.now(), title, section, done:false, createdAt:Date.now() });
+  document.getElementById('taskInput').value=''; persist(); renderTasks(); toast('Added');
+});
+document.addEventListener('click',(e)=>{
+  const tt=e.target.closest('[data-toggle-task]');
+  if(tt){ const t=state.tasks.find(x=>x.id===tt.dataset.toggleTask); if(!t)return; t.done=!t.done; t.completedOn=t.done?today:null; if(t.done)toast('Nice — keep going.'); persist(); renderTasks(); bumpStreak(); return; }
+  const dt=e.target.closest('[data-delete-task]');
+  if(dt){ state.tasks=state.tasks.filter(x=>x.id!==dt.dataset.deleteTask); persist(); renderTasks(); return; }
+});
+
+const scrim=document.getElementById('scrim');
+const drawer=document.getElementById('drawer');
+function openDrawer(tab='tasks'){ drawer.classList.add('open'); scrim.classList.add('show'); setDrawerTab(tab); }
+function closeDrawer(){ drawer.classList.remove('open'); scrim.classList.remove('show'); }
+function setDrawerTab(name){
+  state.drawerTab=name;
+  document.querySelectorAll('.drawer-tab').forEach(b=>b.setAttribute('aria-selected', b.dataset.drawerTab===name));
+  document.getElementById('drawer-tasks').style.display = name==='tasks'?'block':'none';
+  document.getElementById('drawer-goals').style.display = name==='goals'?'block':'none';
+}
+document.getElementById('fab').addEventListener('click',()=>openDrawer('tasks'));
+document.getElementById('drawerClose').addEventListener('click',closeDrawer);
+scrim.addEventListener('click',closeDrawer);
+document.addEventListener('keydown',(e)=>{ if(e.key==='Escape'){ closeDrawer(); closeBible(); } });
+document.querySelectorAll('.drawer-tab').forEach(b=>b.addEventListener('click',()=>setDrawerTab(b.dataset.drawerTab)));
+document.getElementById('goalForm').addEventListener('submit',(e)=>{
+  e.preventDefault();
+  const title=(document.getElementById('goalTitleInput').value||'').trim(); if(!title) return;
+  const section=document.getElementById('goalSectionInput').value;
+  state.goals.push({ id:'g_'+section.slice(0,3)+'_'+Date.now(), section, title, type:'check', target:1 });
+  document.getElementById('goalTitleInput').value=''; persist(); renderAll(); toast('Goal added');
+});
+
+/* ================== NOTES + theme detection trigger ================== */
+const notesEl=document.getElementById('daily-notes');
+let notesTimer;
+notesEl.addEventListener('input',()=>{
+  getDay(today).notes = notesEl.value;
+  document.getElementById('save-status').innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/></svg> saving…';
+  clearTimeout(notesTimer);
+  notesTimer = setTimeout(()=>{
+    persist();
+    document.getElementById('save-status').innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> saved · ' + new Date().toLocaleTimeString();
+    renderProgress();
+    renderScripturePreview(); // re-evaluate theme bias based on new journal text
+  }, 500);
+});
+function loadNotes(){ notesEl.value = getDay(today).notes||''; document.getElementById('save-status').textContent=''; }
+
+/* ================== BREATH ================== */
+let breathTimer=null;
+document.getElementById('breathBtn').addEventListener('click',()=>{
+  const stage=document.getElementById('breathStage');
+  const phase=document.getElementById('breathPhase');
+  const count=document.getElementById('breathCount');
+  const label=document.getElementById('breathLabel');
+  if(breathTimer){ clearInterval(breathTimer); breathTimer=null; stage.style.display='none'; label.textContent='Start 4-7-8'; return; }
+  label.textContent='Stop'; stage.style.display='block';
+  let phaseIdx=0; const phases=[['Inhale',4],['Hold',7],['Exhale',8]];
+  let [name,sec]=phases[0]; phase.textContent=name; count.textContent=sec;
+  breathTimer = setInterval(()=>{ sec--; if(sec<=0){ phaseIdx=(phaseIdx+1)%3; [name,sec]=phases[phaseIdx]; phase.textContent=name; } count.textContent=sec; }, 1000);
+});
+
+/* ================== SCRIPTURE / BIBLE MODAL ================== */
+function recentJournalText(daysBack=7){
+  let text='';
+  for(let i=0;i<daysBack;i++){
+    const iso=shiftISO(today,-i);
+    const d=state.days[iso];
+    if(d&&d.notes) text += ' ' + d.notes;
+  }
+  return text.toLowerCase();
+}
+function themeWeights(){
+  const text = recentJournalText(7);
+  const weights = {};
+  Object.entries(THEME_KEYWORDS).forEach(([theme, kws])=>{
+    let count=0;
+    kws.forEach(kw=>{
+      const re = new RegExp('\\b'+kw.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'\\b', 'g');
+      const m = text.match(re); if(m) count += m.length;
+    });
+    if(count>0) weights[theme]=count;
+  });
+  return weights;
+}
+function pickScripture(){
+  const weights = themeWeights();
+  const themed = Object.keys(weights);
+  let candidates = SCRIPTURES;
+  if(themed.length){
+    const filtered = SCRIPTURES.filter(s => themed.includes(s.theme));
+    if(filtered.length) candidates = filtered;
+  }
+  // Seed by date so the same passage shows all day
+  const d=new Date(today+'T00:00:00');
+  const dayNum=Math.floor(d.getTime()/(1000*60*60*24));
+  return { passage: candidates[dayNum % candidates.length], hint: themed.length ? themed[0] : null };
+}
+let CURRENT_SCRIPTURE = null;
+function renderScripturePreview(){
+  const { passage, hint } = pickScripture();
+  CURRENT_SCRIPTURE = passage;
+  document.getElementById('scriptureRef').textContent = passage.ref;
+  const firstVerse = passage.passage[0];
+  const snippet = firstVerse ? `"${firstVerse.text.length > 140 ? firstVerse.text.slice(0,140) + '…' : firstVerse.text}"` : '';
+  document.getElementById('scriptureSnippet').textContent = snippet;
+  const themeLine = hint ? `Theme: ${passage.theme} · biased by your journal (${hint})` : `Theme: ${passage.theme}`;
+  document.getElementById('scriptureTheme').textContent = themeLine;
+}
+function openBible(){
+  if(!CURRENT_SCRIPTURE) return;
+  document.getElementById('bibleRef').textContent = CURRENT_SCRIPTURE.ref;
+  document.getElementById('bibleTheme').textContent = CURRENT_SCRIPTURE.theme;
+  document.getElementById('biblePassage').innerHTML = CURRENT_SCRIPTURE.passage.map(v=>
+    `<span class="verse"><span class="verse-num">${v.v}</span>${escapeHTML(v.text)}</span>`).join('');
+  document.getElementById('bibleCommentary').innerHTML = CURRENT_SCRIPTURE.commentary.map(c=>
+    `<div class="commentary-block"><h4>${escapeHTML(c.title)}</h4><p>${escapeHTML(c.body)}</p></div>`).join('');
+  document.getElementById('bibleScrim').classList.add('show');
+  document.getElementById('bibleModal').classList.add('show');
+  document.getElementById('bibleModal').setAttribute('aria-hidden','false');
+}
+function closeBible(){
+  document.getElementById('bibleScrim').classList.remove('show');
+  document.getElementById('bibleModal').classList.remove('show');
+  document.getElementById('bibleModal').setAttribute('aria-hidden','true');
+}
+document.getElementById('scriptureCard').addEventListener('click', openBible);
+document.getElementById('scriptureCard').addEventListener('keydown',(e)=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openBible(); } });
+document.getElementById('bibleClose').addEventListener('click', closeBible);
+document.getElementById('bibleCloseFoot').addEventListener('click', closeBible);
+document.getElementById('bibleScrim').addEventListener('click', closeBible);
+
+/* ================== TOAST ================== */
+const toastEl=document.getElementById('toast');
+let toastTimer=null;
+function toast(msg){ toastEl.textContent=msg; toastEl.classList.add('show'); clearTimeout(toastTimer); toastTimer=setTimeout(()=>toastEl.classList.remove('show'),1800); }
+
+/* ================== RENDER ALL ================== */
+function renderAll(){
+  renderHero();
+  renderMindfulness();
+  renderBusiness();
+  renderPersonal();
+  renderGoals();
+  renderProgress();
+  renderTasks();
+  loadNotes();
+}
+
+/* boot */
+applyTheme();
+renderAll();
+</script>
+</body>
+</html>
