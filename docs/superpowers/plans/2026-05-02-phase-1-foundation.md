@@ -120,9 +120,9 @@ Patch the `"scripts"` field to:
 ```json
 {
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -p 4111",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 4111",
     "lint": "next lint",
     "test": "vitest run",
     "test:watch": "vitest",
@@ -156,7 +156,7 @@ Run:
 pnpm dev
 ```
 
-Expected: server starts on `http://localhost:3000`. Stop with Ctrl+C. (Page will 404 since we haven't built `src/app/page.tsx` yet — that's fine; we just want Next to recognize the project.)
+Expected: server starts on `http://localhost:4111`. Stop with Ctrl+C. (Page will 404 since we haven't built `src/app/page.tsx` yet — that's fine; we just want Next to recognize the project.)
 
 - [ ] **Step 8: Commit**
 
@@ -978,7 +978,7 @@ Run:
 pnpm dev
 ```
 
-Open `http://localhost:3000`. Verify:
+Open `http://localhost:4111`. Verify:
 - Page renders without errors
 - Topbar shows brand, "0" streak pill, and theme toggle
 - Greeting + today's date in serif
@@ -1069,7 +1069,7 @@ pnpm db:seed
 pnpm dev
 ```
 
-Open http://localhost:3000.
+Open http://localhost:4111.
 
 ## Scripts
 
@@ -1114,7 +1114,7 @@ git commit -m "docs: add README with quick start"
 
 ## Phase 1 Acceptance Criteria
 
-- [ ] `pnpm dev` boots the dashboard at `http://localhost:3000`
+- [ ] `pnpm dev` boots the dashboard at `http://localhost:4111`
 - [ ] Topbar shows brand "The Daily Mind", a streak pill (showing 0), and a working theme toggle
 - [ ] Theme toggle flips `<html data-theme>` between `light` and `dark` and persists via cookie
 - [ ] Hero shows greeting + today's date in serif (Fraunces) — falls back gracefully if Google Fonts blocked

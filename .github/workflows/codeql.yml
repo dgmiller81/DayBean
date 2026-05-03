@@ -1,5 +1,12 @@
 name: codeql
 
+# CodeQL upload requires GitHub Advanced Security for private repos. While
+# the repo is private without GHAS, the workflow runs as advisory only —
+# it analyzes the code but the SARIF upload step is allowed to fail without
+# blocking the PR. Once the repo is public OR GHAS is enabled, remove the
+# `continue-on-error: true` and re-add this job to the required branch
+# protection contexts.
+
 on:
   push:
     branches: [main]
@@ -20,7 +27,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: github/codeql-action/init@v3
+        continue-on-error: true
         with:
           languages: javascript-typescript
           queries: security-and-quality
       - uses: github/codeql-action/analyze@v3
+        continue-on-error: true

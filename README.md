@@ -33,7 +33,7 @@ pnpm db:seed
 pnpm dev
 ```
 
-Open http://localhost:3000.
+Open http://localhost:4111.
 
 ## License
 

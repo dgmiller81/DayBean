@@ -1,0 +1,86 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String?  @unique
+  name      String?
+  createdAt DateTime @default(now())
+
+  goals       Goal[]
+  tasks       Task[]
+  days        Day[]
+  clicks      Click[]
+  prefs       Pref?
+}
+
+model Pref {
+  id          String  @id @default(cuid())
+  userId      String  @unique
+  user        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  theme       String  @default("light")  // 'light' | 'dark' (extended in Phase 11)
+  filter      String  @default("all")    // 'all' | 'mindfulness' | 'business' | 'personal'
+  jobTitle    String?
+  interests   String?                    // JSON array of strings
+  faith       String?                    // 'christian' | 'jewish' | 'muslim' | 'spiritual' | 'none' | custom
+  scripturePref String?                  // 'kjv' | 'niv' | etc; null when faith is 'none'
+}
+
+model Goal {
+  id        String   @id            // 'g_god', 'g_min_<ts>'
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  section   String                  // 'mindfulness' | 'business' | 'personal'
+  title     String
+  type      String                  // 'check' | 'count' | 'time'
+  target    Int
+  isDefault Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([userId, section])
+}
+
+model Task {
+  id          String   @id          // 't_<ts>'
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title       String
+  section     String                // 'general' | 'mindfulness' | 'business' | 'personal'
+  done        Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  completedOn String?               // ISO date
+
+  @@index([userId, done])
+}
+
+model Day {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  iso        String                 // 'YYYY-MM-DD'
+  goalsJson  String   @default("{}")   // map goalId -> boolean | number
+  notes      String   @default("")
+  healthJson String   @default("{}")   // { slept, moved, ate }
+  disconnect Int      @default(0)
+  win        String   @default("")
+  finJson    String   @default("{}")   // { net, cash, invest }
+
+  @@unique([userId, iso])
+}
+
+model Click {
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  iso          String                  // 'YYYY-MM-DD'
+  section      String                  // 'mindfulness' | 'business' | 'personal'
+  count        Int      @default(0)
+
+  @@unique([userId, iso, section])
+}

@@ -85,7 +85,7 @@ Every change lands via PR — no direct pushes to `main`.
 pnpm install
 pnpm db:migrate
 pnpm db:seed
-pnpm dev          # http://localhost:3000
+pnpm dev          # http://localhost:4111
 
 # Before committing
 pnpm lint
