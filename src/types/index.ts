@@ -1,0 +1,67 @@
+export type Section = "mindfulness" | "business" | "personal";
+export type SectionOrGeneral = Section | "general";
+export type Filter = "all" | Section;
+export type GoalType = "check" | "count" | "time";
+
+export type Goal = {
+  id: string;
+  specId: string;
+  userId: string;
+  section: Section;
+  title: string;
+  type: GoalType;
+  target: number;
+  isDefault: boolean;
+  createdAt: Date;
+};
+
+export type Task = {
+  id: string;
+  userId: string;
+  title: string;
+  section: SectionOrGeneral;
+  done: boolean;
+  createdAt: Date;
+  completedOn: string | null;
+};
+
+export type HealthFlags = {
+  slept?: boolean;
+  moved?: boolean;
+  ate?: boolean;
+};
+
+export type Finance = {
+  net?: string;
+  cash?: string;
+  invest?: string;
+};
+
+export type DayRecord = {
+  iso: string;
+  userId: string;
+  goals: Record<string, boolean | number>;
+  notes: string;
+  health: HealthFlags;
+  disconnect: number;
+  win: string;
+  fin: Finance;
+};
+
+export type ClickCounts = {
+  mindfulness: number;
+  business: number;
+  personal: number;
+};
+
+export type Pref = {
+  userId: string;
+  theme: "light" | "dark";
+  filter: Filter;
+  jobTitle: string | null;
+  interests: string[];
+  faith: string | null;
+  scripturePref: string | null;
+};
+
+export type GoalProgress = { current: number; target: number; pct: number };

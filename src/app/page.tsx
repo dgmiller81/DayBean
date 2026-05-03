@@ -2,13 +2,18 @@ import { cookies } from "next/headers";
 import { Topbar } from "@/components/Topbar";
 import { Hero } from "@/components/Hero";
 import { Tabs } from "@/components/Tabs";
+import { MindfulnessPanel } from "@/components/panels/MindfulnessPanel";
+import { BusinessPanel } from "@/components/panels/BusinessPanel";
+import { PersonalPanel } from "@/components/panels/PersonalPanel";
+import { OverviewPanel } from "@/components/panels/OverviewPanel";
 import { todayISO } from "@/lib/dates";
 import { db } from "@/server/db";
+import type { Tab } from "@/components/Tabs";
 
 export default async function Page() {
   const c = await cookies();
   const theme: "light" | "dark" = c.get("mm_theme")?.value === "dark" ? "dark" : "light";
-  const tab = (c.get("mm_tab")?.value as "mindfulness" | "business" | "personal" | "overview" | undefined) ?? "mindfulness";
+  const tab = (c.get("mm_tab")?.value as Tab | undefined) ?? "mindfulness";
 
   // Single-user local default — Phase 7 generalizes this
   const user = await db.user.findUnique({ where: { id: "local-default" } });
@@ -18,7 +23,13 @@ export default async function Page() {
     <main className="app">
       <Topbar theme={theme} name={name} />
       <Hero name={name} iso={todayISO()} sub="A fresh page." />
-      <Tabs initial={tab} />
+      <Tabs
+        initial={tab}
+        mindfulnessPanel={<MindfulnessPanel />}
+        businessPanel={<BusinessPanel />}
+        personalPanel={<PersonalPanel />}
+        overviewPanel={<OverviewPanel />}
+      />
       <footer
         className="serif"
         style={{

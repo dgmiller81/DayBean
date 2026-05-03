@@ -1,11 +1,8 @@
 "use client";
 import { useState } from "react";
-import { MindfulnessPanel } from "./panels/MindfulnessPanel";
-import { BusinessPanel } from "./panels/BusinessPanel";
-import { PersonalPanel } from "./panels/PersonalPanel";
-import { OverviewPanel } from "./panels/OverviewPanel";
+import type { ReactNode } from "react";
 
-type Tab = "mindfulness" | "business" | "personal" | "overview";
+export type Tab = "mindfulness" | "business" | "personal" | "overview";
 
 const TABS: Array<{ id: Tab; label: string; eyebrow: string; dotClass: string }> = [
   { id: "mindfulness", label: "Mindfulness", eyebrow: "Stillpoint", dotClass: "sec-mindfulness" },
@@ -14,7 +11,21 @@ const TABS: Array<{ id: Tab; label: string; eyebrow: string; dotClass: string }>
   { id: "overview",    label: "Goals Overview", eyebrow: "All-up", dotClass: "sec-general" },
 ];
 
-export function Tabs({ initial = "mindfulness" }: { initial?: Tab }) {
+type Props = {
+  initial?: Tab;
+  mindfulnessPanel: ReactNode;
+  businessPanel: ReactNode;
+  personalPanel: ReactNode;
+  overviewPanel: ReactNode;
+};
+
+export function Tabs({
+  initial = "mindfulness",
+  mindfulnessPanel,
+  businessPanel,
+  personalPanel,
+  overviewPanel,
+}: Props) {
   const [active, setActive] = useState<Tab>(initial);
   return (
     <>
@@ -58,10 +69,10 @@ export function Tabs({ initial = "mindfulness" }: { initial?: Tab }) {
         ))}
       </div>
       <section>
-        {active === "mindfulness" && <MindfulnessPanel />}
-        {active === "business" && <BusinessPanel />}
-        {active === "personal" && <PersonalPanel />}
-        {active === "overview" && <OverviewPanel />}
+        {active === "mindfulness" && mindfulnessPanel}
+        {active === "business" && businessPanel}
+        {active === "personal" && personalPanel}
+        {active === "overview" && overviewPanel}
       </section>
     </>
   );

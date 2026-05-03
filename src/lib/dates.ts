@@ -14,3 +14,15 @@ export function friendlyDate(iso: string): string {
     year: "numeric",
   });
 }
+
+export function isoOffset(iso: string, deltaDays: number): string {
+  const d = new Date(iso + "T00:00:00");
+  d.setDate(d.getDate() + deltaDays);
+  return todayISO(d);
+}
+
+export function daysBack(iso: string, n: number): string[] {
+  const out: string[] = [];
+  for (let i = 0; i < n; i++) out.push(isoOffset(iso, -i));
+  return out;
+}
