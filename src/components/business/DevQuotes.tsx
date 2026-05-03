@@ -10,43 +10,30 @@ export async function DevQuotes({ userId, iso }: { userId: string; iso: string }
   const track = recordClick.bind(null, { userId, iso, section: "business" });
 
   return (
-    <section className="card">
-      <div style={{ color: "var(--accent)", fontSize: 11, letterSpacing: ".16em", fontWeight: 600 }}>
-        DEV QUOTES
+    <div className="card">
+      <div className="card-header">
+        <div>
+          <div className="card-eyebrow">Voice of the devs</div>
+          <div className="card-title">What people are saying</div>
+        </div>
       </div>
-      <div style={{ display: "grid", gap: 14, marginTop: 12 }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         {quotes.map((q, i) => (
-          <blockquote
-            key={i}
-            className="quote-card"
-            style={{
-              margin: 0,
-              padding: "12px 16px",
-              borderLeft: "3px solid var(--gold)",
-              background: "var(--surface-2)",
-              borderRadius: "var(--radius-sm)",
-            }}
-          >
-            <p
-              className="serif"
-              style={{ fontSize: "1rem", lineHeight: 1.6, fontStyle: "italic", margin: 0, color: "var(--ink)" }}
-            >
-              “{q.text}”
-            </p>
-            <footer style={{ marginTop: 6, fontSize: 12, color: "var(--ink-muted)" }}>
+          <div key={i} className="quote-card">
+            <div className="quote-text">"{q.text}"</div>
+            <div className="quote-meta">
               — {q.url ? (
-                <TrackedAnchor href={q.url} cat="business" onTrack={track}
-                  style={{ color: "var(--ink-soft)", textDecoration: "underline" }}>
+                <TrackedAnchor href={q.url} cat="business" onTrack={track}>
                   {q.source}
                 </TrackedAnchor>
               ) : (
                 <span>{q.source}</span>
               )}
-              {q.target ? <span style={{ marginLeft: 6, color: "var(--ink-muted)" }}>· {q.target}</span> : null}
-            </footer>
-          </blockquote>
+              {q.target ? <span style={{ marginLeft: 6 }}>· {q.target}</span> : null}
+            </div>
+          </div>
         ))}
       </div>
-    </section>
+    </div>
   );
 }

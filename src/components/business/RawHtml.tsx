@@ -18,6 +18,14 @@ import type { CSSProperties } from "react";
  * URL parameter, request body, or third-party API without first changing
  * this implementation to sanitise.
  */
-export function RawHtml({ html, style }: { html: string; style?: CSSProperties }) {
-  return <div style={style} dangerouslySetInnerHTML={{ __html: html }} />;
+export function RawHtml({
+  html,
+  style,
+  className,
+}: {
+  html: string;
+  style?: CSSProperties;
+  className?: string;
+}) {
+  return <div className={className} style={style} dangerouslySetInnerHTML={{ __html: html }} />;
 }

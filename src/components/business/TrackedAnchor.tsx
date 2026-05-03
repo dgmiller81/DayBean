@@ -27,7 +27,6 @@ export function TrackedAnchor({
       className={className}
       style={style}
       onClick={() => {
-        // Fire-and-forget; the anchor still navigates in the new tab.
         void onTrack();
       }}
     >

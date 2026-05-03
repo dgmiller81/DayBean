@@ -1,17 +1,39 @@
 import { friendlyDate } from "@/lib/dates";
 
-export function Hero({ name, iso, sub }: { name: string; iso: string; sub?: string }) {
+function splitDateForHero(iso: string): { weekday: string; rest: string } {
+  const d = new Date(iso + "T00:00:00");
+  const weekday = d.toLocaleDateString("en-US", { weekday: "long" });
+  const rest = d.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
+  return { weekday, rest };
+}
+
+export function Hero({
+  name,
+  iso,
+  sub,
+  showFixtureHint = false,
+}: {
+  name: string;
+  iso: string;
+  sub?: string;
+  showFixtureHint?: boolean;
+}) {
+  const { weekday, rest } = splitDateForHero(iso);
   return (
-    <section style={{ marginBottom: 24 }}>
-      <h1 className="serif" style={{ fontSize: 36, fontWeight: 500, margin: 0, color: "var(--ink)" }}>
-        Good morning, {name}
+    <div className="hero">
+      <div className="greeting">Good morning, {name}</div>
+      <h1>
+        {weekday}
+        <br />
+        <em>{rest}</em>
       </h1>
-      <p className="serif" style={{ color: "var(--ink-soft)", margin: "6px 0 0", fontSize: 18 }}>
-        {friendlyDate(iso)}
-      </p>
-      {sub ? (
-        <p style={{ color: "var(--ink-muted)", margin: "8px 0 0", fontSize: 14 }}>{sub}</p>
-      ) : null}
-    </section>
+      {sub ? <div className="date-sub">{sub}</div> : null}
+      {showFixtureHint && (
+        <div className="date-sub" style={{ fontStyle: "italic", marginTop: 4 }}>
+          Showing default content — paste or generate yours.
+        </div>
+      )}
+      <span hidden>{friendlyDate(iso)}</span>
+    </div>
   );
 }

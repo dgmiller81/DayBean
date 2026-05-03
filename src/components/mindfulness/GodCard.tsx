@@ -5,37 +5,22 @@ export async function GodCard({ userId, iso }: { userId: string; iso: string }) 
   const { opening, prayer, carry } = content.god;
 
   return (
-    <article
-      className="card"
-      style={{
-        background:
-          "radial-gradient(120% 80% at 0% 0%, var(--gold-soft), transparent 60%), var(--surface-solid)",
-      }}
-    >
-      <div style={{ color: "var(--gold)", fontSize: 11, letterSpacing: ".16em", fontWeight: 600 }}>
-        DAILY · GOD
+    <div className="god-card">
+      <div className="god-card-inner">
+        <div className="card-eyebrow">Begin here</div>
+        <div className="card-title" style={{ marginTop: 2 }}>
+          Daily God, My Savior
+        </div>
+        <p className="opening">{opening}</p>
+        <div className="prayer">{prayer}</div>
+        <div className="carry">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+            <circle cx="12" cy="12" r="10" />
+            <polyline points="12 6 12 12 16 14" />
+          </svg>
+          <span>{carry}</span>
+        </div>
       </div>
-      <p className="serif" style={{ fontSize: "1.05rem", lineHeight: 1.65, marginTop: 12, color: "var(--ink)" }}>
-        {opening}
-      </p>
-      <blockquote
-        className="serif"
-        style={{
-          margin: "16px 0 0",
-          padding: "16px 20px",
-          borderLeft: "3px solid var(--gold)",
-          background: "var(--surface-2)",
-          borderRadius: "var(--radius-sm)",
-          fontSize: "1.02rem",
-          lineHeight: 1.65,
-          color: "var(--ink)",
-        }}
-      >
-        {prayer}
-      </blockquote>
-      <p style={{ marginTop: 12, fontSize: 13, color: "var(--ink-soft)", fontStyle: "italic" }}>
-        Carry today: {carry}
-      </p>
-    </article>
+    </div>
   );
 }

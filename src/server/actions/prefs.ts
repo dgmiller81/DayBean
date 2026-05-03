@@ -4,7 +4,7 @@ import { db } from "@/server/db";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
-const ThemeSchema = z.enum(["light", "dark"]);
+const ThemeSchema = z.enum(["light", "dark", "warm", "forest", "midnight"]);
 const FilterSchema = z.enum(["all", "mindfulness", "business", "personal"]);
 
 const SetThemeInput = z.object({ userId: z.string(), theme: ThemeSchema });

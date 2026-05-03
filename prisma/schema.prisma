@@ -13,11 +13,14 @@ model User {
   name      String?
   createdAt DateTime @default(now())
 
-  goals       Goal[]
-  tasks       Task[]
-  days        Day[]
-  clicks      Click[]
-  prefs       Pref?
+  goals          Goal[]
+  tasks          Task[]
+  days           Day[]
+  clicks         Click[]
+  prefs          Pref?
+  dailyContents  DailyContent[]
+  llmCredentials LlmCredential[]
+  refreshLogs    RefreshLog[]
 }
 
 model Pref {
@@ -30,6 +33,9 @@ model Pref {
   interests   String?                    // JSON array of strings
   faith       String?                    // 'christian' | 'jewish' | 'muslim' | 'spiritual' | 'none' | custom
   scripturePref String?                  // 'kjv' | 'niv' | etc; null when faith is 'none'
+  contentInterests String?                // JSON array of strings (LLM context)
+  bio         String?
+  refreshHour Int      @default(4)       // 0-23, local-time hour for daily content refresh
 }
 
 model Goal {
@@ -83,4 +89,51 @@ model Click {
   count        Int      @default(0)
 
   @@unique([userId, iso, section])
+}
+
+model DailyContent {
+  id          String   @id @default(cuid())
+  userId      String
+  iso         String   // 'YYYY-MM-DD'
+  contentJson String   // serialized DailyContent JSON; validated at the boundary
+  source      String   // 'manual' | 'llm' | 'fixture'
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, iso])
+  @@index([userId, iso])
+}
+
+model LlmCredential {
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  provider     String   // 'openai' | 'anthropic' | 'lmstudio'
+  encryptedKey String   // base64( iv | ciphertext | tag )
+  last4        String   // last 4 chars of plaintext key (UI display)
+  model        String   // user-selected model id
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@unique([userId, provider])
+  @@index([userId])
+}
+
+model RefreshLog {
+  id          String    @id @default(cuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  iso         String    // YYYY-MM-DD — the day of the content being generated
+  source      String    // 'manual' | 'cron' | 'cold-start'
+  status      String    // 'ok' | 'rate-limited' | 'no-credential' | 'provider-error' | 'validation-error'
+  tokensUsed  Int       @default(0)
+  errorCode   String?
+  errorDetail String?
+  startedAt   DateTime  @default(now())
+  finishedAt  DateTime?
+
+  @@index([userId, iso])
+  @@index([userId, startedAt])
 }

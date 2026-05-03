@@ -20,14 +20,28 @@ export async function MindfulnessPanel() {
   ]);
 
   return (
-    <div style={{ display: "grid", gap: 16 }}>
+    <>
       <GodCard userId={userId} iso={iso} />
       <ScriptureWithModal passage={scripture.passage} hint={scripture.hint} />
-      <Reflections iso={iso} />
-      <Journal userId={userId} iso={iso} initial={day.notes} />
-      <BreathTimer />
-      <MindfulnessArticles userId={userId} iso={iso} />
-      <MindfulnessGoals userId={userId} iso={iso} />
-    </div>
+      <div className="grid-2">
+        <div>
+          <div style={{ marginBottom: 22 }}>
+            <Reflections iso={iso} />
+          </div>
+          <div style={{ marginBottom: 22 }}>
+            <MindfulnessArticles userId={userId} iso={iso} />
+          </div>
+          <div>
+            <Journal userId={userId} iso={iso} initial={day.notes} />
+          </div>
+        </div>
+        <div>
+          <div style={{ marginBottom: 22 }}>
+            <MindfulnessGoals userId={userId} iso={iso} />
+          </div>
+          <BreathTimer />
+        </div>
+      </div>
+    </>
   );
 }

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Fraunces, Inter } from "next/font/google";
 import { cookies } from "next/headers";
 import "@/styles/globals.css";
+import { DrawerHost } from "@/components/drawer/DrawerHost";
 
 const fraunces = Fraunces({
   subsets: ["latin"],
@@ -22,15 +23,21 @@ export const metadata: Metadata = {
   description: "A daily snapshot for spiritual, professional, and personal growth.",
 };
 
+const VALID_THEMES = new Set(["light", "dark", "warm", "forest", "midnight"]);
+
 export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const theme = (await cookies()).get("mm_theme")?.value === "dark" ? "dark" : "light";
+  const raw = (await cookies()).get("mm_theme")?.value;
+  const theme = raw && VALID_THEMES.has(raw) ? raw : "light";
   return (
     <html lang="en" data-theme={theme} className={`${fraunces.variable} ${inter.variable}`}>
-      <body>{children}</body>
+      <body>
+        {children}
+        <DrawerHost />
+      </body>
     </html>
   );
 }

@@ -1,5 +1,4 @@
-import { BusinessHeadline } from "@/components/business/BusinessHeadline";
-import { BusinessBriefing } from "@/components/business/BusinessBriefing";
+import { BusinessHero } from "@/components/business/BusinessHero";
 import { TopStories } from "@/components/business/TopStories";
 import { ScanList } from "@/components/business/ScanList";
 import { BusinessArticles } from "@/components/business/BusinessArticles";
@@ -15,16 +14,27 @@ export async function BusinessPanel() {
   const iso = todayISO();
 
   return (
-    <div style={{ display: "grid", gap: 16 }}>
-      <BusinessHeadline userId={userId} iso={iso} />
-      <BusinessBriefing userId={userId} iso={iso} />
+    <>
+      <BusinessHero userId={userId} iso={iso} />
       <TopStories userId={userId} iso={iso} />
       <ScanList userId={userId} iso={iso} />
-      <BusinessArticles userId={userId} iso={iso} />
-      <DevQuotes userId={userId} iso={iso} />
-      <Repos userId={userId} iso={iso} />
-      <Watchlist userId={userId} iso={iso} />
-      <BusinessGoals userId={userId} iso={iso} />
-    </div>
+      <div className="grid-2">
+        <div>
+          <div style={{ marginBottom: 22 }}>
+            <BusinessArticles userId={userId} iso={iso} />
+          </div>
+          <Repos userId={userId} iso={iso} />
+        </div>
+        <div>
+          <div style={{ marginBottom: 22 }}>
+            <DevQuotes userId={userId} iso={iso} />
+          </div>
+          <div style={{ marginBottom: 22 }}>
+            <Watchlist userId={userId} iso={iso} />
+          </div>
+          <BusinessGoals userId={userId} iso={iso} />
+        </div>
+      </div>
+    </>
   );
 }

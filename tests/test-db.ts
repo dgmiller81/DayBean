@@ -38,6 +38,7 @@ export async function resetTestDb() {
   await testDb.$executeRawUnsafe('DELETE FROM "Task"');
   await testDb.$executeRawUnsafe('DELETE FROM "Goal"');
   await testDb.$executeRawUnsafe('DELETE FROM "Pref"');
+  await testDb.$executeRawUnsafe('DELETE FROM "DailyContent"');
   await testDb.$executeRawUnsafe('DELETE FROM "User"');
 }
 

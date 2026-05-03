@@ -3,23 +3,30 @@ import { pickReflections } from "@/lib/reflections";
 export function Reflections({ iso }: { iso: string }) {
   const items = pickReflections(iso);
   return (
-    <section className="card">
-      <div style={{ color: "var(--gold)", fontSize: 11, letterSpacing: ".16em", fontWeight: 600 }}>
-        REFLECTIONS · TODAY
+    <div className="card">
+      <div className="card-header">
+        <div>
+          <div className="card-eyebrow">Today's reflections</div>
+          <div className="card-title">A few thoughts to carry</div>
+        </div>
       </div>
-      <div style={{ display: "grid", gap: 16, marginTop: 12 }}>
+      <div>
         {items.map((r, i) => (
-          <article key={i}>
-            <h3 className="serif" style={{ fontSize: "1.05rem", margin: "0 0 4px", color: "var(--ink)" }}>
-              {r.title}
-            </h3>
-            <p style={{ margin: 0, fontSize: 14, lineHeight: 1.6, color: "var(--ink-soft)" }}>{r.body}</p>
-            <p style={{ marginTop: 6, fontSize: 13, color: "var(--sage-deep)", fontStyle: "italic" }}>
-              Practice: {r.practice}
-            </p>
-          </article>
+          <div key={i} className="reflection">
+            <div className="reflection-head">
+              <div className="reflection-num">No. {String(i + 1).padStart(2, "0")}</div>
+              <div className="reflection-title">{r.title}</div>
+            </div>
+            <div className="reflection-body">{r.body}</div>
+            <div className="reflection-practice">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+              <span>{r.practice}</span>
+            </div>
+          </div>
         ))}
       </div>
-    </section>
+    </div>
   );
 }

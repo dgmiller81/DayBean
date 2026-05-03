@@ -34,12 +34,11 @@ export function WinWidget({
   }, [persist]);
 
   return (
-    <div className="stat-card card" style={{ padding: 14 }}>
-      <div style={{ color: "var(--gold)", fontSize: 11, letterSpacing: ".16em", fontWeight: 600 }}>
-        WIN OF THE DAY
-      </div>
+    <div className="stat-card">
+      <div className="lbl">Success</div>
+      <h3>Win of the day</h3>
       <textarea
-        className="win-area serif"
+        className="win-area"
         value={text}
         onChange={(e) => {
           const v = e.target.value;
@@ -47,25 +46,11 @@ export function WinWidget({
           setStatus("saving");
           persist(v);
         }}
-        placeholder="What worked today?"
+        placeholder="One small thing you'll be proud of by tonight…"
         rows={4}
         maxLength={1000}
-        style={{
-          width: "100%",
-          marginTop: 10,
-          padding: 12,
-          borderRadius: "var(--radius-sm)",
-          border: "1px solid var(--line)",
-          background: "var(--surface-2)",
-          color: "var(--ink)",
-          fontFamily: "Fraunces, Georgia, serif",
-          fontStyle: "italic",
-          fontSize: "1rem",
-          lineHeight: 1.55,
-          resize: "vertical",
-        }}
       />
-      <div className="save-status" style={{ fontSize: 11, color: "var(--ink-muted)", marginTop: 6, minHeight: 14 }}>
+      <div className="save-status">
         {status === "saving" ? "saving…" : status === "saved" ? `saved · ${lastSavedAt.current}` : ""}
       </div>
     </div>

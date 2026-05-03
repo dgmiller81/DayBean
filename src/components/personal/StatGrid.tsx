@@ -8,17 +8,11 @@ export async function StatGrid({ userId, iso }: { userId: string; iso: string })
   const day = await getDayOrEmpty(userId, iso);
 
   return (
-    <section
-      style={{
-        display: "grid",
-        gap: 12,
-        gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-      }}
-    >
+    <div className="grid-4" style={{ marginBottom: 22 }}>
       <FinancialWidget userId={userId} iso={iso} initial={day.fin ?? {}} />
-      <HealthWidget    userId={userId} iso={iso} initial={day.health ?? {}} />
+      <HealthWidget userId={userId} iso={iso} initial={day.health ?? {}} />
       <DisconnectWidget userId={userId} iso={iso} initial={day.disconnect ?? 0} />
-      <WinWidget       userId={userId} iso={iso} initial={day.win ?? ""} />
-    </section>
+      <WinWidget userId={userId} iso={iso} initial={day.win ?? ""} />
+    </div>
   );
 }

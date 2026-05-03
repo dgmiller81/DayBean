@@ -7,11 +7,17 @@ export async function MindfulnessArticles({ userId, iso }: { userId: string; iso
   if (articles.length === 0) return null;
 
   return (
-    <section className="card">
-      <div style={{ color: "var(--gold)", fontSize: 11, letterSpacing: ".16em", fontWeight: 600 }}>
-        TODAY'S READING
+    <div className="card">
+      <div className="card-header">
+        <div>
+          <div className="card-eyebrow">Today's reading</div>
+          <div className="card-title">Three small windows</div>
+        </div>
+        <span style={{ fontSize: ".78rem", color: "var(--ink-muted)" }}>
+          Click an article to count it toward goals
+        </span>
       </div>
-      <div style={{ display: "grid", gap: 12, marginTop: 12 }}>
+      <div className="cards-grid">
         {articles.map((a) => (
           <TrackedArticleLink
             key={a.url}
@@ -25,6 +31,6 @@ export async function MindfulnessArticles({ userId, iso }: { userId: string; iso
           />
         ))}
       </div>
-    </section>
+    </div>
   );
 }

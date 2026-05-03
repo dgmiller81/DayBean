@@ -13,8 +13,8 @@ export function FinancialWidget({
   initial: { net?: string; cash?: string; invest?: string };
 }) {
   const [fin, setFin] = useState({
-    net:    initial.net    ?? "",
-    cash:   initial.cash   ?? "",
+    net: initial.net ?? "",
+    cash: initial.cash ?? "",
     invest: initial.invest ?? "",
   });
   const [status, setStatus] = useState<"" | "saving" | "saved">("");
@@ -45,38 +45,28 @@ export function FinancialWidget({
   }, [persist]);
 
   return (
-    <div className="stat-card card" style={{ padding: 14 }}>
-      <div style={{ color: "var(--gold)", fontSize: 11, letterSpacing: ".16em", fontWeight: 600 }}>
-        FINANCIAL
-      </div>
-      <p style={{ fontSize: 11, color: "var(--ink-muted)", margin: "4px 0 10px" }}>
+    <div className="stat-card">
+      <div className="lbl">Financial</div>
+      <h3>YNAB · USBank · IBKR</h3>
+      <p style={{ fontSize: ".78rem", color: "var(--ink-muted)", marginTop: 6 }}>
         Manual until connectors are wired.
       </p>
-      <div style={{ display: "grid", gap: 8 }}>
+      <div className="fin-inputs">
         {(["net", "cash", "invest"] as const).map((k) => (
-          <label key={k} style={{ display: "grid", gap: 4 }}>
-            <span style={{ fontSize: 11, color: "var(--ink-soft)", textTransform: "capitalize" }}>{k}</span>
+          <label key={k}>
+            {k.charAt(0).toUpperCase() + k.slice(1)}
             <input
               type="text"
               inputMode="decimal"
               value={fin[k]}
               onChange={(e) => update(k, e.target.value)}
-              placeholder="$0"
+              placeholder="$—"
               maxLength={32}
-              style={{
-                padding: "6px 10px",
-                borderRadius: "var(--radius-sm)",
-                border: "1px solid var(--line)",
-                background: "var(--surface-2)",
-                color: "var(--ink)",
-                fontFamily: "inherit",
-                fontSize: 14,
-              }}
             />
           </label>
         ))}
       </div>
-      <div className="save-status" style={{ fontSize: 11, color: "var(--ink-muted)", marginTop: 8, minHeight: 14 }}>
+      <div className="save-status" style={{ marginTop: 8 }}>
         {status === "saving" ? "saving…" : status === "saved" ? `saved · ${lastSavedAt.current}` : ""}
       </div>
     </div>

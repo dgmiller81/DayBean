@@ -1,59 +1,125 @@
-import { getDailyContent } from "@/server/queries/daily-content";
 import { recordClick } from "@/server/actions/clicks";
+import { getGitHubBuzz, type GitHubRepo } from "@/server/queries/github-buzz";
 import { TrackedAnchor } from "./TrackedAnchor";
 
-export async function Repos({ userId, iso }: { userId: string; iso: string }) {
-  const content = await getDailyContent(userId, iso);
-  const repos = content.business.repos;
-  if (!repos.length) return null;
+function RepoCard({
+  r,
+  showVelocity,
+  track,
+}: {
+  r: GitHubRepo;
+  showVelocity: boolean;
+  track: () => Promise<void>;
+}) {
+  return (
+    <TrackedAnchor
+      key={r.url}
+      href={r.url}
+      cat="business"
+      onTrack={track}
+      className="repo"
+    >
+      <div style={{ flex: 1 }}>
+        <div className="repo-name">
+          <span className="org">{r.org}/</span>
+          <strong>{r.name}</strong>
+        </div>
+        {r.description && <div className="repo-pitch">{r.description}</div>}
+        <div className="repo-meta">
+          <span><strong>★ {r.starsDisplay}</strong></span>
+          {showVelocity && r.starsPerWeekDisplay && (
+            <span style={{ color: "var(--gold)", fontWeight: 600 }}>
+              {r.starsPerWeekDisplay}
+            </span>
+          )}
+          {r.language && <span>· {r.language}</span>}
+          {r.license && <span>· {r.license}</span>}
+        </div>
+      </div>
+    </TrackedAnchor>
+  );
+}
 
+export async function Repos({ userId, iso }: { userId: string; iso: string }) {
+  const buzz = await getGitHubBuzz();
   const track = recordClick.bind(null, { userId, iso, section: "business" });
 
+  const empty = buzz.topStarred.length === 0 && buzz.fastestGrowing.length === 0;
+
   return (
-    <section className="card">
-      <div style={{ color: "var(--accent)", fontSize: 11, letterSpacing: ".16em", fontWeight: 600 }}>
-        GITHUB BUZZ
+    <div className="card">
+      <div className="card-header">
+        <div>
+          <div className="card-eyebrow">GitHub buzz</div>
+          <div className="card-title">What devs are starring</div>
+        </div>
+        <span style={{ fontSize: ".7rem", color: "var(--ink-muted)", letterSpacing: ".06em" }}>
+          live
+        </span>
       </div>
-      <div style={{ display: "grid", gap: 12, marginTop: 12 }}>
-        {repos.map((r) => (
-          <TrackedAnchor
-            key={r.url}
-            href={r.url}
-            cat="business"
-            onTrack={track}
-            className="repo"
+
+      {buzz.error && (
+        <div
+          role="alert"
+          style={{
+            padding: 10,
+            background: "rgba(201,123,110,0.10)",
+            border: "1px solid rgba(201,123,110,0.35)",
+            borderRadius: "var(--radius-sm)",
+            color: "var(--rose)",
+            fontSize: 12,
+            marginBottom: 12,
+          }}
+        >
+          GitHub API error: {buzz.error}
+        </div>
+      )}
+
+      {empty && !buzz.error && (
+        <p style={{ color: "var(--ink-muted)", fontSize: 13, fontStyle: "italic" }}>
+          No repos returned (rate-limited?). Set <code>GITHUB_TOKEN</code> in .env to raise the limit.
+        </p>
+      )}
+
+      {buzz.topStarred.length > 0 && (
+        <section style={{ marginBottom: 18 }}>
+          <h4
             style={{
-              display: "block",
-              padding: 14,
-              border: "1px solid var(--line)",
-              borderRadius: "var(--radius-sm)",
-              background: "var(--surface-2)",
-              color: "var(--ink)",
-              textDecoration: "none",
+              fontSize: ".65rem",
+              fontWeight: 700,
+              textTransform: "uppercase",
+              letterSpacing: ".16em",
+              color: "var(--gold)",
+              margin: "0 0 8px",
             }}
           >
-            <div style={{ display: "flex", justifyContent: "space-between", gap: 12, alignItems: "baseline" }}>
-              <div>
-                <div className="serif" style={{ fontSize: "1.05rem", fontWeight: 500 }}>
-                  {r.org}/<span style={{ fontWeight: 600 }}>{r.name}</span>
-                </div>
-                <p style={{ marginTop: 4, fontSize: 13, color: "var(--ink-soft)", lineHeight: 1.55 }}>
-                  {r.pitch}
-                </p>
-              </div>
-              <div style={{ textAlign: "right", fontSize: 11, color: "var(--ink-muted)", whiteSpace: "nowrap" }}>
-                <div style={{ color: "var(--gold)", fontWeight: 600 }}>★ {r.stars}</div>
-                <div>{r.weekly}</div>
-              </div>
-            </div>
-            <div style={{ marginTop: 8, display: "flex", gap: 12, fontSize: 11, color: "var(--ink-muted)" }}>
-              <span>{r.lang}</span>
-              <span>·</span>
-              <span>{r.license}</span>
-            </div>
-          </TrackedAnchor>
-        ))}
-      </div>
-    </section>
+            Highest-starred AI
+          </h4>
+          {buzz.topStarred.map((r) => (
+            <RepoCard key={r.url} r={r} showVelocity={false} track={track} />
+          ))}
+        </section>
+      )}
+
+      {buzz.fastestGrowing.length > 0 && (
+        <section>
+          <h4
+            style={{
+              fontSize: ".65rem",
+              fontWeight: 700,
+              textTransform: "uppercase",
+              letterSpacing: ".16em",
+              color: "var(--gold)",
+              margin: "0 0 8px",
+            }}
+          >
+            Fastest-growing (last 180 days)
+          </h4>
+          {buzz.fastestGrowing.map((r) => (
+            <RepoCard key={r.url} r={r} showVelocity={true} track={track} />
+          ))}
+        </section>
+      )}
+    </div>
   );
 }

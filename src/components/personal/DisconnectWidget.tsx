@@ -50,34 +50,24 @@ export function DisconnectWidget({
   }
 
   return (
-    <div className="stat-card card" style={{ padding: 14 }}>
-      <div style={{ color: "var(--gold)", fontSize: 11, letterSpacing: ".16em", fontWeight: 600 }}>
-        DISCONNECT
-      </div>
-      <div className="serif" style={{ fontSize: "2.4rem", fontWeight: 500, color: "var(--ink)", marginTop: 6 }}>
-        {minutes}
-        <span style={{ fontSize: "0.95rem", color: "var(--ink-soft)", marginLeft: 6 }}>min</span>
-      </div>
-      <div style={{ display: "flex", gap: 6, marginTop: 10, flexWrap: "wrap" }}>
-        {[15, 30, 60].map((m) => (
-          <button key={m} type="button" onClick={() => add(m)}
-            style={{
-              padding: "6px 10px", borderRadius: 999,
-              border: "1px solid var(--sage)", background: "transparent",
-              color: "var(--sage-deep)", cursor: "pointer", fontSize: 12, fontWeight: 600,
-            }}>
-            +{m}
+    <div className="stat-card">
+      <div className="lbl">Disconnect</div>
+      <h3>Phone-down minutes</h3>
+      <div style={{ marginTop: 14 }}>
+        <div className="disc-mins">
+          <span>{minutes}</span>
+          <span>min today</span>
+        </div>
+        <div className="disc-buttons">
+          {[15, 30, 60].map((m) => (
+            <button key={m} type="button" className="disc-btn" onClick={() => add(m)}>
+              +{m}
+            </button>
+          ))}
+          <button type="button" className="disc-btn minus" onClick={subtractFifteen} aria-label="Subtract 15">
+            −15
           </button>
-        ))}
-        <button type="button" onClick={subtractFifteen}
-          aria-label="Subtract 15 minutes"
-          style={{
-            padding: "6px 10px", borderRadius: 999,
-            border: "1px solid var(--line-strong)", background: "transparent",
-            color: "var(--ink-muted)", cursor: "pointer", fontSize: 12, fontWeight: 600,
-          }}>
-          −15
-        </button>
+        </div>
       </div>
     </div>
   );

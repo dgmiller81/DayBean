@@ -34,36 +34,23 @@ export function Journal({
 
   return (
     <div className="card">
-      <div style={{ color: "var(--gold)", fontSize: 11, letterSpacing: ".16em", fontWeight: 600 }}>
-        JOURNAL
+      <div className="card-header">
+        <div>
+          <div className="card-eyebrow">Journal</div>
+          <div className="card-title">My reflection for the day</div>
+        </div>
       </div>
-      <h2 className="serif" style={{ fontSize: "1.2rem", margin: "8px 0 12px" }}>
-        Today's reflection
-      </h2>
       <textarea
-        className="serif notes"
+        className="notes"
         value={value}
         onChange={(e) => {
           setValue(e.target.value);
           save(e.target.value);
         }}
-        rows={6}
-        placeholder="Mention themes (humility, anxious, contentment) — tomorrow's scripture adapts."
+        placeholder="One thing I'm grateful for, one thing I noticed, one thing to do better tomorrow… Mention themes like 'humility' or 'contentment' to bias future scriptures."
         maxLength={50_000}
-        style={{
-          width: "100%",
-          background: "var(--surface-2)",
-          color: "var(--ink)",
-          border: "1px solid var(--line)",
-          borderRadius: "var(--radius-sm)",
-          padding: 12,
-          fontSize: "1rem",
-          lineHeight: 1.6,
-          resize: "vertical",
-          fontFamily: "var(--font-fraunces)",
-        }}
       />
-      <p style={{ marginTop: 8, fontSize: 12, color: "var(--ink-muted)" }}>{status}</p>
+      <div className="save-status">{status}</div>
     </div>
   );
 }

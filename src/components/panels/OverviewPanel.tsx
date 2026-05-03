@@ -1,15 +1,46 @@
-export function OverviewPanel() {
+import { getCurrentUserId } from "@/server/auth-context";
+import { todayISO } from "@/lib/dates";
+import { OverviewHero } from "@/components/overview/OverviewHero";
+import { SectionBars } from "@/components/overview/SectionBars";
+import { FilterPills } from "@/components/overview/FilterPills";
+import { MasterGoalList } from "@/components/overview/MasterGoalList";
+
+export async function OverviewPanel() {
+  const userId = await getCurrentUserId();
+  const iso = todayISO();
+
   return (
-    <div className="card">
-      <div style={{ color: "var(--gold)", fontSize: 11, letterSpacing: ".16em", fontWeight: 600 }}>
-        GOALS OVERVIEW
+    <>
+      <div className="pulse-hero">
+        <div className="card-eyebrow">Whole-life view</div>
+        <h2>Your goals, all in one place.</h2>
+        <p style={{ marginTop: 14, color: "var(--ink-soft)" }}>
+          Check goals off here or from any section — it all syncs. Articles read, disconnect minutes, and check-ins flow up automatically.
+        </p>
       </div>
-      <h2 className="serif" style={{ fontSize: "1.35rem", fontWeight: 500, margin: "8px 0 0" }}>
-        Coming in Phase 5
-      </h2>
-      <p style={{ color: "var(--ink-muted)", marginTop: 8 }}>
-        All goals across sections in one place — progress, streaks, and edits.
-      </p>
-    </div>
+
+      <OverviewHero userId={userId} iso={iso} />
+
+      <div className="card" style={{ marginBottom: 22 }}>
+        <div className="card-header">
+          <div>
+            <div className="card-eyebrow">By section</div>
+            <div className="card-title">Today's progress</div>
+          </div>
+        </div>
+        <SectionBars userId={userId} iso={iso} />
+      </div>
+
+      <div className="card">
+        <div className="card-header">
+          <div>
+            <div className="card-eyebrow">All goals</div>
+            <div className="card-title">Filterable view</div>
+          </div>
+        </div>
+        <FilterPills userId={userId} />
+        <MasterGoalList userId={userId} iso={iso} />
+      </div>
+    </>
   );
 }

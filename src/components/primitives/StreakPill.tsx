@@ -1,23 +1,10 @@
 export function StreakPill({ count }: { count: number }) {
   return (
-    <span
-      style={{
-        display: "inline-flex",
-        alignItems: "center",
-        gap: 6,
-        padding: "6px 12px",
-        background: "var(--gold-soft)",
-        color: "var(--gold)",
-        borderRadius: 999,
-        fontSize: 12,
-        fontWeight: 600,
-        letterSpacing: 0.4,
-      }}
-    >
-      <svg className="ic-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
-        <path d="M12 2c1 4 4 6 4 10a4 4 0 1 1-8 0c0-2 1-3 1-5-2 1-3 3-3 5a6 6 0 0 0 12 0c0-5-4-7-6-10z" />
+    <div className="streak-pill" title="Daily streak">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+        <path d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67zM11.71 19c-1.78 0-3.22-1.4-3.22-3.14 0-1.62 1.05-2.76 2.81-3.12 1.77-.36 3.6-1.21 4.62-2.58.39 1.29.59 2.65.59 4.04 0 2.65-2.15 4.8-4.8 4.8z" />
       </svg>
-      <span>{count}</span>
-    </span>
+      <span>{count}-day streak</span>
+    </div>
   );
 }

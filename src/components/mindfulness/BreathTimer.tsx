@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 type Phase = "Inhale" | "Hold" | "Exhale";
 const SCRIPT: Array<{ phase: Phase; secs: number }> = [
   { phase: "Inhale", secs: 4 },
-  { phase: "Hold",   secs: 7 },
+  { phase: "Hold", secs: 7 },
   { phase: "Exhale", secs: 8 },
 ];
 
@@ -44,35 +44,51 @@ export function BreathTimer() {
 
   return (
     <div className="card">
-      <div style={{ color: "var(--gold)", fontSize: 11, letterSpacing: ".16em", fontWeight: 600 }}>
-        BREATH · 4–7–8
-      </div>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 12 }}>
+      <div className="card-header">
         <div>
-          <div className="serif" style={{ fontSize: "1.6rem", color: "var(--ink)" }}>
-            {running ? phase : "Ready"}
+          <div className="card-eyebrow">Practice</div>
+          <div className="card-title">Breathe</div>
+        </div>
+      </div>
+      <p style={{ color: "var(--ink-soft)", fontSize: ".92rem", marginBottom: 14 }}>
+        4 in, 7 hold, 8 out. One round at a stoplight resets your day.
+      </p>
+      {running && (
+        <div style={{ marginBottom: 14, textAlign: "center" }}>
+          <div className="serif" style={{ fontSize: "1.2rem", color: "var(--ink-soft)" }}>
+            {phase}
           </div>
-          <div className="serif" style={{ fontSize: "2.4rem", color: "var(--sage-deep)" }}>
-            {running ? count : "—"}
+          <div className="serif" style={{ fontSize: "2.4rem", color: "var(--sage-deep)", lineHeight: 1 }}>
+            {count}
           </div>
         </div>
-        <button
-          type="button"
-          onClick={running ? stop : start}
-          style={{
-            background: "var(--sage)",
-            color: "white",
-            border: 0,
-            padding: "10px 18px",
-            borderRadius: 999,
-            cursor: "pointer",
-            fontWeight: 600,
-            letterSpacing: ".08em",
-          }}
-        >
-          {running ? "Stop" : "Start 4-7-8"}
-        </button>
-      </div>
+      )}
+      <button
+        type="button"
+        onClick={running ? stop : start}
+        style={{
+          background: "var(--sage)",
+          color: "white",
+          border: 0,
+          borderRadius: 999,
+          padding: "10px 20px",
+          fontWeight: 600,
+          fontSize: ".88rem",
+          display: "inline-flex",
+          alignItems: "center",
+          gap: 8,
+          cursor: "pointer",
+        }}
+      >
+        <svg className="ic" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+          {running ? (
+            <path d="M6 4h4v16H6zM14 4h4v16h-4z" />
+          ) : (
+            <polygon points="6 4 20 12 6 20 6 4" />
+          )}
+        </svg>
+        <span>{running ? "Stop" : "Start 4-7-8"}</span>
+      </button>
     </div>
   );
 }

@@ -1,12 +1,53 @@
 import "server-only";
-import type { DailyContent } from "@/types/daily-content";
+import { db } from "@/server/db";
+import { DailyContentSchema, type DailyContent } from "@/types/daily-content";
 import { fixtureFor } from "@/lib/daily-content-fixture";
 
-/**
- * Phase 3: returns the fixture (same content regardless of user/iso).
- * Phase 6: reads from the DailyContent table keyed by (userId, iso); falls back
- *          to the fixture only if the user has no row yet (e.g. new users).
- */
-export async function getDailyContent(_userId: string, iso: string): Promise<DailyContent> {
-  return fixtureFor(iso);
+export type DailyContentSource = "manual" | "llm" | "fixture";
+export type DailyContentWithMeta = {
+  content: DailyContent;
+  source: DailyContentSource;
+};
+
+export async function getDailyContent(userId: string, iso: string): Promise<DailyContent> {
+  const meta = await getDailyContentWithMeta(userId, iso);
+  return meta.content;
+}
+
+export async function getDailyContentWithMeta(
+  userId: string,
+  iso: string,
+): Promise<DailyContentWithMeta> {
+  const row = await db.dailyContent.findUnique({
+    where: { userId_iso: { userId, iso } },
+  });
+
+  if (!row) {
+    return { content: fixtureFor(iso), source: "fixture" };
+  }
+
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(row.contentJson);
+  } catch (e) {
+    console.error("[daily-content] row has invalid JSON, falling back to fixture", {
+      userId, iso, error: (e as Error).message,
+    });
+    return { content: fixtureFor(iso), source: "fixture" };
+  }
+
+  const result = DailyContentSchema.safeParse(parsed);
+  if (!result.success) {
+    console.error("[daily-content] row failed schema validation, falling back to fixture", {
+      userId, iso, issues: result.error.issues.length,
+    });
+    return { content: fixtureFor(iso), source: "fixture" };
+  }
+
+  const source = isValidSource(row.source) ? row.source : "manual";
+  return { content: result.data, source };
+}
+
+function isValidSource(s: string): s is DailyContentSource {
+  return s === "manual" || s === "llm" || s === "fixture";
 }

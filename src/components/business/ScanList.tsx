@@ -6,29 +6,18 @@ export async function ScanList({ userId, iso }: { userId: string; iso: string })
   if (!items.length) return null;
 
   return (
-    <section className="card">
-      <div style={{ color: "var(--accent)", fontSize: 11, letterSpacing: ".16em", fontWeight: 600 }}>
-        TODAY'S SCAN
+    <div className="card" style={{ marginBottom: 22 }}>
+      <div className="card-header">
+        <div>
+          <div className="card-eyebrow">Quick scan</div>
+          <div className="card-title">Today, in {items.length} {items.length === 1 ? "line" : "lines"}</div>
+        </div>
       </div>
-      <ul style={{ listStyle: "none", padding: 0, margin: "10px 0 0", display: "grid", gap: 6 }}>
+      <ol className="scan-grid">
         {items.map((line, i) => (
-          <li
-            key={i}
-            style={{
-              fontSize: 14,
-              lineHeight: 1.5,
-              color: "var(--ink)",
-              padding: "6px 0",
-              borderBottom: i < items.length - 1 ? "1px solid var(--line)" : "none",
-              display: "flex",
-              gap: 10,
-            }}
-          >
-            <span aria-hidden style={{ color: "var(--accent)", fontWeight: 700 }}>·</span>
-            <span>{line}</span>
-          </li>
+          <li key={i}>{line}</li>
         ))}
-      </ul>
-    </section>
+      </ol>
+    </div>
   );
 }
