@@ -54,7 +54,7 @@ export async function Repos({ userId, iso }: { userId: string; iso: string }) {
           <div className="card-title">What devs are starring</div>
         </div>
         <span style={{ fontSize: ".7rem", color: "var(--ink-muted)", letterSpacing: ".06em" }}>
-          live
+          updated daily
         </span>
       </div>
 
@@ -77,7 +77,7 @@ export async function Repos({ userId, iso }: { userId: string; iso: string }) {
 
       {empty && !buzz.error && (
         <p style={{ color: "var(--ink-muted)", fontSize: 13, fontStyle: "italic" }}>
-          No repos returned (rate-limited?). Set <code>GITHUB_TOKEN</code> in .env to raise the limit.
+          No repos returned today. The query refreshes once a day.
         </p>
       )}
 

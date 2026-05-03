@@ -20,9 +20,9 @@ export type GitHubBuzz = {
   error: string | null;
 };
 
-// Topics broad enough to capture AI/ML/LLM repos. GitHub Search OR-joins
-// these in the query string with "+OR+".
-const AI_TOPICS = ["ai", "artificial-intelligence", "machine-learning", "llm", "deep-learning"];
+// Once-a-day cache. One unauthenticated request to GitHub per query per
+// 24h is well below the 60/hr unauthenticated cap, so no token needed.
+const CACHE_SECONDS = 86_400;
 const FASTEST_GROWING_DAYS = 180;
 
 type GhItem = {
@@ -86,8 +86,7 @@ async function search(query: string, withVelocity: boolean): Promise<GitHubRepo[
 
   const res = await fetch(url, {
     headers,
-    // Next.js fetch cache: re-fetch at most once per hour
-    next: { revalidate: 3600 },
+    next: { revalidate: CACHE_SECONDS },
   });
 
   if (!res.ok) {
@@ -98,22 +97,28 @@ async function search(query: string, withVelocity: boolean): Promise<GitHubRepo[
   return (data.items ?? []).map((it) => parseItem(it, withVelocity));
 }
 
+/**
+ * Daily-cached GitHub Search:
+ *   topStarred:     repos with "AI" in name/desc/readme + 1000+ stars,
+ *                   sorted by stars desc, top 4.
+ *   fastestGrowing: same keyword + created in the last 180 days,
+ *                   sorted by stars desc, top 4 (with stars-per-week chip).
+ *
+ * Why a plain keyword (not topic:): the GitHub Search API's logical OR
+ * across qualifiers is unreliable — `topic:ai OR topic:llm` silently
+ * returns zero items. A keyword search ("ai") covers repos with AI in
+ * the name/description/readme regardless of whether they remembered to
+ * tag a topic, which is most of them.
+ */
 export async function getGitHubBuzz(): Promise<GitHubBuzz> {
-  const topicQuery = AI_TOPICS.map((t) => `topic:${t}`).join(" OR ");
-
-  // For "fastest growing" we look at recently-created repos and sort by
-  // total stars. A young repo with many stars is, by definition, growing
-  // fast. The Search API doesn't expose stars-per-day directly so this
-  // proxy is the cleanest available.
   const since = new Date();
   since.setDate(since.getDate() - FASTEST_GROWING_DAYS);
   const sinceIso = since.toISOString().slice(0, 10);
-  const fastestQuery = `(${topicQuery}) created:>${sinceIso}`;
 
   try {
     const [topStarred, fastestGrowing] = await Promise.all([
-      search(`(${topicQuery})`, false),
-      search(fastestQuery, true),
+      search(`ai stars:>1000`, false),
+      search(`ai stars:>200 created:>${sinceIso}`, true),
     ]);
     return {
       topStarred,
