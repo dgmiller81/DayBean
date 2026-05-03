@@ -28,7 +28,7 @@ Sub-items:
 
 ## Epic 2 — Data Layer & Server Actions
 **Milestone:** `phase-2-data-layer`
-**Plan:** `phase-2-data-layer.md` (to be written before Phase 2 starts)
+**Plan:** [phase-2-data-layer.md](superpowers/plans/2026-05-02-phase-2-data-layer.md)
 **Depends on:** Epic 1
 **Output:** Server actions for goals, tasks, days, clicks, theme, filter — replacing localStorage.
 
@@ -45,6 +45,7 @@ Sub-items (preview, finalized in plan):
 
 ## Epic 3 — Mindfulness Panel + Journal + Scripture Engine
 **Milestone:** `phase-3-mindfulness`
+**Plan:** [phase-3-mindfulness.md](superpowers/plans/2026-05-02-phase-3-mindfulness.md)
 **Depends on:** Epic 2
 
 Sub-items:
@@ -63,6 +64,7 @@ Sub-items:
 
 ## Epic 4 — Business + Personal Panels
 **Milestone:** `phase-4-business-personal`
+**Plan:** [phase-4-business-personal.md](superpowers/plans/2026-05-02-phase-4-business-personal.md)
 **Depends on:** Epic 2
 
 Sub-items:
@@ -75,6 +77,7 @@ Sub-items:
 
 ## Epic 5 — Goals Overview + Tasks Drawer + Heatmap
 **Milestone:** `phase-5-overview-drawer`
+**Plan:** [phase-5-overview-drawer.md](superpowers/plans/2026-05-02-phase-5-overview-drawer.md)
 **Depends on:** Epic 2
 
 Sub-items:
@@ -90,6 +93,7 @@ Sub-items:
 
 ## Epic 6 — Daily Content Refresh + DAILY_CONTENT JSON
 **Milestone:** `phase-6-content-refresh`
+**Plan:** [phase-6-content-refresh.md](superpowers/plans/2026-05-02-phase-6-content-refresh.md)
 **Depends on:** Epic 2
 
 Sub-items:
@@ -103,6 +107,7 @@ Sub-items:
 
 ## Epic 7 — Auth (3 modes)
 **Milestone:** `phase-7-auth`
+**Plan:** [phase-7-auth.md](superpowers/plans/2026-05-02-phase-7-auth.md)
 **Depends on:** Epic 6
 **Type:** `security`
 
@@ -120,6 +125,7 @@ Sub-items:
 
 ## Epic 8 — Settings, LLM Providers & Content Fetcher
 **Milestone:** `phase-8-settings-llm`
+**Plan:** [phase-8-settings-llm.md](superpowers/plans/2026-05-02-phase-8-settings-llm.md)
 **Depends on:** Epic 7
 **Type:** `security`
 
@@ -139,6 +145,7 @@ Sub-items:
 
 ## Epic 9 — Onboarding + LMS Bundle Script
 **Milestone:** `phase-9-onboarding`
+**Plan:** [phase-9-onboarding.md](superpowers/plans/2026-05-02-phase-9-onboarding.md)
 **Depends on:** Epic 8
 
 Sub-items:
@@ -152,6 +159,7 @@ Sub-items:
 
 ## Epic 10 — LLM Scheduler
 **Milestone:** `phase-10-scheduler`
+**Plan:** [phase-10-scheduler.md](superpowers/plans/2026-05-02-phase-10-scheduler.md)
 **Depends on:** Epic 8
 **Type:** `security`
 
@@ -168,6 +176,7 @@ Sub-items:
 
 ## Epic 11 — Calendar Navigation + Weekend Mode
 **Milestone:** `phase-11-calendar-weekend`
+**Plan:** [phase-11-calendar-weekend.md](superpowers/plans/2026-05-02-phase-11-calendar-weekend.md)
 **Depends on:** Epic 5
 
 Sub-items:
@@ -182,6 +191,7 @@ Sub-items:
 
 ## Epic 12 — Additional Themes + Friends & Family Stub
 **Milestone:** `phase-12-themes-friendsfamily`
+**Plan:** [phase-12-themes-friendsfamily.md](superpowers/plans/2026-05-02-phase-12-themes-friendsfamily.md)
 **Depends on:** Epic 1 (themes only need tokens) and Epic 11 (weekend hooks into the F&F card)
 
 Sub-items:
@@ -193,6 +203,7 @@ Sub-items:
 
 ## Epic 13 — Railway Deploy
 **Milestone:** `phase-13-railway`
+**Plan:** [phase-13-railway.md](superpowers/plans/2026-05-02-phase-13-railway.md)
 **Depends on:** Epic 7, Epic 10
 **Type:** `infra`, `security`
 
@@ -210,6 +221,7 @@ Sub-items:
 
 ## Epic 14 — Hardening, Security Review, E2E
 **Milestone:** `phase-14-hardening`
+**Plan:** [phase-14-hardening.md](superpowers/plans/2026-05-02-phase-14-hardening.md)
 **Depends on:** Epic 13
 **Type:** `security`, `test`
 
