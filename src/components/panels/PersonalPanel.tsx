@@ -1,15 +1,22 @@
-export function PersonalPanel() {
+import { PersonalHeadline } from "@/components/personal/PersonalHeadline";
+import { Motivation } from "@/components/personal/Motivation";
+import { PersonalArticles } from "@/components/personal/PersonalArticles";
+import { StatGrid } from "@/components/personal/StatGrid";
+import { PersonalGoals } from "@/components/personal/PersonalGoals";
+import { getCurrentUserId } from "@/server/auth-context";
+import { todayISO } from "@/lib/dates";
+
+export async function PersonalPanel() {
+  const userId = await getCurrentUserId();
+  const iso = todayISO();
+
   return (
-    <div className="card">
-      <div style={{ color: "var(--gold)", fontSize: 11, letterSpacing: ".16em", fontWeight: 600 }}>
-        PERSONAL
-      </div>
-      <h2 className="serif" style={{ fontSize: "1.35rem", fontWeight: 500, margin: "8px 0 0" }}>
-        Coming in Phase 4
-      </h2>
-      <p style={{ color: "var(--ink-muted)", marginTop: 8 }}>
-        Movement, finances, disconnect timer, writing prompt, and personal goals.
-      </p>
+    <div style={{ display: "grid", gap: 16 }}>
+      <PersonalHeadline userId={userId} iso={iso} />
+      <Motivation userId={userId} iso={iso} />
+      <StatGrid userId={userId} iso={iso} />
+      <PersonalArticles userId={userId} iso={iso} />
+      <PersonalGoals userId={userId} iso={iso} />
     </div>
   );
 }

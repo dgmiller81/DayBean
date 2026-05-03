@@ -1,15 +1,30 @@
-export function BusinessPanel() {
+import { BusinessHeadline } from "@/components/business/BusinessHeadline";
+import { BusinessBriefing } from "@/components/business/BusinessBriefing";
+import { TopStories } from "@/components/business/TopStories";
+import { ScanList } from "@/components/business/ScanList";
+import { BusinessArticles } from "@/components/business/BusinessArticles";
+import { DevQuotes } from "@/components/business/DevQuotes";
+import { Repos } from "@/components/business/Repos";
+import { Watchlist } from "@/components/business/Watchlist";
+import { BusinessGoals } from "@/components/business/BusinessGoals";
+import { getCurrentUserId } from "@/server/auth-context";
+import { todayISO } from "@/lib/dates";
+
+export async function BusinessPanel() {
+  const userId = await getCurrentUserId();
+  const iso = todayISO();
+
   return (
-    <div className="card">
-      <div style={{ color: "var(--gold)", fontSize: 11, letterSpacing: ".16em", fontWeight: 600 }}>
-        BUSINESS / AI
-      </div>
-      <h2 className="serif" style={{ fontSize: "1.35rem", fontWeight: 500, margin: "8px 0 0" }}>
-        Coming in Phase 4
-      </h2>
-      <p style={{ color: "var(--ink-muted)", marginTop: 8 }}>
-        AI pulse digest, business goals, customer signals, strategy and learning prompts.
-      </p>
+    <div style={{ display: "grid", gap: 16 }}>
+      <BusinessHeadline userId={userId} iso={iso} />
+      <BusinessBriefing userId={userId} iso={iso} />
+      <TopStories userId={userId} iso={iso} />
+      <ScanList userId={userId} iso={iso} />
+      <BusinessArticles userId={userId} iso={iso} />
+      <DevQuotes userId={userId} iso={iso} />
+      <Repos userId={userId} iso={iso} />
+      <Watchlist userId={userId} iso={iso} />
+      <BusinessGoals userId={userId} iso={iso} />
     </div>
   );
 }
