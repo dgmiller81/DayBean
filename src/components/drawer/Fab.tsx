@@ -1,24 +1,29 @@
 "use client";
 
-export function Fab({
+export function SideTab({
   openCount,
+  visible,
   onOpen,
 }: {
   openCount: number;
+  visible: boolean;
   onOpen: () => void;
 }) {
   return (
     <button
       type="button"
-      className="fab"
+      className={`drawer-sidetab${visible ? " visible" : ""}`}
       onClick={onOpen}
       aria-label={`Open tasks drawer${openCount > 0 ? ` (${openCount} open)` : ""}`}
+      aria-hidden={!visible}
+      tabIndex={visible ? 0 : -1}
     >
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-        <polyline points="22 4 12 14.01 9 11.01" />
-      </svg>
-      {openCount > 0 && <span className="badge">{openCount}</span>}
+      <span className="drawer-sidetab-icon" aria-hidden>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="15 18 9 12 15 6" />
+        </svg>
+      </span>
+      {openCount > 0 && <span className="drawer-sidetab-badge">{openCount > 9 ? "9+" : openCount}</span>}
     </button>
   );
 }

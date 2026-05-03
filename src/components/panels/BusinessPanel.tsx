@@ -6,6 +6,7 @@ import { DevQuotes } from "@/components/business/DevQuotes";
 import { Repos } from "@/components/business/Repos";
 import { Watchlist } from "@/components/business/Watchlist";
 import { BusinessGoals } from "@/components/business/BusinessGoals";
+import { NextUpFooter } from "@/components/NextUpFooter";
 import { getCurrentUserId } from "@/server/auth-context";
 import { todayISO } from "@/lib/dates";
 
@@ -35,6 +36,7 @@ export async function BusinessPanel() {
           <BusinessGoals userId={userId} iso={iso} />
         </div>
       </div>
+      <NextUpFooter current="business" />
     </>
   );
 }

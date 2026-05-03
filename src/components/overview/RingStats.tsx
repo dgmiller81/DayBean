@@ -65,7 +65,7 @@ export async function RingStats({ userId, iso }: { userId: string; iso: string }
   const journaled = daysJournaled(last60);
 
   return (
-    <div className="rings-grid" style={{ gridTemplateColumns: "repeat(4, minmax(0, 1fr))" }}>
+    <div className="rings-grid" style={{ gridTemplateColumns: "repeat(8, minmax(0, 1fr))" }}>
       {/* Row 1 — today + by section */}
       <Ring pct={ringFraction(completedToday, totalGoals)} variant="sage" big={`${completedToday}/${totalGoals}`} small="Today" />
       <Ring pct={ringFraction(m.completed, m.goals.length)} variant="sage" big={`${m.completed}/${m.goals.length}`} small="Mindfulness" />

@@ -2,7 +2,7 @@
 import { cookies } from "next/headers";
 import { z } from "zod";
 
-const TabSchema = z.enum(["tasks", "goals"]);
+const TabSchema = z.enum(["tasks", "goals", "bookmarks"]);
 export type DrawerTab = z.infer<typeof TabSchema>;
 
 const COOKIE_NAME = "mm_drawer_tab";

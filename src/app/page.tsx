@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { Topbar } from "@/components/Topbar";
 import { Hero } from "@/components/Hero";
 import { Tabs } from "@/components/Tabs";
+import { StickyHeader } from "@/components/StickyHeader";
 import { DateNav } from "@/components/DateNav";
 import { MindfulnessPanel } from "@/components/panels/MindfulnessPanel";
 import { BusinessPanel } from "@/components/panels/BusinessPanel";
@@ -20,7 +21,23 @@ import type { Tab } from "@/components/Tabs";
 import type { Theme } from "@/components/primitives/ThemeToggle";
 
 const ISO_PATTERN = /^\d{4}-\d{2}-\d{2}$/;
-const VALID_THEMES = new Set<Theme>(["light", "dark", "warm", "forest", "midnight"]);
+const VALID_THEMES = new Set<Theme>([
+  "light",
+  "dark",
+  "warm",
+  "forest",
+  "midnight",
+  "black",
+  "space",
+  "ai",
+  "snow",
+  "sepia",
+  "slate",
+  "crimson",
+  "aurora",
+  "steel",
+  "ember",
+]);
 
 export default async function Page({
   searchParams,
@@ -83,6 +100,7 @@ export default async function Page({
 
   return (
     <main className="app">
+      <StickyHeader iso={iso} initialTab={tab} />
       <Topbar theme={theme} name={name} iso={iso} dailyContent={content} settings={settings} latestRefresh={latestRefresh} />
       <Hero
         name={name}

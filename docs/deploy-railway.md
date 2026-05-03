@@ -1,32 +1,49 @@
 # Deploying The Daily Mind to Railway
 
-This is a single-service Next.js + Postgres deploy. SQLite stays the local-development DB.
+Single-service Next.js deploy. Two DB paths are supported:
 
-## One-time setup
+- **Recommended today — SQLite + Railway Volume.** Single instance, zero extra services, uses the migrations already in this repo.
+- **Future — Postgres.** Schema/migrations need to be regenerated against a live Postgres (not yet committed).
+
+SQLite stays the local-development DB in either case.
+
+## One-time setup (SQLite + Volume — immediately deployable)
 
 1. Create a new Railway project from this repo.
-2. Add a **Postgres** service in the same project.
-3. On the Web service, set these variables:
+2. On the Web service, attach a **Volume** mounted at `/data`. This is what makes the SQLite file survive deploys and restarts.
+3. Set these variables on the Web service:
 
-   | Variable | Value |
-   |---|---|
-   | `DEPLOY_TARGET` | `railway` |
-   | `DATABASE_URL` | `${{Postgres.DATABASE_URL}}` (Railway-resolved reference) |
-   | `APP_ENCRYPTION_KEY` | 32-byte base64 — `openssl rand -base64 32` |
-   | `AUTH_MODE` | `none` (Phase 7 enables `simple` / `full`) |
-   | `AUTH_SECRET` | required only when `AUTH_MODE=full` |
-   | `LMSTUDIO_BASE_URL` | optional override; default is `http://localhost:1234/v1` |
-   | `NODE_ENV` | `production` |
+   | Variable | Value | Notes |
+   |---|---|---|
+   | `DEPLOY_TARGET` | `railway` | Boot guard enforces the rules below. |
+   | `DATABASE_URL` | `file:/data/prod.db` | Path must be inside the mounted Volume. |
+   | `APP_ENCRYPTION_KEY` | 32-byte base64 — `openssl rand -base64 32` | Required. |
+   | `AUTH_MODE` | `simple` | Boot guard rejects `none` on Railway. `full` is deferred. |
+   | `AUTH_SECRET` | `openssl rand -base64 32` | Required by `simple` and `full`. |
+   | `SIMPLE_PASSWORD_HASH` | output of `pnpm exec tsx scripts/hash-password.ts` | Required by `simple`. |
+   | `CRON_SECRET` | `openssl rand -base64 32` | Required on Railway (boot guard). |
+   | `LMSTUDIO_BASE_URL` | optional | Default `http://localhost:1234/v1` (won't reach LM Studio from Railway — set per-user OpenAI/Anthropic keys instead). |
+   | `NODE_ENV` | `production` | Railway sets this by default; pinning is fine. |
 
-4. **Schema provider**: this repo's `prisma/schema.prisma` is currently `provider = "sqlite"`. To deploy on Railway with Postgres, switch to a Postgres-targeted schema in a follow-up commit (or maintain a parallel `prisma/schema.postgres.prisma`). The migrations folder is SQLite-shaped today; Postgres deploys must regenerate migrations against Postgres.
+4. Do **not** set `PORT` manually — Railway injects it, and `next start` reads it automatically.
+
+> **Single-instance only.** SQLite + Volume cannot be horizontally scaled. Keep replicas at 1.
+
+## One-time setup (Postgres — when you're ready)
+
+1. Add a **Postgres** service to the same project.
+2. Set `DATABASE_URL` on the Web service to `${{Postgres.DATABASE_URL}}` (Railway resolves the reference).
+3. Switch `prisma/schema.prisma` `provider` to `postgresql`, regenerate migrations against a live Postgres (`prisma migrate dev`), and commit the new `prisma/migrations/` folder. The current SQLite migrations will not apply.
+4. All other variables from the SQLite table above still apply.
 
 ## Build & start
 
 `railway.json` is already wired with:
 
 - **buildCommand**: `pnpm install --frozen-lockfile && pnpm db:generate && pnpm build`
-- **startCommand**: `pnpm exec prisma migrate deploy && pnpm start`
+- **startCommand**: `pnpm start:railway` (runs `prisma migrate deploy` then `next start -H 0.0.0.0`; Next.js reads the `PORT` env var that Railway injects)
 - **healthcheckPath**: `/api/health`
+- **healthcheckTimeout**: 300s (covers cold-start migration on the Volume)
 
 `/api/health` returns `{ status: "ok" }` after a successful `SELECT 1` against the DB; Railway uses this to gate the green deployment.
 

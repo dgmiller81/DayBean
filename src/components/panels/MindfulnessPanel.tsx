@@ -6,6 +6,7 @@ import { Journal } from "@/components/mindfulness/Journal";
 import { BreathTimer } from "@/components/mindfulness/BreathTimer";
 import { MindfulnessArticles } from "@/components/mindfulness/MindfulnessArticles";
 import { MindfulnessGoals } from "@/components/mindfulness/MindfulnessGoals";
+import { NextUpFooter } from "@/components/NextUpFooter";
 import { getDayOrEmpty } from "@/server/queries/days";
 import { getCurrentUserId } from "@/server/auth-context";
 import { todayISO } from "@/lib/dates";
@@ -42,6 +43,7 @@ export async function MindfulnessPanel() {
           <BreathTimer />
         </div>
       </div>
+      <NextUpFooter current="mindfulness" />
     </>
   );
 }

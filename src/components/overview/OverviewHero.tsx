@@ -25,16 +25,22 @@ export async function OverviewHero({ userId, iso }: { userId: string; iso: strin
           Last 60 days
         </div>
         <Heatmap userId={userId} iso={iso} />
-        <div className="heat-legend">
-          <span>Less</span>
-          <div className="dots">
-            <span style={{ background: "var(--surface-2)", border: "1px solid var(--line)" }} />
-            <span style={{ background: "color-mix(in oklab, var(--sage) 20%, var(--surface-2))" }} />
-            <span style={{ background: "color-mix(in oklab, var(--sage) 40%, var(--surface-2))" }} />
-            <span style={{ background: "color-mix(in oklab, var(--sage) 65%, var(--surface-2))" }} />
-            <span style={{ background: "var(--sage)" }} />
+        <div className="heat-legend-row">
+          <span className="heat-legend-note" aria-label="Number in cell shows journal entries that day">
+            <span className="heat-legend-num" aria-hidden>3</span>
+            <span>= journal entries that day</span>
+          </span>
+          <div className="heat-legend">
+            <span>Less</span>
+            <div className="dots">
+              <span style={{ background: "var(--surface-2)", border: "1px solid var(--line)" }} />
+              <span style={{ background: "color-mix(in oklab, var(--sage) 20%, var(--surface-2))" }} />
+              <span style={{ background: "color-mix(in oklab, var(--sage) 40%, var(--surface-2))" }} />
+              <span style={{ background: "color-mix(in oklab, var(--sage) 65%, var(--surface-2))" }} />
+              <span style={{ background: "var(--sage)" }} />
+            </div>
+            <span>More</span>
           </div>
-          <span>More</span>
         </div>
       </div>
     </div>

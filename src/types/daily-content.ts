@@ -17,6 +17,12 @@ export const TopStorySchema = z.object({
   src: z.string(),
 });
 
+export const ScanItemSchema = z.object({
+  title: z.string(),
+  url: z.string().url(),
+  src: z.string().optional().default(""),
+});
+
 export const QuoteSchema = z.object({
   text: z.string(),
   source: z.string(),
@@ -50,7 +56,7 @@ export const DailyContentSchema = z.object({
     headline: z.string(),
     briefing: z.string(),
     topStories: z.array(TopStorySchema),
-    scan: z.array(z.string()),
+    scan: z.array(ScanItemSchema),
     articles: z.array(z.object({
       badges: z.array(z.tuple([z.string(), z.string()])).default([]),
       title: z.string(),
@@ -74,3 +80,4 @@ export const DailyContentSchema = z.object({
 
 export type DailyContent = z.infer<typeof DailyContentSchema>;
 export type Article = z.infer<typeof ArticleSchema>;
+export type ScanItem = z.infer<typeof ScanItemSchema>;

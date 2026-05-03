@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "next dev -p 4111",
+    "dev": "next dev -p 4111 --turbopack",
     "build": "next build",
-    "start": "next start -p 4111",
+    "start": "next start -H 0.0.0.0",
+    "start:railway": "prisma migrate deploy && next start -H 0.0.0.0",
     "lint": "eslint src tests",
     "test": "vitest run",
     "test:watch": "vitest",

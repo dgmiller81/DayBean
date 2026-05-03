@@ -1,6 +1,7 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
+import { TAB_EVENT, setActiveTab as broadcastTab } from "@/lib/tab-bus";
 
 export type Tab = "mindfulness" | "business" | "personal" | "overview";
 
@@ -73,6 +74,15 @@ export function Tabs({
 }: Props) {
   const [active, setActive] = useState<Tab>(initial);
 
+  useEffect(() => {
+    const handler = (e: Event) => {
+      const detail = (e as CustomEvent<Tab>).detail;
+      if (detail) setActive(detail);
+    };
+    window.addEventListener(TAB_EVENT, handler);
+    return () => window.removeEventListener(TAB_EVENT, handler);
+  }, []);
+
   const slot: Record<Tab, ReactNode> = {
     mindfulness: mindfulnessPanel,
     business: businessPanel,
@@ -93,7 +103,7 @@ export function Tabs({
             className="tab-btn"
             onClick={() => {
               setActive(t.id);
-              document.cookie = `mm_tab=${t.id}; path=/; max-age=31536000; SameSite=Lax`;
+              broadcastTab(t.id);
             }}
           >
             <span className="tab-icon">{t.icon}</span>

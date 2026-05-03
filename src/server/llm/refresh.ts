@@ -4,6 +4,7 @@ import { DailyContentSchema } from "@/types/daily-content";
 import { setDailyContent } from "@/server/actions/daily-content";
 import { todayISO } from "@/lib/dates";
 import { getJournalSignal } from "@/server/queries/journal-themes";
+import { dedupeContent } from "@/lib/dedupe-content";
 import { getAdapter, type LlmProvider } from "./index";
 import { getEnvLlmConfig } from "./env-config";
 import type { LlmContext } from "./types";
@@ -75,7 +76,9 @@ export async function refreshDailyContent(
       validated.date = iso;
     }
 
-    await setDailyContent(userId, iso, validated, "llm");
+    const deduped = dedupeContent(validated);
+
+    await setDailyContent(userId, iso, deduped, "llm");
     await db.refreshLog.update({
       where: { id: log.id },
       data: { status: "ok", finishedAt: new Date() },

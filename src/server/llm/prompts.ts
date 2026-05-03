@@ -61,13 +61,23 @@ business.topStories       1–3 items. The first MAY be { kind: "lead", ... } �
                           Valid className values: "b-product", "b-model",
                           "b-research", "b-policy", "b-open", "b-security", "tag"
                           body is 1–2 sentences. url is real https.
-business.scan             6–8 single-line headlines. Each is a complete
-                          sentence the user can scan in 2 seconds.
+business.scan             6–8 short single-line headlines linked to a real
+                          source. Each item: { title, url, src }.
+                          title is a complete sentence the user can scan
+                          in 2 seconds. url is a real https link to the
+                          source story. src is the bare host (e.g.
+                          "github.com"). DO NOT repeat URLs already used
+                          in topStories or articles.
 business.articles         3–5 article cards. Same shape as topStories minus
                           eyebrow/body — { badges, title, summary, url, src }.
 business.quotes           1–3 dev quotes that capture community sentiment.
-                          { text, source, target?: string, url?: string }.
+                          { text, source, target?: string, url: string }.
                           target is what the quote is ABOUT (e.g. a product).
+                          url MUST be a real https link to where the quote
+                          was said (a tweet, a blog post, a talk, a podcast
+                          episode, the author's site). Do NOT invent URLs;
+                          if you cannot find a real one for a specific
+                          quote, drop the quote.
 business.repos            0–4 trending GitHub repos. Each:
                           { name, org, stars, weekly, license, lang, pitch, url }.
                           stars/weekly are display strings ("110K", "+23K wk").
@@ -118,6 +128,13 @@ HARD CONSTRAINTS
 ──────────────────────────────────────────────────────────────────────
 
 - All "url" fields must be real, reachable https URLs.
+- **Every URL must appear in AT MOST ONE section across the whole response.**
+  Do not put the same article in business.topStories AND business.articles,
+  or in business.scan AND business.articles, etc. Treat topStories as
+  highest priority — if an article belongs there, it does NOT also go in
+  business.articles or business.scan. Generate distinct stories for each
+  slot. If you only have one good story for a slot, leave the other slot
+  shorter rather than duplicating.
 - No emojis anywhere.
 - No markdown — only HTML (and only inside business.briefing).
 - Tone is warm, calm, bookish. Concise.

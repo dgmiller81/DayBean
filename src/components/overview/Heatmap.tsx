@@ -1,23 +1,26 @@
 import { listGoals } from "@/server/queries/goals";
 import { getDaysRange } from "@/server/queries/days";
+import { journalCountsByDay } from "@/server/queries/journal";
 import { progressFor } from "@/lib/progress";
 import { heatmapLevels, type HeatmapInput } from "@/lib/progress-overview";
 import { isoOffset } from "@/lib/dates";
 
 const WINDOW_DAYS = 60;
 
-function fmtTooltip(iso: string, completed: number, total: number): string {
+function fmtTooltip(iso: string, completed: number, total: number, entries: number): string {
   const d = new Date(iso + "T00:00:00");
   const wd = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][d.getDay()];
   const mo = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][d.getMonth()];
-  return `${wd}, ${mo} ${d.getDate()} · ${completed}/${total} goals`;
+  const entryStr = entries > 0 ? ` · ${entries} ${entries === 1 ? "entry" : "entries"}` : "";
+  return `${wd}, ${mo} ${d.getDate()} · ${completed}/${total} goals${entryStr}`;
 }
 
 export async function Heatmap({ userId, iso }: { userId: string; iso: string }) {
   const start = isoOffset(iso, -(WINDOW_DAYS - 1));
-  const [goals, days] = await Promise.all([
+  const [goals, days, journalCounts] = await Promise.all([
     listGoals(userId),
     getDaysRange(userId, start, iso),
+    journalCountsByDay(userId, start, iso),
   ]);
 
   const byIso = new Map(days.map((d) => [d.iso, d]));
@@ -39,9 +42,10 @@ export async function Heatmap({ userId, iso }: { userId: string; iso: string }) 
   const cells = heatmapLevels(inputs, iso);
 
   return (
-    <div className="heatmap" role="img" aria-label="60-day completion heatmap">
+    <div className="heatmap" role="img" aria-label="60-day completion heatmap with journal entry counts">
       {cells.map((c) => {
         const completed = inputs.find((x) => x.iso === c.iso)?.completedToday ?? 0;
+        const entryCount = journalCounts.get(c.iso) ?? 0;
         return (
           <div
             key={c.iso}
@@ -50,9 +54,15 @@ export async function Heatmap({ userId, iso }: { userId: string; iso: string }) 
               c.level > 0 ? `l${c.level}` : "",
               c.isToday ? "is-today" : "",
             ].filter(Boolean).join(" ")}
-            data-tooltip={fmtTooltip(c.iso, completed, goals.length)}
-            aria-label={fmtTooltip(c.iso, completed, goals.length)}
-          />
+            data-tooltip={fmtTooltip(c.iso, completed, goals.length, entryCount)}
+            aria-label={fmtTooltip(c.iso, completed, goals.length, entryCount)}
+          >
+            {entryCount > 0 && (
+              <span className="heatmap-entry-count" aria-hidden>
+                {entryCount > 9 ? "9+" : entryCount}
+              </span>
+            )}
+          </div>
         );
       })}
     </div>

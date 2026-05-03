@@ -126,12 +126,40 @@ export async function setRefreshHour(input: z.infer<typeof SetRefreshHourInput>)
   revalidatePath("/");
 }
 
+const ThemePrefsInput = z.object({
+  bgImageUrl: z.string().trim().max(2048).nullable().optional(),
+  bgOverlay: z.number().int().min(0).max(100).optional(),
+});
+
+export async function setThemePrefs(input: z.infer<typeof ThemePrefsInput>): Promise<void> {
+  const v = ThemePrefsInput.parse(input);
+  const userId = await getCurrentUserId();
+
+  const data: { bgImageUrl?: string | null; bgOverlay?: number } = {};
+  if (v.bgImageUrl !== undefined) {
+    const trimmed = v.bgImageUrl?.trim() ?? "";
+    data.bgImageUrl = trimmed.length === 0 ? null : trimmed;
+  }
+  if (v.bgOverlay !== undefined) data.bgOverlay = v.bgOverlay;
+
+  if (Object.keys(data).length === 0) return;
+
+  await db.pref.upsert({
+    where: { userId },
+    create: { userId, ...data },
+    update: data,
+  });
+  revalidatePath("/");
+}
+
 export type SettingsSummary = {
   name: string;
   bio: string | null;
   jobTitle: string | null;
   contentInterests: string[];
   refreshHour: number;
+  bgImageUrl: string | null;
+  bgOverlay: number;
   credentials: LlmCredentialSummary[];
   /** When set, the env (.env file) is overriding any per-user credential. */
   envOverride: { provider: LlmProvider; model: string } | null;
@@ -163,6 +191,8 @@ export async function getSettings(): Promise<SettingsSummary> {
     jobTitle: pref?.jobTitle ?? null,
     contentInterests: interests,
     refreshHour: pref?.refreshHour ?? 4,
+    bgImageUrl: pref?.bgImageUrl ?? null,
+    bgOverlay: pref?.bgOverlay ?? 90,
     credentials: creds.map((c) => ({
       provider: c.provider as LlmProvider,
       last4: c.last4,

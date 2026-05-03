@@ -45,7 +45,7 @@ export function Topbar({
         <StreakPill count={0} />
         <TopbarRefreshButton llmConfigured={llmConfigured} lastStatus={lastStatus} />
         <EditContentLink iso={iso} initialContent={dailyContent} latestRefresh={latestRefresh} />
-        <SettingsButton initial={settings} />
+        <SettingsButton initial={settings} initialTheme={theme} />
         <ThemeToggle initial={theme} />
       </div>
     </div>

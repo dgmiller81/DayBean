@@ -30,6 +30,30 @@ const SetNotesInput = z.object({
 export async function setNotes(input: z.infer<typeof SetNotesInput>): Promise<void> {
   const v = SetNotesInput.parse(input);
   await upsertDay(v.userId, v.iso, { notes: v.notes });
+
+  // Mirror the mindfulness journal as a single JournalEntry row so it appears
+  // in the side-menu journal log and counts toward the heatmap entry count.
+  // Empty/whitespace-only notes mean "no entry today" — drop the mirror row.
+  const text = v.notes.trim();
+  const existing = await db.journalEntry.findFirst({
+    where: { userId: v.userId, iso: v.iso, page: "mindfulness" },
+  });
+  if (!text) {
+    if (existing) {
+      await db.journalEntry.delete({ where: { id: existing.id } });
+    }
+  } else if (existing) {
+    if (existing.content !== text) {
+      await db.journalEntry.update({
+        where: { id: existing.id },
+        data: { content: text },
+      });
+    }
+  } else {
+    await db.journalEntry.create({
+      data: { userId: v.userId, iso: v.iso, page: "mindfulness", content: text },
+    });
+  }
 }
 
 const HealthKey = z.enum(["slept", "moved", "ate"]);

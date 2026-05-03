@@ -2,6 +2,7 @@ import "server-only";
 import { db } from "@/server/db";
 import { DailyContentSchema, type DailyContent } from "@/types/daily-content";
 import { fixtureFor } from "@/lib/daily-content-fixture";
+import { dedupeContent } from "@/lib/dedupe-content";
 
 export type DailyContentSource = "manual" | "llm" | "fixture";
 export type DailyContentWithMeta = {
@@ -23,7 +24,7 @@ export async function getDailyContentWithMeta(
   });
 
   if (!row) {
-    return { content: fixtureFor(iso), source: "fixture" };
+    return { content: dedupeContent(fixtureFor(iso)), source: "fixture" };
   }
 
   let parsed: unknown;
@@ -33,7 +34,7 @@ export async function getDailyContentWithMeta(
     console.error("[daily-content] row has invalid JSON, falling back to fixture", {
       userId, iso, error: (e as Error).message,
     });
-    return { content: fixtureFor(iso), source: "fixture" };
+    return { content: dedupeContent(fixtureFor(iso)), source: "fixture" };
   }
 
   const result = DailyContentSchema.safeParse(parsed);
@@ -41,11 +42,14 @@ export async function getDailyContentWithMeta(
     console.error("[daily-content] row failed schema validation, falling back to fixture", {
       userId, iso, issues: result.error.issues.length,
     });
-    return { content: fixtureFor(iso), source: "fixture" };
+    return { content: dedupeContent(fixtureFor(iso)), source: "fixture" };
   }
 
   const source = isValidSource(row.source) ? row.source : "manual";
-  return { content: result.data, source };
+  // Defensive dedupe at read time — covers rows persisted before the dedupe
+  // post-processor was added, and acts as a safety net if the LLM sneaks
+  // a duplicate past the prompt rule.
+  return { content: dedupeContent(result.data), source };
 }
 
 function isValidSource(s: string): s is DailyContentSource {

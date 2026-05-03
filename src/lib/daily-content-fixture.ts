@@ -76,14 +76,14 @@ export function fixtureFor(iso: string): DailyContent {
         },
       ],
       scan: [
-        "Inference costs continue to compress month-over-month.",
-        "Agent stacks consolidate to a smaller set of primitives.",
-        "Open-weight context windows hit 1M+ tokens broadly.",
-        "Code-gen evals plateau on benchmark; gap shows up in long horizons.",
-        "Voice-to-voice latency drops below human-conversation threshold.",
-        "More research labs publish negative results — a healthy sign.",
-        "Local-first inference becomes a credible default for product teams.",
-        "Provenance + watermarking standards inch forward at the W3C.",
+        { title: "Inference costs continue to compress month-over-month.", url: "https://news.ycombinator.com/", src: "ycombinator.com" },
+        { title: "Agent stacks consolidate to a smaller set of primitives.", url: "https://github.com/topics/agents", src: "github.com" },
+        { title: "Open-weight context windows hit 1M+ tokens broadly.", url: "https://huggingface.co/models", src: "huggingface.co" },
+        { title: "Code-gen evals plateau on benchmark; gap shows up in long horizons.", url: "https://arxiv.org/list/cs.SE/recent", src: "arxiv.org" },
+        { title: "Voice-to-voice latency drops below human-conversation threshold.", url: "https://www.theverge.com/ai-artificial-intelligence", src: "theverge.com" },
+        { title: "More research labs publish negative results — a healthy sign.", url: "https://arxiv.org/list/cs.LG/recent", src: "arxiv.org" },
+        { title: "Local-first inference becomes a credible default for product teams.", url: "https://ollama.com/", src: "ollama.com" },
+        { title: "Provenance + watermarking standards inch forward at the W3C.", url: "https://www.w3.org/", src: "w3.org" },
       ],
       articles: [
         {
@@ -120,11 +120,13 @@ export function fixtureFor(iso: string): DailyContent {
           text: "The best founders I know don't argue with the model — they iterate on the prompt the way I used to iterate on the schema.",
           source: "@swyx",
           target: "agentic coding",
+          url: "https://twitter.com/swyx",
         },
         {
           text: "Evals are the new tests. Treat them like CI.",
           source: "@simonw",
           target: "evals",
+          url: "https://simonwillison.net/",
         },
       ],
       repos: [

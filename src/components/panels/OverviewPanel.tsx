@@ -4,6 +4,7 @@ import { OverviewHero } from "@/components/overview/OverviewHero";
 import { SectionBars } from "@/components/overview/SectionBars";
 import { FilterPills } from "@/components/overview/FilterPills";
 import { MasterGoalList } from "@/components/overview/MasterGoalList";
+import { NextUpFooter } from "@/components/NextUpFooter";
 
 export async function OverviewPanel() {
   const userId = await getCurrentUserId();
@@ -41,6 +42,7 @@ export async function OverviewPanel() {
         <FilterPills userId={userId} />
         <MasterGoalList userId={userId} iso={iso} />
       </div>
+      <NextUpFooter current="overview" />
     </>
   );
 }

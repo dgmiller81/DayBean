@@ -21,6 +21,8 @@ model User {
   dailyContents  DailyContent[]
   llmCredentials LlmCredential[]
   refreshLogs    RefreshLog[]
+  journalEntries JournalEntry[]
+  bookmarks      Bookmark[]
 }
 
 model Pref {
@@ -36,6 +38,8 @@ model Pref {
   contentInterests String?                // JSON array of strings (LLM context)
   bio         String?
   refreshHour Int      @default(4)       // 0-23, local-time hour for daily content refresh
+  bgImageUrl  String?                    // optional URL for the page background image
+  bgOverlay   Int      @default(90)      // 0-100, theme color overlay opacity over the bg image
 }
 
 model Goal {
@@ -119,6 +123,41 @@ model LlmCredential {
 
   @@unique([userId, provider])
   @@index([userId])
+}
+
+model JournalEntry {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  iso       String                 // 'YYYY-MM-DD' — the day this entry belongs to
+  page      String                 // 'mindfulness' | 'business' | 'personal' | 'overview'
+  content   String
+  createdAt DateTime @default(now())
+
+  @@index([userId, iso])
+  @@index([userId, iso, page])
+}
+
+model Bookmark {
+  id           String    @id @default(cuid())
+  userId       String
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  url          String
+  title        String
+  source       String?               // 'mindfulness' | 'business' | 'personal' | 'top' | etc.
+  excerpt      String?
+  isBookmarked Boolean   @default(false)  // explicit user bookmark vs share-only row
+  pinned       Boolean   @default(false)
+  pinnedAt     DateTime?
+  sortOrder    Int       @default(0)      // user-assigned order in Bookmarked section
+  shareCount   Int       @default(0)
+  lastSharedAt DateTime?
+  createdAt    DateTime  @default(now())
+
+  @@unique([userId, url])
+  @@index([userId, createdAt])
+  @@index([userId, lastSharedAt])
+  @@index([userId, shareCount])
 }
 
 model RefreshLog {
