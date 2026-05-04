@@ -130,6 +130,12 @@ export async function refreshDailyContent(
       msg.includes("ZodError") || /schema|validation/i.test(msg)
         ? "validation-error"
         : "provider-error";
+    // Surface to Railway / stdout — the same string is also persisted on
+    // RefreshLog.errorDetail, but RefreshLog isn't reachable from Railway's
+    // log viewer without DB access.
+    console.error(
+      `[refresh] phase=${phase} userId=${userId} iso=${iso} code=${code} provider=${provider} msg=${msg.slice(0, 800)}`,
+    );
     await db.refreshLog.update({
       where: { id: log.id },
       data: { status: code, errorCode: code, errorDetail: msg.slice(0, 1000), finishedAt: new Date() },
