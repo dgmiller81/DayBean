@@ -26,6 +26,12 @@ model User {
   refreshLogs    RefreshLog[]
   journalEntries JournalEntry[]
   bookmarks      Bookmark[]
+
+  // S0-T02 additions
+  journalThemes  JournalTheme[]
+  suggestedGoals SuggestedGoal[]
+  vouchers       Voucher[]
+  rewardClaims   RewardClaim[]
 }
 
 model Pref {
@@ -43,6 +49,19 @@ model Pref {
   refreshHour Int      @default(4)       // 0-23, local-time hour for daily content refresh
   bgImageUrl  String?                    // optional URL for the page background image
   bgOverlay   Int      @default(90)      // 0-100, theme color overlay opacity over the bg image
+
+  // S0-T02 — Slow Sip + dual-run resilience
+  hobbies        String?  // JSON array: ["woodworking", "japanese", "piano"]
+  livesWith      String?  // JSON array: ["partner", "kids", "alone"]
+  financeMode    Boolean  @default(false)
+  netWorth       String?  // user-entered display string (no bank integration)
+  cashOnHand     String?
+  savingsTarget  String?
+  prebrewHour    Int      @default(17)  // 5pm default for the safety-net evening pre-brew run
+  prebrewEnabled Boolean  @default(true)
+  industry       String?  // for Daily Grind curation bias
+  companyStage   String?  // for Daily Grind curation bias (e.g., 'series-b')
+  timezone       String?  // IANA name for cron scheduling
 }
 
 model Goal {
@@ -56,7 +75,12 @@ model Goal {
   isDefault Boolean  @default(false)
   createdAt DateTime @default(now())
 
+  // S0-T02 — Slow Sip categorization. Optional. Cross-cuts section.
+  // 'family' | 'finance' | 'hobby' | 'fitness' | 'faith' | 'work'
+  category  String?
+
   @@index([userId, section])
+  @@index([userId, category])
 }
 
 model Task {
@@ -106,6 +130,15 @@ model DailyContent {
   source      String   // 'manual' | 'llm' | 'fixture'
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  // S0-T02 — Dual-run resilience. The 5pm pre-brew on Day N writes
+  // to backupContentJson on the Day N+1 row. Morning brew writes
+  // to contentJson. Read-time precedence: contentJson → backup → fixture.
+  backupContentJson String?
+  primarySource     String?    // 'manual' | 'morning' | 'cold-start' (which run wrote contentJson)
+  backupSource      String?    // 'evening-prebrew' | 'manual-prebrew'
+  primaryAt         DateTime?
+  backupAt          DateTime?
 
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -176,6 +209,91 @@ model RefreshLog {
   startedAt   DateTime  @default(now())
   finishedAt  DateTime?
 
+  // S0-T02 — Dual-run phase tag. Identifies WHICH cron-triggered run a
+  // log row belongs to so admins can compute morning vs. pre-brew success rates.
+  phase       String?   // 'morning' | 'evening-prebrew' | 'cold-start' | 'manual'
+
   @@index([userId, iso])
   @@index([userId, startedAt])
+  @@index([phase, status, startedAt])
+}
+
+// S0-T02 — Journal Listens (Phase C). Theme tokens extracted from journal
+// entries, recency-weighted. The LLM prompt reads top unmuted themes by
+// weight to bias tomorrow's content. Theme strings are short tokens
+// ("presence", "rest"); never user verbatim.
+model JournalTheme {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  theme     String
+  weight    Float    @default(1)
+  muted     Boolean  @default(false)  // user can mute themes from biasing content
+  lastSeen  DateTime @default(now())
+
+  @@unique([userId, theme])
+  @@index([userId, weight])
+}
+
+// S0-T02 — Suggested goals derived from journal intent phrases ("I want to…").
+// User accepts to create a real Goal, or dismisses.
+model SuggestedGoal {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title           String
+  cadence         String   // 'daily' | 'weekly'
+  category        String?
+  sourceJournalId String?  // FK back to JournalEntry that triggered it
+  status          String   @default("pending")  // 'pending' | 'accepted' | 'dismissed'
+  createdAt       DateTime @default(now())
+
+  @@index([userId, status])
+}
+
+// S0-T02 — Coffee partnerships (Phase D). Indie roasters + chains (Caribou,
+// Scooter's, Starbucks). Vouchers issued from a per-partner weekly pool.
+model Partner {
+  id           String   @id @default(cuid())
+  name         String
+  slug         String   @unique
+  type         String   // 'chain' | 'indie'
+  city         String?  // for indie roasters; null for chains (national)
+  state        String?
+  logoUrl      String?
+  blurb        String?  // editorial copy for the partner card
+  active       Boolean  @default(true)
+  weeklyBudget Int      @default(0)  // # of vouchers to seed per week
+  createdAt    DateTime @default(now())
+
+  vouchers Voucher[]
+}
+
+model Voucher {
+  id         String    @id @default(cuid())
+  partnerId  String
+  partner    Partner   @relation(fields: [partnerId], references: [id], onDelete: Cascade)
+  code       String    @unique  // single-use redeem code
+  issued     Boolean   @default(false)  // false = available in pool; true = assigned to user
+  redeemedAt DateTime?
+  userId     String?
+  user       User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
+  expiresAt  DateTime
+  weekOf     DateTime  // start of the calendar week this voucher belongs to
+
+  rewardClaim RewardClaim?
+
+  @@index([partnerId, issued, expiresAt])
+}
+
+model RewardClaim {
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  voucherId    String   @unique
+  voucher      Voucher  @relation(fields: [voucherId], references: [id])
+  streakLength Int      // 7, 14, 21, etc.
+  claimedAt    DateTime @default(now())
+
+  @@index([userId, claimedAt])
 }

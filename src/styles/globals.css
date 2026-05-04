@@ -206,6 +206,43 @@
   --header-shadow:0 18px 40px rgba(0,0,0,.65), 0 4px 14px rgba(255,107,53,.20);
 }
 
+/* ============================================================
+   S0-T04 — DayBean brand color tokens.
+   Registered on every theme so S1+ can use them without conflict.
+   On light themes, --espresso is the dark anchor. On dark themes,
+   it's the cream-colored anchor (visually equivalent role).
+   --crema is the gold halo accent (used sparingly).
+   See docs/daybeans/02-visual-identity.md §2.1.
+   ============================================================ */
+:root,
+[data-theme="warm"],
+[data-theme="snow"],
+[data-theme="sepia"] {
+  --espresso: #3b2415;
+  --espresso-deep: #1f120a;
+  --crema: #d4a86a;
+  --crema-deep: #a87a3c;
+  --crema-soft: #f6e7c4;
+}
+
+[data-theme="dark"],
+[data-theme="forest"],
+[data-theme="midnight"],
+[data-theme="black"],
+[data-theme="space"],
+[data-theme="ai"],
+[data-theme="slate"],
+[data-theme="crimson"],
+[data-theme="aurora"],
+[data-theme="steel"],
+[data-theme="ember"] {
+  --espresso: #f6e7c4;        /* on dark, espresso flips to the cream anchor role */
+  --espresso-deep: #ffffff;
+  --crema: #d4a86a;
+  --crema-deep: #f0c890;
+  --crema-soft: rgba(212,168,106,.18);
+}
+
 * { box-sizing: border-box; }
 
 html, body {
