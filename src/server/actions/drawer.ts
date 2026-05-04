@@ -5,7 +5,10 @@ import { z } from "zod";
 const TabSchema = z.enum(["tasks", "goals", "bookmarks"]);
 export type DrawerTab = z.infer<typeof TabSchema>;
 
-const COOKIE_NAME = "mm_drawer_tab";
+// S1-T05 — db_* preferred; the read path in queries/drawer.ts honors mm_*
+// during the migration window.
+const COOKIE_NAME = "db_drawer_tab";
+const LEGACY_COOKIE_NAME = "mm_drawer_tab";
 const ONE_YEAR = 60 * 60 * 24 * 365;
 
 export async function setDrawerTab({ tab }: { tab: DrawerTab }): Promise<void> {
@@ -17,4 +20,8 @@ export async function setDrawerTab({ tab }: { tab: DrawerTab }): Promise<void> {
     sameSite: "lax",
     httpOnly: false,
   });
+  // Clear the legacy cookie so it doesn't shadow the new one on stale clients.
+  if (c.get(LEGACY_COOKIE_NAME)) {
+    c.set(LEGACY_COOKIE_NAME, "", { path: "/", maxAge: 0, sameSite: "lax" });
+  }
 }

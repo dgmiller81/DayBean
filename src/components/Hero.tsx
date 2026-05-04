@@ -7,6 +7,16 @@ function splitDateForHero(iso: string): { weekday: string; rest: string } {
   return { weekday, rest };
 }
 
+// S1-T04 — DayBean voice greetings, by hour bucket. Quiet-by-default tone;
+// no exclamation points, no apologies, no mention of caffeine quantity.
+function brandGreeting(name: string): string {
+  const h = new Date().getHours();
+  if (h < 11) return `Pour first, ${name}.`;
+  if (h < 16) return `Steady pour, ${name}.`;
+  if (h < 20) return `Steeping the evening, ${name}.`;
+  return `That was a good cup, ${name}.`;
+}
+
 export function Hero({
   name,
   iso,
@@ -21,7 +31,7 @@ export function Hero({
   const { weekday, rest } = splitDateForHero(iso);
   return (
     <div className="hero">
-      <div className="greeting">Good morning, {name}</div>
+      <div className="greeting">{brandGreeting(name)}</div>
       <h1>
         {weekday}
         <br />
@@ -30,7 +40,7 @@ export function Hero({
       {sub ? <div className="date-sub">{sub}</div> : null}
       {showFixtureHint && (
         <div className="date-sub" style={{ fontStyle: "italic", marginTop: 4 }}>
-          Showing default content — paste or generate yours.
+          Brewing the defaults — paste or generate your own batch.
         </div>
       )}
       <span hidden>{friendlyDate(iso)}</span>

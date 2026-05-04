@@ -3,8 +3,11 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import { SideTab } from "./Fab";
 import { setDrawerTab, type DrawerTab } from "@/server/actions/drawer";
 
-const WIDTH_KEY = "mm_drawer_width";
-const PIN_KEY = "mm_drawer_pinned";
+// S1-T05 — db_* preferred; legacy mm_* still read once for migration.
+const WIDTH_KEY = "db_drawer_width";
+const PIN_KEY = "db_drawer_pinned";
+const LEGACY_WIDTH_KEY = "mm_drawer_width";
+const LEGACY_PIN_KEY = "mm_drawer_pinned";
 const MIN_WIDTH = 320;
 const MAX_WIDTH = 720;
 const DEFAULT_WIDTH = 420;
@@ -40,12 +43,19 @@ export function TasksDrawer({
 
   useEffect(() => {
     try {
-      const w = localStorage.getItem(WIDTH_KEY);
-      if (w) setWidth(clampWidth(parseInt(w, 10)));
-      const p = localStorage.getItem(PIN_KEY);
+      // S1-T05 — read db_* first; one-time migrate from mm_* if present.
+      const w = localStorage.getItem(WIDTH_KEY) ?? localStorage.getItem(LEGACY_WIDTH_KEY);
+      if (w) {
+        setWidth(clampWidth(parseInt(w, 10)));
+        if (!localStorage.getItem(WIDTH_KEY)) localStorage.setItem(WIDTH_KEY, w);
+        localStorage.removeItem(LEGACY_WIDTH_KEY);
+      }
+      const p = localStorage.getItem(PIN_KEY) ?? localStorage.getItem(LEGACY_PIN_KEY);
       if (p === "1") {
         setPinned(true);
         setOpen(true);
+        if (!localStorage.getItem(PIN_KEY)) localStorage.setItem(PIN_KEY, p);
+        localStorage.removeItem(LEGACY_PIN_KEY);
       }
     } catch {
       /* noop */
@@ -97,7 +107,7 @@ export function TasksDrawer({
     setTab(next);
     void setDrawerTab({ tab: next });
     try {
-      sessionStorage.setItem("mm_drawer_tab", next);
+      sessionStorage.setItem("db_drawer_tab", next);
     } catch {
       /* noop */
     }

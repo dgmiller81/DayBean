@@ -131,14 +131,14 @@ export function fixtureFor(iso: string): DailyContent {
       ],
       repos: [
         {
-          name: "the-daily-mind",
+          name: "DayBean",
           org: "dgmiller81",
           stars: "—",
           weekly: "—",
           license: "MIT",
           lang: "TypeScript",
           pitch: "The DayBeans morning dashboard. The repo you're looking at right now.",
-          url: "https://github.com/dgmiller81/the-daily-mind",
+          url: "https://github.com/dgmiller81/DayBean",
         },
       ],
       watchlist: [

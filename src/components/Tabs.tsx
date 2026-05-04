@@ -2,9 +2,13 @@
 import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import { TAB_EVENT, setActiveTab as broadcastTab } from "@/lib/tab-bus";
+import { TAB_LABELS, TAB_EYEBROWS } from "@/lib/constants";
 
 export type Tab = "mindfulness" | "business" | "personal" | "overview";
 
+// S1-T02 — Coffee-named tab labels read from src/lib/constants.ts. Tab IDs
+// stay the same to preserve cookies + routes; only the human-readable
+// labels change.
 const TAB_DEFS: Array<{
   id: Tab;
   label: string;
@@ -13,8 +17,8 @@ const TAB_DEFS: Array<{
 }> = [
   {
     id: "mindfulness",
-    label: "Mindfulness",
-    eyebrow: "Section 1",
+    label: TAB_LABELS.mindfulness, // "Pour Over"
+    eyebrow: TAB_EYEBROWS.mindfulness, // "Mindful Soul"
     icon: (
       <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
         <circle cx="12" cy="12" r="9" />
@@ -24,8 +28,8 @@ const TAB_DEFS: Array<{
   },
   {
     id: "business",
-    label: "Business / AI",
-    eyebrow: "Section 2",
+    label: TAB_LABELS.business, // "Daily Grind"
+    eyebrow: TAB_EYEBROWS.business, // "Professional"
     icon: (
       <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
         <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
@@ -34,8 +38,8 @@ const TAB_DEFS: Array<{
   },
   {
     id: "personal",
-    label: "Personal",
-    eyebrow: "Section 3",
+    label: TAB_LABELS.personal, // "Slow Sip"
+    eyebrow: TAB_EYEBROWS.personal, // "Personal"
     icon: (
       <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
         <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.5 19 2c1 2 2 4.2 2 8 0 5.5-4.78 10-10 10z" />
@@ -45,8 +49,8 @@ const TAB_DEFS: Array<{
   },
   {
     id: "overview",
-    label: "Goals Overview",
-    eyebrow: "Section 4",
+    label: TAB_LABELS.overview, // "Bean Count"
+    eyebrow: TAB_EYEBROWS.overview, // "Goals overview"
     icon: (
       <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
         <circle cx="12" cy="12" r="10" />
