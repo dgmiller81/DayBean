@@ -1,5 +1,6 @@
 import { ThemeToggle, type Theme } from "./primitives/ThemeToggle";
 import { StreakPill } from "./primitives/StreakPill";
+import { StreakRewardBadge } from "./rewards/StreakRewardBadge";
 import { EditContentLink } from "./content/EditContentLink";
 import { SettingsButton } from "./settings/SettingsButton";
 import { TopbarRefreshButton } from "./TopbarRefreshButton";
@@ -17,6 +18,7 @@ export function Topbar({
   dailyContent,
   settings,
   latestRefresh,
+  streakLength,
   refreshStatusSlot,
 }: {
   theme: Theme;
@@ -25,6 +27,7 @@ export function Topbar({
   dailyContent: DailyContent;
   settings: SettingsSummary;
   latestRefresh: LatestRefresh | null;
+  streakLength: number;
   refreshStatusSlot?: ReactNode;
 }) {
   const llmConfigured = settings.credentials.length > 0 || !!settings.envOverride;
@@ -46,7 +49,8 @@ export function Topbar({
         </div>
       </div>
       <div className="topbar-tools">
-        <StreakPill count={0} />
+        <StreakPill count={streakLength} />
+        <StreakRewardBadge streakLength={streakLength} />
         <TopbarRefreshButton llmConfigured={llmConfigured} lastStatus={lastStatus} />
         <EditContentLink iso={iso} initialContent={dailyContent} latestRefresh={latestRefresh} />
         <SettingsButton initial={settings} initialTheme={theme} refreshStatusSlot={refreshStatusSlot} />

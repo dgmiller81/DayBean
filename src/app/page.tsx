@@ -18,6 +18,7 @@ import { getSettings } from "@/server/actions/settings";
 import { hasRefreshedToday } from "@/server/queries/refresh-status";
 import { getLatestRefresh } from "@/server/queries/refresh-log";
 import { refreshDailyContent } from "@/server/llm/refresh";
+import { detectStreak } from "@/server/lib/streak";
 import type { Tab } from "@/components/Tabs";
 import type { Theme } from "@/components/primitives/ThemeToggle";
 
@@ -107,10 +108,12 @@ export default async function Page({
   }
 
   // Re-fetch content + latest log AFTER any forced refresh so the page
-  // renders with the result of this run.
-  const [{ content, source }, latestRefresh] = await Promise.all([
+  // renders with the result of this run. detectStreak joins the same
+  // fan-out — its own queries are independent of content/refresh-log.
+  const [{ content, source }, latestRefresh, streak] = await Promise.all([
     getDailyContentWithMeta(userId, iso),
     getLatestRefresh(userId),
+    detectStreak(userId, today),
   ]);
 
   return (
@@ -123,6 +126,7 @@ export default async function Page({
         dailyContent={content}
         settings={settings}
         latestRefresh={latestRefresh}
+        streakLength={streak.length}
         refreshStatusSlot={<RefreshStatus userId={userId} todayIso={today} />}
       />
       <Hero
