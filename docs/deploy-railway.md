@@ -1,43 +1,58 @@
 # Deploying DayBeans to Railway
 
-Single-service Next.js deploy. Two DB paths are supported:
+Single-service Next.js deploy backed by a Postgres service in the same project. Postgres is the only supported provider — local dev uses Postgres too (via Docker) so dev and prod are schema-identical.
 
-- **Recommended today — SQLite + Railway Volume.** Single instance, zero extra services, uses the migrations already in this repo.
-- **Future — Postgres.** Schema/migrations need to be regenerated against a live Postgres (not yet committed).
-
-SQLite stays the local-development DB in either case.
-
-## One-time setup (SQLite + Volume — immediately deployable)
+## One-time setup
 
 1. Create a new Railway project from this repo.
-2. On the Web service, attach a **Volume** mounted at `/data`. This is what makes the SQLite file survive deploys and restarts.
-3. Set these variables on the Web service:
+2. **Add a Postgres service** to the project (`railway add --database postgres`, or via the dashboard).
+3. On the Web service, set these variables:
 
    | Variable | Value | Notes |
    |---|---|---|
    | `DEPLOY_TARGET` | `railway` | Boot guard enforces the rules below. |
-   | `DATABASE_URL` | `file:/data/prod.db` | Path must be inside the mounted Volume. |
+   | `DATABASE_URL` | `${{Postgres.DATABASE_URL}}` | Railway resolves the reference to the Postgres service's internal URL. |
    | `APP_ENCRYPTION_KEY` | 32-byte base64 — `openssl rand -base64 32` | Required. |
    | `AUTH_MODE` | `simple` | Boot guard rejects `none` on Railway. `full` is deferred. |
    | `AUTH_SECRET` | `openssl rand -base64 32` | Required by `simple` and `full`. |
    | `SIMPLE_PASSWORD_HASH` | output of `pnpm exec tsx scripts/hash-password.ts` | Required by `simple`. |
+   | `ADMIN_EMAIL` | your-email@example.com | Required by `simple`. Bootstrap admin. |
    | `CRON_SECRET` | `openssl rand -base64 32` | Required on Railway (boot guard). |
    | `LMSTUDIO_BASE_URL` | optional | Default `http://localhost:1234/v1` (won't reach LM Studio from Railway — set per-user OpenAI/Anthropic keys instead). |
    | `NODE_ENV` | `production` | Railway sets this by default; pinning is fine. |
    | `PREBREW_POLICY` | optional, default `always` | S2 dual-run cost-graduation. `always` (Stage 0) → pre-brew everyone; `tiered` / `reactive` / `smart-resume` to dial cost down later. |
-   | `RESEND_API_KEY` | optional | S5 voucher emails. When unset, claim flow logs `[email:dev]` and continues — fine for pre-launch. Set this once you're issuing real codes. |
+   | `RESEND_API_KEY` | optional | S5 voucher emails. When unset, claim flow logs `[email:dev]` and continues — fine for pre-launch. |
    | `EMAIL_FROM` | optional | Default `"DayBeans <hello@daybeans.com>"`. Override with your verified Resend sender. |
 
 4. Do **not** set `PORT` manually — Railway injects it, and `next start` reads it automatically.
+5. The Volume from the SQLite era is no longer needed — you can detach it.
 
-> **Single-instance only.** SQLite + Volume cannot be horizontally scaled. Keep replicas at 1.
+> Postgres handles concurrent writes natively, so horizontal scaling is now possible (though we ship at replica=1 by default).
 
-## One-time setup (Postgres — when you're ready)
+## Local development
 
-1. Add a **Postgres** service to the same project.
-2. Set `DATABASE_URL` on the Web service to `${{Postgres.DATABASE_URL}}` (Railway resolves the reference).
-3. Switch `prisma/schema.prisma` `provider` to `postgresql`, regenerate migrations against a live Postgres (`prisma migrate dev`), and commit the new `prisma/migrations/` folder. The current SQLite migrations will not apply.
-4. All other variables from the SQLite table above still apply.
+Single Postgres provider means dev needs a local Postgres. Easiest:
+
+```bash
+docker run -d --name daybeans-pg -p 5432:5432 \
+  -e POSTGRES_PASSWORD=local \
+  -e POSTGRES_DB=daybeans \
+  postgres:16
+```
+
+Then `.env`:
+
+```
+DATABASE_URL="postgresql://postgres:local@localhost:5432/daybeans"
+```
+
+And:
+
+```bash
+npx prisma migrate dev   # applies the init migration to your local DB
+pnpm db:seed             # creates the local-default admin row
+pnpm dev
+```
 
 ## Build & start
 
