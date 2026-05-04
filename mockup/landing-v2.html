@@ -1,0 +1,1455 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DayBeans — Different beans. Same morning.</title>
+  <meta name="description" content="DayBeans is one quiet page that knows what you've journaled, what you're working on, and what kind of day you need to face. Pour first. Conquer next." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* DayBeans landing v2 — coffee-warm palette, witty voice, feature-driven sections.
+       Self-contained: only external dep is Google Fonts. */
+    :root {
+      --bg: #f6efe4;
+      --bg-1: #faf3e6; --bg-2: #ecdfc7;
+      --surface: #fffaf0;
+      --surface-2: #f4e9d3;
+      --ink: #2b1d10;
+      --ink-soft: #5a4530;
+      --ink-muted: #94816a;
+      --line: rgba(64,42,18,.10);
+      --line-strong: rgba(64,42,18,.22);
+      --espresso: #3b2415;
+      --espresso-deep: #1f120a;
+      --crema: #d4a86a;
+      --crema-deep: #a87a3c;
+      --crema-soft: #f6e7c4;
+      --sage: #5d7a6c;
+      --sage-deep: #3e5a4d;
+      --sage-soft: #dde6df;
+      --accent: #c2410c;
+      --accent-soft: #f9d8c1;
+      --shadow-soft: 0 1px 2px rgba(45,28,12,.05), 0 18px 40px rgba(45,28,12,.08);
+      --shadow-lift: 0 2px 6px rgba(45,28,12,.08), 0 28px 60px rgba(45,28,12,.16);
+    }
+    [data-theme="dusk"] {
+      --bg: #1a1410; --bg-1: #211912; --bg-2: #100a05;
+      --surface: #251a12; --surface-2: #2d2117;
+      --ink: #f4e6c8; --ink-soft: #c0a98a; --ink-muted: #8a7458;
+      --line: rgba(244,230,200,.10); --line-strong: rgba(244,230,200,.22);
+      --espresso: #d4a86a; --espresso-deep: #f0c890;
+      --crema: #d4a86a; --crema-deep: #f0c890; --crema-soft: rgba(212,168,106,.20);
+      --sage: #95b3a2; --sage-deep: #c4dccc; --sage-soft: rgba(149,179,162,.18);
+      --accent: #f7873f; --accent-soft: rgba(247,135,63,.16);
+      --shadow-soft: 0 1px 2px rgba(0,0,0,.4), 0 22px 50px rgba(0,0,0,.5);
+      --shadow-lift: 0 2px 6px rgba(0,0,0,.5), 0 36px 72px rgba(0,0,0,.55);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: "Inter", system-ui, -apple-system, sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.6;
+      letter-spacing: -.005em;
+      overflow-x: hidden;
+      transition: background .6s ease, color .6s ease;
+    }
+    .serif { font-family: "Fraunces", Georgia, serif; letter-spacing: -.02em; }
+    a { color: inherit; text-decoration: none; }
+    button { font-family: inherit; cursor: pointer; }
+
+    /* ===== Background ambience ===== */
+    .bg-canvas {
+      position: fixed; inset: 0; z-index: -2;
+      background:
+        radial-gradient(80% 60% at 50% -10%, var(--crema-soft) 0%, transparent 60%),
+        radial-gradient(70% 50% at 90% 20%, var(--sage-soft) 0%, transparent 55%),
+        linear-gradient(180deg, var(--bg-1) 0%, var(--bg-2) 100%);
+      transition: background .6s ease;
+    }
+    .bg-orb {
+      position: fixed; z-index: -1;
+      width: 760px; height: 760px;
+      border-radius: 50%; filter: blur(80px);
+      opacity: .55; pointer-events: none;
+      animation: drift 22s ease-in-out infinite alternate;
+      will-change: transform;
+    }
+    .bg-orb.a { top: -260px; left: -180px; background: var(--crema); animation-delay: -3s; }
+    .bg-orb.b { top: 30%; right: -240px; background: var(--sage); opacity: .35; animation-delay: -8s; }
+    .bg-orb.c { bottom: -300px; left: 30%; background: var(--accent); opacity: .22; animation-delay: -14s; }
+    @keyframes drift {
+      0%   { transform: translate3d(0,0,0) scale(1); }
+      50%  { transform: translate3d(40px, 60px, 0) scale(1.07); }
+      100% { transform: translate3d(-40px, 30px, 0) scale(.96); }
+    }
+    @media (prefers-reduced-motion: reduce) { .bg-orb { animation: none; } }
+
+    /* ===== Nav ===== */
+    .nav {
+      position: sticky; top: 0; z-index: 50;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 36px;
+      backdrop-filter: saturate(140%) blur(14px);
+      -webkit-backdrop-filter: saturate(140%) blur(14px);
+      background: color-mix(in oklab, var(--bg) 70%, transparent);
+      border-bottom: 1px solid transparent;
+      transition: border-color .25s ease, background .6s ease;
+    }
+    .nav.scrolled { border-bottom-color: var(--line); }
+    .brand {
+      display: inline-flex; align-items: center; gap: 12px;
+      font-family: "Fraunces", serif; font-weight: 500; font-size: 1.12rem;
+      letter-spacing: -.01em;
+    }
+    .brand-mark {
+      width: 36px; height: 36px; border-radius: 999px;
+      background: linear-gradient(135deg, var(--espresso), var(--crema));
+      display: inline-flex; align-items: center; justify-content: center;
+      color: var(--surface);
+      box-shadow: 0 4px 14px color-mix(in oklab, var(--espresso) 40%, transparent);
+      font-family: "Fraunces", serif; font-weight: 700; font-size: 1rem;
+    }
+    .nav-links { display: flex; gap: 26px; align-items: center; font-size: .92rem; color: var(--ink-soft); }
+    .nav-links a { transition: color .15s ease; }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-cta { display: inline-flex; gap: 10px; align-items: center; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 10px 18px; border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--surface); color: var(--ink);
+      font-size: .92rem; font-weight: 500; letter-spacing: .005em;
+      transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease, background .15s ease, color .15s ease;
+    }
+    .btn:hover { border-color: var(--line-strong); transform: translateY(-1px); box-shadow: var(--shadow-soft); }
+    .btn.primary { background: var(--espresso); color: var(--surface); border-color: var(--espresso); }
+    .btn.primary:hover { background: var(--espresso-deep); border-color: var(--espresso-deep); }
+    .btn.crema { background: var(--crema); color: var(--espresso-deep); border-color: var(--crema); }
+    .btn.crema:hover { background: var(--crema-deep); border-color: var(--crema-deep); color: var(--surface); }
+    .btn.ghost { background: transparent; }
+    .btn.lg { padding: 14px 26px; font-size: 1rem; }
+
+    /* ===== Hero ===== */
+    .hero { padding: 70px 36px 80px; max-width: 1240px; margin: 0 auto; }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 12px; border-radius: 999px;
+      background: color-mix(in oklab, var(--crema) 22%, transparent);
+      border: 1px solid color-mix(in oklab, var(--crema) 40%, transparent);
+      color: var(--espresso); font-size: .72rem; font-weight: 600;
+      letter-spacing: .14em; text-transform: uppercase;
+    }
+    .hero-eyebrow .steam {
+      width: 14px; height: 14px; display: inline-flex; align-items: center; justify-content: center;
+    }
+    .hero-eyebrow .steam svg { animation: steam 3.4s ease-in-out infinite; transform-origin: bottom; }
+    @keyframes steam {
+      0%   { opacity: 0; transform: translateY(2px) scaleY(.6); }
+      30%  { opacity: 1; transform: translateY(-2px) scaleY(1); }
+      60%  { opacity: .6; transform: translateY(-6px) scaleY(1.1); }
+      100% { opacity: 0; transform: translateY(-10px) scaleY(.5); }
+    }
+
+    .hero-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 56px; align-items: center; margin-top: 24px; }
+    @media (max-width: 980px) { .hero-grid { grid-template-columns: 1fr; gap: 40px; } }
+
+    .hero-headline {
+      font-family: "Fraunces", serif; font-weight: 400;
+      font-size: clamp(2.6rem, 6.6vw, 5.4rem);
+      line-height: 1.02; letter-spacing: -.025em;
+      margin: 18px 0 18px;
+    }
+    .hero-headline em { font-style: italic; font-weight: 300; color: var(--espresso); }
+    .hero-headline .reveal-word {
+      display: inline-block;
+      transform: translateY(28px); opacity: 0;
+      animation: revealUp .9s cubic-bezier(.2,.7,.2,1) forwards;
+    }
+    .hero-headline .reveal-word:nth-child(1) { animation-delay: .05s; }
+    .hero-headline .reveal-word:nth-child(2) { animation-delay: .14s; }
+    .hero-headline .reveal-word:nth-child(3) { animation-delay: .22s; }
+    .hero-headline .reveal-word:nth-child(4) { animation-delay: .30s; }
+    .hero-headline .reveal-word:nth-child(5) { animation-delay: .38s; }
+    .hero-headline .reveal-word:nth-child(6) { animation-delay: .46s; }
+    @keyframes revealUp { to { transform: translateY(0); opacity: 1; } }
+
+    .hero-sub {
+      font-size: 1.18rem; line-height: 1.55;
+      color: var(--ink-soft); max-width: 580px;
+      animation: revealUp .9s cubic-bezier(.2,.7,.2,1) .6s both;
+    }
+    .hero-sub strong { color: var(--ink); font-weight: 600; }
+    .hero-cta { margin-top: 28px; display: flex; gap: 12px; flex-wrap: wrap;
+      animation: revealUp .9s cubic-bezier(.2,.7,.2,1) .75s both; }
+    .hero-cta .btn .arr { transition: transform .2s ease; }
+    .hero-cta .btn:hover .arr { transform: translateX(3px); }
+    .hero-meta {
+      margin-top: 22px; display: flex; gap: 18px; flex-wrap: wrap;
+      font-size: .8rem; color: var(--ink-muted);
+      animation: revealUp .9s cubic-bezier(.2,.7,.2,1) .9s both;
+    }
+    .hero-meta .check { display: inline-flex; align-items: center; gap: 6px; }
+
+    /* Hero illustration: a coffee cup with steam + the dashboard mini-card behind it */
+    .hero-art { position: relative; perspective: 1400px; min-height: 520px; }
+    .cup {
+      position: absolute; right: 18%; top: 8%;
+      width: 220px; height: 220px;
+      filter: drop-shadow(0 24px 36px rgba(45,28,12,.18));
+      animation: bobble 6s ease-in-out infinite alternate;
+    }
+    @keyframes bobble {
+      from { transform: translateY(0) rotate(-2deg); }
+      to   { transform: translateY(-8px) rotate(2deg); }
+    }
+    .cup .steam-wisp {
+      animation: wisp 3s ease-in-out infinite;
+      transform-origin: bottom;
+    }
+    .cup .steam-wisp.b { animation-delay: -1s; }
+    .cup .steam-wisp.c { animation-delay: -2s; }
+    @keyframes wisp {
+      0%   { opacity: 0; transform: translateY(0) scaleX(1); }
+      30%  { opacity: .7; transform: translateY(-8px) scaleX(1.2); }
+      60%  { opacity: .4; transform: translateY(-22px) scaleX(.8); }
+      100% { opacity: 0; transform: translateY(-40px) scaleX(.5); }
+    }
+
+    .hero-card {
+      position: absolute; left: 0; bottom: 0;
+      width: 78%;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 22px;
+      box-shadow: var(--shadow-lift);
+      transform: rotate(-1.5deg);
+      animation: float 7s ease-in-out infinite alternate;
+      transition: transform .25s cubic-bezier(.2,.7,.2,1);
+    }
+    @keyframes float {
+      from { transform: rotate(-1.5deg) translateY(0); }
+      to   { transform: rotate(-1.5deg) translateY(-8px); }
+    }
+    .hero-card-eyebrow {
+      font-size: .68rem; color: var(--ink-muted);
+      text-transform: uppercase; letter-spacing: .14em; font-weight: 600;
+    }
+    .hero-card-title { font-family: "Fraunces", serif; font-size: 1.4rem; line-height: 1.1; margin: 6px 0 14px; }
+    .ring-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .ring-stat { display: flex; flex-direction: column; align-items: center; padding: 8px 4px; border-radius: 10px; }
+    .ring-svg { width: 50px; height: 50px; transform: rotate(-90deg); }
+    .ring-bg { fill: none; stroke: var(--line-strong); stroke-width: 5; }
+    .ring-fg {
+      fill: none; stroke: var(--espresso); stroke-width: 5; stroke-linecap: round;
+      stroke-dasharray: 169.65; stroke-dashoffset: 169.65;
+      animation: drawRing 1.6s cubic-bezier(.2,.7,.2,1) .8s forwards;
+    }
+    .ring-stat:nth-child(2) .ring-fg { animation-delay: 1s; --ring-end: 30; stroke: var(--crema-deep); }
+    .ring-stat:nth-child(3) .ring-fg { animation-delay: 1.2s; --ring-end: 80; stroke: var(--sage); }
+    .ring-stat:nth-child(4) .ring-fg { animation-delay: 1.4s; --ring-end: 110; stroke: var(--accent); }
+    .ring-num { font-family: "Fraunces", serif; font-size: 1.05rem; line-height: 1; margin-top: 6px; }
+    .ring-num small { font-size: .68rem; color: var(--ink-muted); }
+    .ring-label { font-size: .58rem; color: var(--ink-muted); text-transform: uppercase; letter-spacing: .14em; margin-top: 3px; }
+    @keyframes drawRing { to { stroke-dashoffset: var(--ring-end, 50); } }
+
+    .heatmap-mini { margin-top: 14px; display: grid; grid-template-columns: repeat(20, 1fr); gap: 3px; }
+    .heatmap-mini span {
+      aspect-ratio: 1/1; border-radius: 2px;
+      background: var(--surface-2); border: 1px solid var(--line);
+      opacity: 0; transform: scale(.6);
+      animation: cellPop .35s ease forwards;
+    }
+    .heatmap-mini span.l1 { background: color-mix(in oklab, var(--crema) 35%, var(--surface-2)); border-color: transparent; }
+    .heatmap-mini span.l2 { background: color-mix(in oklab, var(--crema) 60%, var(--surface-2)); border-color: transparent; }
+    .heatmap-mini span.l3 { background: color-mix(in oklab, var(--crema) 80%, var(--surface-2)); border-color: transparent; }
+    .heatmap-mini span.l4 { background: var(--crema-deep); border-color: transparent; }
+    @keyframes cellPop { to { opacity: 1; transform: scale(1); } }
+
+    /* Floating chips */
+    .hero-chip {
+      position: absolute;
+      background: var(--surface); border: 1px solid var(--line);
+      border-radius: 14px; padding: 12px 14px;
+      box-shadow: var(--shadow-lift);
+      display: inline-flex; align-items: center; gap: 10px;
+      font-size: .82rem; color: var(--ink-soft);
+      animation: floatY 5s ease-in-out infinite alternate;
+    }
+    .hero-chip .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--crema); box-shadow: 0 0 0 4px color-mix(in oklab, var(--crema) 26%, transparent); }
+    .hero-chip.a { top: 0; left: 18%; transform: rotate(-3deg); animation-delay: -1s; }
+    .hero-chip.b { top: 38%; right: -2%; transform: rotate(3deg); animation-delay: -2.5s; animation-name: floatYRight; }
+    .hero-chip.b .dot { background: var(--sage); box-shadow: 0 0 0 4px color-mix(in oklab, var(--sage) 26%, transparent); }
+    @keyframes floatY {
+      from { transform: rotate(-3deg) translateY(0); }
+      to   { transform: rotate(-3deg) translateY(-8px); }
+    }
+    @keyframes floatYRight {
+      from { transform: rotate(3deg) translateY(0); }
+      to   { transform: rotate(3deg) translateY(8px); }
+    }
+
+    /* ===== Section frames ===== */
+    section { padding: 90px 36px; max-width: 1240px; margin: 0 auto; }
+    @media (max-width: 700px) { section { padding: 60px 22px; } }
+    .section-eyebrow {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-size: .72rem; color: var(--espresso);
+      text-transform: uppercase; letter-spacing: .18em; font-weight: 600;
+    }
+    .section-eyebrow::before {
+      content: ""; width: 28px; height: 1px; background: var(--espresso); display: inline-block;
+    }
+    .section-title {
+      font-family: "Fraunces", serif;
+      font-size: clamp(2rem, 4.4vw, 3.4rem);
+      line-height: 1.06; letter-spacing: -.02em;
+      margin: 14px 0 14px; max-width: 820px;
+    }
+    .section-title em { font-style: italic; color: var(--espresso); font-weight: 300; }
+    .section-sub { font-size: 1.05rem; color: var(--ink-soft); max-width: 700px; line-height: 1.6; }
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity .9s ease, transform .9s cubic-bezier(.2,.7,.2,1); }
+    .reveal.in { opacity: 1; transform: translateY(0); }
+
+    /* ===== Coffee partnership banner (between hero & features) ===== */
+    .partner-strip {
+      max-width: 1240px; margin: 0 auto; padding: 18px 36px;
+      display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap;
+      border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+      background: color-mix(in oklab, var(--crema-soft) 50%, transparent);
+    }
+    .partner-strip .pitch {
+      font-family: "Fraunces", serif; font-style: italic; font-weight: 400;
+      font-size: 1.05rem; color: var(--ink); letter-spacing: -.01em;
+    }
+    .partner-strip .pitch b { font-style: normal; font-weight: 600; color: var(--espresso); }
+    .partner-strip .partners {
+      display: flex; gap: 22px; align-items: center; color: var(--ink-muted);
+      font-size: .8rem; letter-spacing: .12em; text-transform: uppercase; font-weight: 600;
+    }
+    .partner-strip .partners span { display: inline-flex; align-items: center; gap: 6px; }
+    .partner-strip .partners svg { width: 16px; height: 16px; }
+
+    /* ===== Four tabs showcase ===== */
+    .tabs-bar {
+      margin: 38px 0 28px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
+    }
+    @media (max-width: 700px) { .tabs-bar { grid-template-columns: repeat(2, 1fr); } }
+    .tab-pill {
+      background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
+      padding: 14px 16px; cursor: pointer; text-align: left;
+      transition: border-color .15s ease, transform .15s ease, box-shadow .15s ease;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .tab-pill:hover { transform: translateY(-2px); box-shadow: var(--shadow-soft); border-color: var(--line-strong); }
+    .tab-pill.active {
+      background: var(--espresso); color: var(--surface); border-color: var(--espresso);
+      box-shadow: 0 6px 20px color-mix(in oklab, var(--espresso) 38%, transparent);
+    }
+    .tab-pill .ic {
+      width: 36px; height: 36px; border-radius: 10px;
+      background: color-mix(in oklab, var(--crema) 22%, transparent);
+      color: var(--espresso);
+      display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .tab-pill.active .ic { background: color-mix(in oklab, var(--surface) 18%, transparent); color: var(--surface); }
+    .tab-pill .lbl { display: flex; flex-direction: column; }
+    .tab-pill .name { font-family: "Fraunces", serif; font-size: 1.05rem; font-weight: 500; }
+    .tab-pill .meta { font-size: .68rem; opacity: .7; text-transform: uppercase; letter-spacing: .14em; font-weight: 600; }
+
+    .tab-stage {
+      background: var(--surface); border: 1px solid var(--line); border-radius: 28px;
+      padding: 36px; box-shadow: var(--shadow-lift);
+      transition: background .25s ease;
+      min-height: 460px;
+    }
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; animation: fadeUp .45s cubic-bezier(.2,.7,.2,1); }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .tab-panel-head {
+      display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    .tab-panel-head h3 {
+      font-family: "Fraunces", serif; font-size: 1.7rem; line-height: 1.1; margin: 0 0 4px;
+    }
+    .tab-panel-head .quip {
+      font-style: italic; color: var(--ink-soft); font-size: .92rem; max-width: 360px;
+    }
+
+    /* ----- Pour Over panel content ----- */
+    .pour-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 18px; }
+    @media (max-width: 800px) { .pour-grid { grid-template-columns: 1fr; } }
+    .scripture-card {
+      background: linear-gradient(135deg, var(--crema-soft), var(--surface-2));
+      border: 1px solid var(--line); border-radius: 18px; padding: 24px;
+    }
+    .scripture-card .label { font-size: .68rem; color: var(--ink-muted); text-transform: uppercase; letter-spacing: .14em; font-weight: 600; }
+    .scripture-card blockquote {
+      font-family: "Fraunces", serif; font-style: italic; font-weight: 300;
+      font-size: 1.4rem; line-height: 1.4; margin: 10px 0 4px; color: var(--ink);
+    }
+    .scripture-card cite { font-style: normal; color: var(--ink-muted); font-size: .8rem; }
+    .meditate-card {
+      background: var(--surface-2); border: 1px solid var(--line); border-radius: 18px;
+      padding: 22px; display: flex; flex-direction: column; gap: 14px;
+    }
+    .meditate-card .label { font-size: .68rem; color: var(--ink-muted); text-transform: uppercase; letter-spacing: .14em; font-weight: 600; }
+    .meditate-card h4 { font-family: "Fraunces", serif; margin: 0; font-size: 1.2rem; }
+    .breath-ring {
+      width: 80px; height: 80px; border-radius: 50%;
+      background: radial-gradient(circle, color-mix(in oklab, var(--sage) 40%, transparent), transparent 70%);
+      animation: breathe 5s ease-in-out infinite alternate;
+      align-self: center;
+    }
+    @keyframes breathe {
+      from { transform: scale(.85); }
+      to   { transform: scale(1.15); }
+    }
+    .meditate-card .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .meditate-card .pill {
+      padding: 6px 12px; border-radius: 999px;
+      background: var(--surface); border: 1px solid var(--line);
+      font-size: .78rem; color: var(--ink-soft);
+    }
+    .meditate-card .pill.active { background: var(--sage-soft); color: var(--sage-deep); border-color: var(--sage); }
+
+    /* ----- Daily Grind panel ----- */
+    .grind-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 18px; }
+    @media (max-width: 800px) { .grind-grid { grid-template-columns: 1fr; } }
+    .article-card {
+      background: var(--surface-2); border: 1px solid var(--line); border-radius: 14px;
+      padding: 18px; display: flex; flex-direction: column; gap: 8px;
+      transition: border-color .15s ease, transform .15s ease;
+    }
+    .article-card:hover { border-color: var(--crema); transform: translateY(-2px); }
+    .article-card .badges { display: flex; gap: 6px; }
+    .article-card .badge {
+      font-size: .64rem; padding: 2px 8px; border-radius: 999px;
+      background: color-mix(in oklab, var(--crema) 22%, transparent);
+      color: var(--espresso); font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+    }
+    .article-card .badge.b-risk { background: color-mix(in oklab, var(--accent) 18%, transparent); color: var(--accent); }
+    .article-card .badge.b-research { background: color-mix(in oklab, var(--sage) 22%, transparent); color: var(--sage-deep); }
+    .article-card h5 { font-family: "Fraunces", serif; margin: 4px 0; font-size: 1.1rem; line-height: 1.2; }
+    .article-card p { color: var(--ink-soft); font-size: .88rem; margin: 0; line-height: 1.5; }
+    .article-card .src { font-size: .72rem; color: var(--ink-muted); margin-top: auto; }
+    .scan-list { background: var(--surface-2); border: 1px solid var(--line); border-radius: 14px; padding: 18px; }
+    .scan-list h6 { font-family: "Fraunces", serif; margin: 0 0 10px; font-size: 1rem; }
+    .scan-list ol { margin: 0; padding: 0; list-style: none; counter-reset: scan; }
+    .scan-list li {
+      counter-increment: scan;
+      padding: 10px 0; padding-left: 32px;
+      position: relative;
+      border-bottom: 1px dashed var(--line);
+      font-size: .9rem; color: var(--ink-soft); line-height: 1.4;
+    }
+    .scan-list li:last-child { border-bottom: 0; }
+    .scan-list li::before {
+      content: counter(scan, decimal-leading-zero);
+      position: absolute; left: 0; top: 11px;
+      font-size: .68rem; font-weight: 700; color: var(--crema-deep);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ----- Slow Sip panel ----- */
+    .sip-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    @media (max-width: 880px) { .sip-grid { grid-template-columns: 1fr; } }
+    .sip-card {
+      background: var(--surface-2); border: 1px solid var(--line); border-radius: 14px;
+      padding: 18px; display: flex; flex-direction: column; gap: 10px;
+      transition: transform .15s ease, border-color .15s ease;
+    }
+    .sip-card:hover { transform: translateY(-2px); border-color: var(--crema); }
+    .sip-card .ic {
+      width: 36px; height: 36px; border-radius: 10px;
+      background: color-mix(in oklab, var(--sage) 18%, transparent);
+      color: var(--sage-deep);
+      display: inline-flex; align-items: center; justify-content: center;
+    }
+    .sip-card.fin .ic { background: color-mix(in oklab, var(--crema) 22%, transparent); color: var(--espresso); }
+    .sip-card.life .ic { background: color-mix(in oklab, var(--accent) 18%, transparent); color: var(--accent); }
+    .sip-card h5 { font-family: "Fraunces", serif; margin: 0; font-size: 1.05rem; }
+    .sip-card p { color: var(--ink-soft); font-size: .86rem; margin: 0; line-height: 1.45; }
+    .sip-meta {
+      display: flex; gap: 14px; flex-wrap: wrap; margin-top: 4px;
+      font-size: .72rem; color: var(--ink-muted);
+    }
+    .sip-meta b { color: var(--ink); font-variant-numeric: tabular-nums; font-weight: 600; }
+
+    /* ----- Bean Count panel ----- */
+    .bc-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 28px; align-items: center; }
+    @media (max-width: 880px) { .bc-grid { grid-template-columns: 1fr; } }
+    .bc-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .bc-stat { display: flex; flex-direction: column; align-items: center; padding: 12px 6px; border-radius: 12px; }
+    .bc-stat svg { width: 64px; height: 64px; transform: rotate(-90deg); }
+    .bc-stat .num { font-family: "Fraunces", serif; font-size: 1.4rem; margin-top: 6px; }
+    .bc-stat .num small { font-size: .72rem; color: var(--ink-muted); }
+    .bc-stat .lbl { font-size: .6rem; color: var(--ink-muted); text-transform: uppercase; letter-spacing: .14em; margin-top: 3px; }
+    .bc-heat { display: grid; grid-template-columns: repeat(20, 1fr); gap: 4px; }
+    .bc-heat span {
+      aspect-ratio: 1/1; border-radius: 3px;
+      background: var(--surface-2); border: 1px solid var(--line);
+    }
+    .bc-heat span.l1 { background: color-mix(in oklab, var(--crema) 30%, var(--surface-2)); border-color: transparent; }
+    .bc-heat span.l2 { background: color-mix(in oklab, var(--crema) 55%, var(--surface-2)); border-color: transparent; }
+    .bc-heat span.l3 { background: color-mix(in oklab, var(--crema) 78%, var(--surface-2)); border-color: transparent; }
+    .bc-heat span.l4 { background: var(--crema-deep); border-color: transparent; }
+
+    /* ===== Curated content (CEO vs Carpenter) ===== */
+    .profiles { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 36px; }
+    @media (max-width: 880px) { .profiles { grid-template-columns: 1fr; } }
+    .profile {
+      background: var(--surface); border: 1px solid var(--line); border-radius: 22px;
+      padding: 26px; box-shadow: var(--shadow-soft);
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+    .profile:hover { transform: translateY(-3px); box-shadow: var(--shadow-lift); }
+    .profile-head {
+      display: flex; align-items: center; gap: 14px; margin-bottom: 16px;
+    }
+    .avatar {
+      width: 52px; height: 52px; border-radius: 999px;
+      background: linear-gradient(135deg, var(--crema), var(--espresso));
+      color: var(--surface); display: inline-flex; align-items: center; justify-content: center;
+      font-family: "Fraunces", serif; font-weight: 600; font-size: 1.2rem;
+    }
+    .profile.b .avatar { background: linear-gradient(135deg, var(--sage), var(--espresso)); }
+    .profile-head .who { display: flex; flex-direction: column; }
+    .profile-head .who .name { font-family: "Fraunces", serif; font-size: 1.15rem; font-weight: 500; }
+    .profile-head .who .role { font-size: .82rem; color: var(--ink-muted); }
+    .profile h4 {
+      font-family: "Fraunces", serif; font-size: .95rem; margin: 18px 0 8px;
+      color: var(--ink-muted); text-transform: uppercase; letter-spacing: .12em; font-weight: 600;
+    }
+    .profile ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
+    .profile li {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: .9rem; color: var(--ink-soft);
+      padding: 10px 12px; background: var(--surface-2); border-radius: 10px;
+      border: 1px solid var(--line);
+    }
+    .profile li .tag {
+      font-size: .62rem; padding: 2px 6px; border-radius: 999px; flex-shrink: 0;
+      background: color-mix(in oklab, var(--crema) 22%, transparent); color: var(--espresso);
+      font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+    }
+    .profile li .tag.sage { background: color-mix(in oklab, var(--sage) 22%, transparent); color: var(--sage-deep); }
+    .profile li .tag.warn { background: color-mix(in oklab, var(--accent) 18%, transparent); color: var(--accent); }
+    .profile li b { color: var(--ink); font-weight: 600; }
+    .profile-foot {
+      margin-top: 16px; padding-top: 14px; border-top: 1px dashed var(--line);
+      font-size: .78rem; color: var(--ink-muted); font-style: italic;
+    }
+
+    /* ===== Journal magic flow ===== */
+    .magic {
+      margin-top: 50px;
+      background: linear-gradient(135deg, var(--crema-soft) 0%, var(--surface-2) 100%);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 36px;
+      box-shadow: var(--shadow-soft);
+      position: relative; overflow: hidden;
+    }
+    .magic::before {
+      content: ""; position: absolute; right: -120px; top: -120px;
+      width: 360px; height: 360px; border-radius: 50%;
+      background: radial-gradient(circle, color-mix(in oklab, var(--crema) 40%, transparent), transparent 70%);
+      pointer-events: none;
+    }
+    .magic-flow {
+      display: grid; grid-template-columns: 1fr auto 1fr; gap: 22px; align-items: stretch;
+      margin-top: 24px;
+    }
+    @media (max-width: 880px) { .magic-flow { grid-template-columns: 1fr; } .magic-arrow { display: none; } }
+    .journal-card {
+      background: var(--surface); border: 1px solid var(--line); border-radius: 16px;
+      padding: 20px;
+    }
+    .journal-card .head {
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: .68rem; color: var(--ink-muted); text-transform: uppercase; letter-spacing: .14em; font-weight: 600;
+      margin-bottom: 10px;
+    }
+    .journal-card .entry {
+      font-family: "Fraunces", serif; font-style: italic; font-weight: 400;
+      font-size: 1.05rem; color: var(--ink); line-height: 1.5;
+    }
+    .journal-card .entry mark {
+      background: color-mix(in oklab, var(--crema) 40%, transparent);
+      padding: 0 4px; border-radius: 4px; color: var(--ink); font-style: normal; font-weight: 500;
+    }
+    .magic-arrow {
+      display: flex; align-items: center; justify-content: center;
+      color: var(--espresso); font-size: 1.6rem;
+      animation: arrowPulse 2s ease-in-out infinite;
+    }
+    @keyframes arrowPulse {
+      0%,100% { transform: translateX(0); opacity: .55; }
+      50%     { transform: translateX(6px); opacity: 1; }
+    }
+    .suggest-stack { display: flex; flex-direction: column; gap: 10px; }
+    .suggest {
+      background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
+      padding: 14px; display: flex; gap: 12px; align-items: flex-start;
+    }
+    .suggest .ic {
+      width: 32px; height: 32px; border-radius: 10px;
+      background: color-mix(in oklab, var(--sage) 18%, transparent);
+      color: var(--sage-deep); flex-shrink: 0;
+      display: inline-flex; align-items: center; justify-content: center;
+    }
+    .suggest.fin .ic { background: color-mix(in oklab, var(--crema) 22%, transparent); color: var(--espresso); }
+    .suggest.read .ic { background: color-mix(in oklab, var(--accent) 18%, transparent); color: var(--accent); }
+    .suggest .txt h6 { font-family: "Fraunces", serif; margin: 0 0 2px; font-size: .98rem; }
+    .suggest .txt p { margin: 0; font-size: .8rem; color: var(--ink-soft); line-height: 1.4; }
+    .suggest .txt .src { display: block; margin-top: 4px; font-size: .68rem; color: var(--ink-muted); }
+
+    /* ===== Pull quote ===== */
+    .pullquote { margin: 90px auto; max-width: 880px; text-align: center; padding: 32px; }
+    .pullquote .mark {
+      font-family: "Fraunces", serif; font-size: 5rem; line-height: 0;
+      color: var(--crema-deep); display: block; margin-bottom: 8px;
+    }
+    .pullquote p {
+      font-family: "Fraunces", serif; font-style: italic; font-weight: 300;
+      font-size: clamp(1.4rem, 2.6vw, 2.2rem); line-height: 1.4;
+      letter-spacing: -.01em; color: var(--ink); margin: 0 0 18px;
+    }
+    .pullquote .by { font-size: .8rem; color: var(--ink-muted); text-transform: uppercase; letter-spacing: .18em; }
+
+    /* ===== Coffee giveaway / contest banner ===== */
+    .giveaway {
+      margin-top: 60px;
+      background:
+        radial-gradient(60% 80% at 100% 50%, color-mix(in oklab, var(--crema) 30%, transparent), transparent 70%),
+        var(--espresso);
+      color: var(--surface);
+      border-radius: 28px; padding: 44px; position: relative; overflow: hidden;
+      display: grid; grid-template-columns: 1.2fr .8fr; gap: 32px; align-items: center;
+    }
+    @media (max-width: 880px) { .giveaway { grid-template-columns: 1fr; } }
+    .giveaway::before {
+      content: "";
+      position: absolute; right: -80px; bottom: -100px;
+      width: 320px; height: 320px; border-radius: 50%;
+      background: radial-gradient(circle, color-mix(in oklab, var(--crema) 40%, transparent), transparent 70%);
+      pointer-events: none;
+    }
+    .giveaway h3 {
+      font-family: "Fraunces", serif; font-size: clamp(1.6rem, 3.2vw, 2.4rem);
+      line-height: 1.1; margin: 0 0 8px; letter-spacing: -.01em;
+    }
+    .giveaway h3 em { font-style: italic; color: var(--crema); font-weight: 300; }
+    .giveaway p { color: color-mix(in oklab, var(--surface) 80%, transparent); margin: 0 0 18px; font-size: 1rem; max-width: 540px; }
+    .giveaway .partners {
+      display: flex; gap: 16px; flex-wrap: wrap; align-items: center;
+      font-size: .8rem; color: color-mix(in oklab, var(--surface) 70%, transparent);
+      letter-spacing: .12em; text-transform: uppercase; font-weight: 600;
+    }
+    .giveaway .partners span {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 12px; border-radius: 999px;
+      border: 1px solid color-mix(in oklab, var(--surface) 22%, transparent);
+    }
+    .giveaway .cta {
+      display: flex; flex-direction: column; gap: 10px;
+      background: color-mix(in oklab, var(--surface) 8%, transparent);
+      padding: 18px; border-radius: 16px; backdrop-filter: blur(10px);
+      border: 1px solid color-mix(in oklab, var(--surface) 14%, transparent);
+    }
+    .giveaway .cta strong {
+      font-family: "Fraunces", serif; font-size: 1.4rem; font-weight: 500; color: var(--surface);
+    }
+    .giveaway .cta small { color: color-mix(in oklab, var(--surface) 60%, transparent); font-size: .78rem; }
+
+    /* ===== Login ===== */
+    #login { padding-bottom: 110px; }
+    .login-card {
+      margin-top: 40px;
+      display: grid; grid-template-columns: 1.05fr .95fr; gap: 0;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 28px; overflow: hidden;
+      box-shadow: var(--shadow-lift);
+    }
+    @media (max-width: 880px) { .login-card { grid-template-columns: 1fr; } }
+    .login-pitch {
+      padding: 48px;
+      background:
+        radial-gradient(80% 60% at 0% 0%, color-mix(in oklab, var(--crema) 36%, transparent), transparent 60%),
+        radial-gradient(60% 50% at 100% 100%, color-mix(in oklab, var(--sage) 22%, transparent), transparent 60%),
+        var(--surface-2);
+      display: flex; flex-direction: column; gap: 18px; justify-content: center;
+      border-right: 1px solid var(--line);
+    }
+    @media (max-width: 880px) { .login-pitch { border-right: 0; border-bottom: 1px solid var(--line); padding: 36px; } }
+    .login-pitch h3 { font-family: "Fraunces", serif; font-size: 2rem; margin: 0; line-height: 1.1; letter-spacing: -.02em; }
+    .login-pitch h3 em { font-style: italic; color: var(--espresso); font-weight: 300; }
+    .login-pitch p { color: var(--ink-soft); margin: 0; font-size: 1rem; max-width: 380px; }
+    .login-perks { display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
+    .login-perks div { font-size: .9rem; color: var(--ink-soft); display: flex; gap: 10px; align-items: flex-start; }
+    .login-perks svg { color: var(--espresso); flex-shrink: 0; margin-top: 2px; }
+
+    .login-form { padding: 48px; display: flex; flex-direction: column; gap: 16px; }
+    @media (max-width: 880px) { .login-form { padding: 36px; } }
+    .login-form h4 { font-family: "Fraunces", serif; font-size: 1.4rem; margin: 0 0 4px; }
+    .login-form .helper { font-size: .88rem; color: var(--ink-muted); margin: 0 0 8px; }
+    .login-sso { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 8px; }
+    .sso-btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+      padding: 12px 14px; border-radius: 12px; border: 1px solid var(--line);
+      background: var(--surface); color: var(--ink); font-size: .9rem; font-weight: 500;
+      transition: border-color .15s ease, transform .15s ease;
+    }
+    .sso-btn:hover { border-color: var(--line-strong); transform: translateY(-1px); }
+    .login-divider {
+      display: flex; align-items: center; gap: 12px;
+      margin: 8px 0; font-size: .72rem; color: var(--ink-muted);
+      text-transform: uppercase; letter-spacing: .14em;
+    }
+    .login-divider::before, .login-divider::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+    .field { display: flex; flex-direction: column; gap: 6px; }
+    .field label { font-size: .78rem; font-weight: 500; color: var(--ink-soft); }
+    .field input {
+      background: var(--surface-2); color: var(--ink);
+      border: 1px solid var(--line); border-radius: 12px;
+      padding: 12px 14px; font: inherit; font-size: .94rem;
+      transition: border-color .15s ease, box-shadow .15s ease;
+    }
+    .field input:focus { outline: none; border-color: var(--crema); box-shadow: 0 0 0 3px color-mix(in oklab, var(--crema) 22%, transparent); }
+    .login-meta { display: flex; justify-content: space-between; align-items: center; font-size: .82rem; }
+    .login-meta a { color: var(--espresso); }
+    .login-meta a:hover { color: var(--ink); text-decoration: underline; }
+    .login-foot { margin-top: 6px; text-align: center; font-size: .82rem; color: var(--ink-muted); }
+    .login-foot a { color: var(--espresso); }
+    .login-success {
+      display: none; align-items: center; gap: 8px;
+      padding: 12px 14px; border-radius: 12px;
+      background: color-mix(in oklab, var(--sage) 18%, transparent);
+      border: 1px solid color-mix(in oklab, var(--sage) 36%, transparent);
+      color: var(--sage-deep);
+      font-size: .9rem; font-weight: 500;
+    }
+    .login-success.show { display: inline-flex; }
+
+    /* ===== Footer ===== */
+    footer {
+      padding: 50px 36px 60px; max-width: 1240px; margin: 0 auto;
+      border-top: 1px solid var(--line);
+      display: flex; justify-content: space-between; gap: 30px; flex-wrap: wrap;
+      color: var(--ink-muted); font-size: .82rem;
+    }
+    footer .closing-line {
+      font-family: "Fraunces", serif; font-style: italic; font-weight: 300;
+      font-size: 1.05rem; color: var(--ink-soft); max-width: 460px; line-height: 1.5;
+    }
+    footer ul { list-style: none; padding: 0; margin: 0; display: flex; gap: 22px; }
+    footer ul a { color: var(--ink-muted); transition: color .15s ease; }
+    footer ul a:hover { color: var(--ink); }
+
+    /* ===== Theme toggle (dawn / dusk) ===== */
+    .picker {
+      position: fixed; bottom: 22px; right: 22px; z-index: 60;
+      background: var(--surface); border: 1px solid var(--line-strong);
+      border-radius: 999px; padding: 6px;
+      display: flex; gap: 4px; box-shadow: var(--shadow-lift);
+    }
+    .picker button {
+      width: 34px; height: 34px; border-radius: 999px; border: 1px solid var(--line);
+      background: transparent; padding: 0;
+      display: inline-flex; align-items: center; justify-content: center;
+      transition: transform .15s ease, border-color .15s ease;
+      color: var(--ink-soft);
+    }
+    .picker button:hover { transform: scale(1.08); border-color: var(--line-strong); color: var(--ink); }
+    .picker button.active { border-color: var(--ink); color: var(--ink); background: var(--surface-2); }
+
+    .scroll-progress {
+      position: fixed; top: 0; left: 0; right: 0; height: 2px; z-index: 100;
+      background: linear-gradient(90deg, var(--crema), var(--espresso), var(--sage));
+      transform-origin: 0 50%; transform: scaleX(0);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .001s !important; transition-duration: .001s !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-canvas"></div>
+  <div class="bg-orb a"></div>
+  <div class="bg-orb b"></div>
+  <div class="bg-orb c"></div>
+  <div class="scroll-progress" id="scrollProgress"></div>
+
+  <!-- ===== NAV ===== -->
+  <nav class="nav" id="nav">
+    <a href="#top" class="brand" aria-label="DayBeans, home">
+      <span class="brand-mark" aria-hidden>DB</span>
+      <span>DayBeans</span>
+    </a>
+    <div class="nav-links" aria-label="primary">
+      <a href="#how">How it brews</a>
+      <a href="#curated">Curated</a>
+      <a href="#magic">The magic</a>
+      <a href="#contest">Free coffee</a>
+      <a href="#login">Sign in</a>
+    </div>
+    <div class="nav-cta">
+      <a href="#login" class="btn ghost">Sign in</a>
+      <a href="#login" class="btn crema">Pour first
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </nav>
+
+  <!-- ===== HERO ===== -->
+  <header class="hero" id="top">
+    <span class="hero-eyebrow">
+      <span class="steam"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 12 Q4 8, 6 6 T 8 2"/><path d="M9 12 Q9 9, 11 7"/></svg></span>
+      For mindful, spiritual, secular, and "just here for the coffee"
+    </span>
+    <div class="hero-grid">
+      <div>
+        <h1 class="hero-headline">
+          <span class="reveal-word">Different</span>
+          <span class="reveal-word">beans.</span>
+          <br>
+          <span class="reveal-word"><em>Same</em></span>
+          <span class="reveal-word"><em>morning.</em></span>
+        </h1>
+        <p class="hero-sub">
+          DayBeans is one quiet page that knows what you've journaled, what you're working on,
+          and what kind of day you need to face. <strong>Pour first.</strong> Conquer next.
+          Mindful, spiritual, or just stretching with a podcast — DayBeans curates around <em>you</em>.
+        </p>
+        <p class="hero-sub" style="margin-top:8px; font-size:.95rem; color:var(--ink-muted); font-style:italic;">
+          (Don't worry — we're not bat-bean crazy. We're not even into <em>that</em> bean. Boba folks: please report to a different cup.)
+        </p>
+        <div class="hero-cta">
+          <a href="#login" class="btn primary lg">Brew my morning
+            <svg class="arr" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </a>
+          <a href="#how" class="btn ghost lg">See it in motion</a>
+        </div>
+        <div class="hero-meta">
+          <span class="check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Faith-aware (or skip it)</span>
+          <span class="check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Curated to your job & hobbies</span>
+          <span class="check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Your journal stays yours</span>
+        </div>
+      </div>
+
+      <!-- Hero visual — coffee cup + sample dashboard -->
+      <div class="hero-art">
+        <svg class="cup" viewBox="0 0 220 220" aria-hidden>
+          <!-- steam -->
+          <path class="steam-wisp"   d="M85 30 Q95 18 90 8" stroke="rgba(64,42,18,.30)" stroke-width="3" stroke-linecap="round" fill="none"/>
+          <path class="steam-wisp b" d="M110 30 Q120 16 115 4" stroke="rgba(64,42,18,.34)" stroke-width="3" stroke-linecap="round" fill="none"/>
+          <path class="steam-wisp c" d="M135 30 Q145 18 140 8" stroke="rgba(64,42,18,.30)" stroke-width="3" stroke-linecap="round" fill="none"/>
+          <!-- saucer -->
+          <ellipse cx="110" cy="180" rx="92" ry="14" fill="#3b2415" opacity=".25"/>
+          <!-- cup body -->
+          <path d="M40 60 H 168 V 130 Q 168 175, 104 175 Q 40 175, 40 130 Z" fill="#fffaf0" stroke="#3b2415" stroke-width="3"/>
+          <!-- coffee surface -->
+          <ellipse cx="104" cy="60" rx="64" ry="10" fill="#3b2415"/>
+          <ellipse cx="104" cy="58" rx="58" ry="6" fill="#5a3a22"/>
+          <!-- handle -->
+          <path d="M168 80 Q 200 80, 200 110 Q 200 140, 168 140" fill="none" stroke="#3b2415" stroke-width="3"/>
+          <!-- DB logo on cup -->
+          <text x="104" y="118" text-anchor="middle" font-family="Fraunces, serif" font-size="22" font-weight="600" fill="#3b2415">DB</text>
+          <!-- coffee bean tiny -->
+          <ellipse cx="104" cy="60" rx="4" ry="2" fill="#7a5a3c"/>
+        </svg>
+
+        <div class="hero-chip a" aria-hidden>
+          <span class="dot"></span> 12-day streak · keep it light
+        </div>
+        <div class="hero-card" aria-label="Today preview">
+          <div class="hero-card-eyebrow">Sunday · May 3</div>
+          <div class="hero-card-title">How you're showing up</div>
+          <div class="ring-row">
+            <div class="ring-stat">
+              <svg class="ring-svg" viewBox="0 0 60 60"><circle class="ring-bg" cx="30" cy="30" r="27"/><circle class="ring-fg" cx="30" cy="30" r="27" style="--ring-end: 50;"/></svg>
+              <div class="ring-num">14<small>/19</small></div>
+              <div class="ring-label">Today</div>
+            </div>
+            <div class="ring-stat">
+              <svg class="ring-svg" viewBox="0 0 60 60"><circle class="ring-bg" cx="30" cy="30" r="27"/><circle class="ring-fg" cx="30" cy="30" r="27"/></svg>
+              <div class="ring-num">6<small>/8</small></div>
+              <div class="ring-label">Pour</div>
+            </div>
+            <div class="ring-stat">
+              <svg class="ring-svg" viewBox="0 0 60 60"><circle class="ring-bg" cx="30" cy="30" r="27"/><circle class="ring-fg" cx="30" cy="30" r="27"/></svg>
+              <div class="ring-num">87%</div>
+              <div class="ring-label">7 days</div>
+            </div>
+            <div class="ring-stat">
+              <svg class="ring-svg" viewBox="0 0 60 60"><circle class="ring-bg" cx="30" cy="30" r="27"/><circle class="ring-fg" cx="30" cy="30" r="27"/></svg>
+              <div class="ring-num">12d</div>
+              <div class="ring-label">Streak</div>
+            </div>
+          </div>
+          <div class="heatmap-mini" id="heroHeatmap"></div>
+        </div>
+        <div class="hero-chip b" aria-hidden>
+          <span class="dot"></span> 1 unread story for your week
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== Coffee partner strip ===== -->
+  <div class="partner-strip">
+    <div class="pitch">
+      <b>Brewing partnerships</b> with the cafés you already love. Your morning, on the house — sometimes literally.
+    </div>
+    <div class="partners">
+      <span><svg viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 12h8M12 8v8" stroke="currentColor" stroke-width="1.4" fill="none"/></svg> Starbucks</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden><path d="M5 8 Q12 2 19 8 V 16 Q 12 22, 5 16 Z"/></svg> Caribou</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden><circle cx="12" cy="12" r="8"/><path d="M9 12l2 2 4-4"/></svg> Scooter's</span>
+      <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/></svg> Local roasters</span>
+    </div>
+  </div>
+
+  <!-- ===== HOW IT WORKS — FOUR TABS ===== -->
+  <section id="how">
+    <span class="section-eyebrow reveal">How it brews</span>
+    <h2 class="section-title reveal">Four tabs. <em>One whole life.</em></h2>
+    <p class="section-sub reveal">
+      We named them like a barista would. Click any one — the panel below shows what
+      DayBeans actually puts in front of you each morning.
+    </p>
+
+    <!-- Tabs bar -->
+    <div class="tabs-bar reveal" id="tabsBar" role="tablist">
+      <button class="tab-pill active" data-panel="pour" role="tab" aria-selected="true">
+        <span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12c4 0 6 3 9 3s5-3 9-3M12 3v18"/></svg></span>
+        <span class="lbl"><span class="meta">Mindful soul</span><span class="name">Pour Over</span></span>
+      </button>
+      <button class="tab-pill" data-panel="grind" role="tab" aria-selected="false">
+        <span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>
+        <span class="lbl"><span class="meta">Professional</span><span class="name">Daily Grind</span></span>
+      </button>
+      <button class="tab-pill" data-panel="sip" role="tab" aria-selected="false">
+        <span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.5 19 2c1 2 2 4.2 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6"/></svg></span>
+        <span class="lbl"><span class="meta">Personal</span><span class="name">Slow Sip</span></span>
+      </button>
+      <button class="tab-pill" data-panel="bc" role="tab" aria-selected="false">
+        <span class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></span>
+        <span class="lbl"><span class="meta">Goals overview</span><span class="name">Bean Count</span></span>
+      </button>
+    </div>
+
+    <!-- Panel stage -->
+    <div class="tab-stage reveal">
+
+      <!-- Pour Over -->
+      <div class="tab-panel active" data-panel="pour">
+        <div class="tab-panel-head">
+          <div>
+            <h3>Pour Over <em style="font-style:italic;font-weight:300;color:var(--ink-muted);font-size:.7em;">/ Mindful soul</em></h3>
+            <span class="quip">Slow morning, intentional pour. Scripture, meditation, or just five quiet breaths — your choice.</span>
+          </div>
+        </div>
+        <div class="pour-grid">
+          <div class="scripture-card">
+            <div class="label">Verse for today</div>
+            <blockquote>"Be still, and know that I am God."</blockquote>
+            <cite>— Psalm 46:10 · biased to your week's themes</cite>
+            <div style="margin-top:18px; padding-top:14px; border-top:1px dashed var(--line);">
+              <div class="label">Today's opening</div>
+              <p style="margin:8px 0 0; font-family:'Fraunces',serif; font-style:italic; color:var(--ink-soft); line-height:1.5;">
+                You wrote about feeling rushed three times this week. Today, before you respond to anything,
+                breathe twice and ask one question.
+              </p>
+            </div>
+          </div>
+          <div class="meditate-card">
+            <div class="label">Or, just breathe</div>
+            <h4>Box breath · 4-4-4-4</h4>
+            <div class="breath-ring" aria-hidden></div>
+            <div class="actions">
+              <span class="pill active">Breath</span>
+              <span class="pill">Stretch</span>
+              <span class="pill">Walk</span>
+              <span class="pill">Affirmation</span>
+            </div>
+            <p style="margin:0; font-size:.84rem; color:var(--ink-muted); font-style:italic;">
+              Atheist, agnostic, somewhere-in-between? We hide the verse, keep the calm.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Daily Grind -->
+      <div class="tab-panel" data-panel="grind">
+        <div class="tab-panel-head">
+          <div>
+            <h3>Daily Grind <em style="font-style:italic;font-weight:300;color:var(--ink-muted);font-size:.7em;">/ Professional</em></h3>
+            <span class="quip">The news that matches your job — not whatever Twitter screamed about. Curated, not crammed.</span>
+          </div>
+        </div>
+        <div class="grind-grid">
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div class="article-card">
+              <div class="badges"><span class="badge">Strategy</span><span class="badge b-research">Read</span></div>
+              <h5>Series-B founders are quietly hiring fewer engineers, more EAs</h5>
+              <p>The shape of "scaling" changed in Q1 — operators are getting expensive again.</p>
+              <span class="src">stratechery.com</span>
+            </div>
+            <div class="article-card">
+              <div class="badges"><span class="badge b-risk">Risk</span></div>
+              <h5>Supply-chain attacks on ML registries pick up</h5>
+              <p>Two npm-style attacks against PyPI ML packages this month. Your CI matters.</p>
+              <span class="src">thehackernews.com</span>
+            </div>
+            <div class="article-card">
+              <div class="badges"><span class="badge">Product</span></div>
+              <h5>Open-weight context windows hit 1M+ tokens broadly</h5>
+              <p>The cost curve is the real story — what cost $50 of inference is now under $10.</p>
+              <span class="src">huggingface.co</span>
+            </div>
+            <div class="article-card">
+              <div class="badges"><span class="badge b-research">OSS</span></div>
+              <h5>Agent stacks consolidate around 3 primitives</h5>
+              <p>Tools, traces, evals. Less framework, more library.</p>
+              <span class="src">github.com</span>
+            </div>
+          </div>
+          <div class="scan-list">
+            <h6>Today, in 8 lines</h6>
+            <ol>
+              <li>Inference costs continue to compress month-over-month.</li>
+              <li>Voice-to-voice latency drops below conversation threshold.</li>
+              <li>Code-gen evals plateau on benchmark; gap shows in long horizons.</li>
+              <li>Agent stacks consolidate to a smaller set of primitives.</li>
+              <li>More research labs publish negative results — a healthy sign.</li>
+              <li>Local-first inference becomes a credible default.</li>
+              <li>Provenance + watermarking standards inch forward at the W3C.</li>
+              <li>Open-weight context windows hit 1M+ tokens broadly.</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slow Sip -->
+      <div class="tab-panel" data-panel="sip">
+        <div class="tab-panel-head">
+          <div>
+            <h3>Slow Sip <em style="font-style:italic;font-weight:300;color:var(--ink-muted);font-size:.7em;">/ Personal</em></h3>
+            <span class="quip">Family, finance, hobbies, work-life. Three small reads picked from what you've actually said matters.</span>
+          </div>
+        </div>
+        <div class="sip-grid">
+          <div class="sip-card">
+            <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c0-3 1.85-5.36 5.08-6M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.5 19 2c1 2 2 4.2 2 8 0 5.5-4.78 10-10 10z"/></svg></div>
+            <h5>Marriage & family</h5>
+            <p>"The kid asked me to put my phone down" — tonight's habit: phone-free dinner table. 30 days makes a rule.</p>
+            <div class="sip-meta"><span><b>14</b> nights done</span> · <span><b>7-day</b> streak</span></div>
+          </div>
+          <div class="sip-card fin">
+            <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+            <h5>Finance check-in</h5>
+            <p>You set a 3-month emergency target in March. Quietly, you're 62% there. Round-up auto-saves are doing it.</p>
+            <div class="sip-meta"><span>Net worth <b>+4.1%</b></span> · <span>Cash <b>$8.4k</b></span></div>
+          </div>
+          <div class="sip-card life">
+            <div class="ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L4 6v6c0 5 3.5 9.5 8 10 4.5-.5 8-5 8-10V6l-8-4z"/></svg></div>
+            <h5>Hobby · woodworking</h5>
+            <p>You set "1 hour shop time / week" as a goal. New how-to dropped on Japanese joinery — pinned for Saturday.</p>
+            <div class="sip-meta"><span><b>3</b> hrs this week</span> · <span><b>+12%</b> on goal</span></div>
+          </div>
+        </div>
+        <div style="margin-top:18px; font-size:.86rem; color:var(--ink-muted); font-style:italic;">
+          Slow Sip rotates: parenting, partner, finances, faith, friendships, fitness, hobbies. Whatever's mattering this season.
+        </div>
+      </div>
+
+      <!-- Bean Count -->
+      <div class="tab-panel" data-panel="bc">
+        <div class="tab-panel-head">
+          <div>
+            <h3>Bean Count <em style="font-style:italic;font-weight:300;color:var(--ink-muted);font-size:.7em;">/ Goals overview</em></h3>
+            <span class="quip">All your goals, all in one place. Articles read, disconnect minutes, check-ins — they all flow up here.</span>
+          </div>
+        </div>
+        <div class="bc-grid">
+          <div class="bc-stats">
+            <div class="bc-stat"><svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="29" fill="none" stroke="var(--line-strong)" stroke-width="6"/><circle cx="32" cy="32" r="29" fill="none" stroke="var(--espresso)" stroke-width="6" stroke-linecap="round" stroke-dasharray="182" stroke-dashoffset="55"/></svg><div class="num">14<small>/19</small></div><div class="lbl">Today</div></div>
+            <div class="bc-stat"><svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="29" fill="none" stroke="var(--line-strong)" stroke-width="6"/><circle cx="32" cy="32" r="29" fill="none" stroke="var(--sage)" stroke-width="6" stroke-linecap="round" stroke-dasharray="182" stroke-dashoffset="35"/></svg><div class="num">87%</div><div class="lbl">Last 7</div></div>
+            <div class="bc-stat"><svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="29" fill="none" stroke="var(--line-strong)" stroke-width="6"/><circle cx="32" cy="32" r="29" fill="none" stroke="var(--crema-deep)" stroke-width="6" stroke-linecap="round" stroke-dasharray="182" stroke-dashoffset="70"/></svg><div class="num">12d</div><div class="lbl">Best streak</div></div>
+            <div class="bc-stat"><svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="29" fill="none" stroke="var(--line-strong)" stroke-width="6"/><circle cx="32" cy="32" r="29" fill="none" stroke="var(--crema-deep)" stroke-width="6" stroke-linecap="round" stroke-dasharray="182" stroke-dashoffset="110"/></svg><div class="num">22</div><div class="lbl">Journaled</div></div>
+          </div>
+          <div>
+            <div class="bc-heat" id="bcHeat"></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;font-size:.74rem;color:var(--ink-muted);">
+              <span>Last 60 days</span>
+              <span>Each cell = a day's brew</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== CURATED — TWO PROFILES ===== -->
+  <section id="curated">
+    <span class="section-eyebrow reveal">Curated, not crammed</span>
+    <h2 class="section-title reveal">Your bean. <em>Your brief.</em></h2>
+    <p class="section-sub reveal">
+      Two real people. Same product. Wildly different mornings. DayBeans reads your role,
+      your interests, and what you've journaled about — and only puts in front of you what
+      <em>you</em> would actually want to read.
+    </p>
+
+    <div class="profiles">
+      <article class="profile reveal">
+        <div class="profile-head">
+          <div class="avatar">SK</div>
+          <div class="who">
+            <div class="name">Sarah · Series-B founder</div>
+            <div class="role">CEO · 32 employees · 18 months from runway</div>
+          </div>
+        </div>
+        <h4>Daily Grind today</h4>
+        <ul>
+          <li><span class="tag">Story</span><span><b>Series-B founders</b> quietly hiring fewer engineers, more EAs.</span></li>
+          <li><span class="tag warn">Risk</span><span>SaaS pricing pressure — Q1 churn data from your stage cohort.</span></li>
+          <li><span class="tag sage">Read</span><span>Board prep playbook from a founder who just nailed her Series C.</span></li>
+        </ul>
+        <h4>Slow Sip today</h4>
+        <ul>
+          <li><span class="tag sage">Marriage</span><span>"I want to stop bringing work home Sundays" — a 15-min reset ritual.</span></li>
+          <li><span class="tag">Finance</span><span>Founder's emergency fund: how much is enough at your stage?</span></li>
+        </ul>
+        <div class="profile-foot">"It's like my morning paper, but only the parts I'd actually clip."</div>
+      </article>
+
+      <article class="profile b reveal">
+        <div class="profile-head">
+          <div class="avatar">MT</div>
+          <div class="who">
+            <div class="name">Marcus · Master carpenter</div>
+            <div class="role">Custom furniture · 14 yrs trade · weekend Bible study</div>
+          </div>
+        </div>
+        <h4>Daily Grind today</h4>
+        <ul>
+          <li><span class="tag">Trend</span><span><b>Japanese joinery</b> tutorials trending — three new how-tos this week.</span></li>
+          <li><span class="tag sage">Tools</span><span>Festool releases a new track-saw rail; community first impressions.</span></li>
+          <li><span class="tag warn">Pricing</span><span>Hardwood prices easing — best week in a year to lock orders.</span></li>
+        </ul>
+        <h4>Slow Sip today</h4>
+        <ul>
+          <li><span class="tag sage">Family</span><span>"Take the kids to the lumberyard Saturday" — pinned to your weekend.</span></li>
+          <li><span class="tag">Faith</span><span>Tim Keller's piece on calling — a 4-min read for your Bible group.</span></li>
+        </ul>
+        <div class="profile-foot">"Same product as my CEO buddy. Completely different page."</div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== JOURNAL → CONTENT MAGIC ===== -->
+  <section id="magic">
+    <span class="section-eyebrow reveal">The magic</span>
+    <h2 class="section-title reveal">You journal it. <em>DayBeans listens.</em></h2>
+    <p class="section-sub reveal">
+      Your journal isn't a graveyard for thoughts. It's the input that bends tomorrow's content
+      toward what you actually said you wanted. No surveys. No taxonomies. Just write — and watch.
+    </p>
+
+    <div class="magic reveal">
+      <div style="font-size:.72rem;color:var(--ink-muted);text-transform:uppercase;letter-spacing:.14em;font-weight:600;">
+        Tuesday night → Wednesday morning
+      </div>
+      <h3 class="serif" style="font-size:1.5rem; margin:8px 0 4px; line-height:1.2;">From journal entry, to tomorrow's brew.</h3>
+
+      <div class="magic-flow">
+        <div class="journal-card">
+          <div class="head">
+            <span>Journal · Tue 11:42pm</span>
+            <span style="color:var(--crema-deep);">2 entries</span>
+          </div>
+          <p class="entry">
+            "I want to get better at being <mark>present in my kid's life</mark> and not be on my phone.
+            Tonight I caught myself scrolling while she was telling me about her science project.
+            <mark>Need to do something about this.</mark>"
+          </p>
+        </div>
+        <div class="magic-arrow" aria-hidden>
+          <svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14M13 5l7 7-7 7"/>
+          </svg>
+        </div>
+        <div class="suggest-stack">
+          <div class="suggest">
+            <div class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h18v14H3z"/><path d="M3 9h18"/></svg></div>
+            <div class="txt">
+              <h6>The case for boring evenings with your kids</h6>
+              <p>What undivided attention actually does for a 7-year-old's nervous system.</p>
+              <span class="src">psyche.co · pinned for Pour Over</span>
+            </div>
+          </div>
+          <div class="suggest fin">
+            <div class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+            <div class="txt">
+              <h6>New goal: phone-free dinner table · 30 days</h6>
+              <p>Goal added with one tap. Counts up in Bean Count tomorrow.</p>
+              <span class="src">auto-suggested · matches your journal theme</span>
+            </div>
+          </div>
+          <div class="suggest read">
+            <div class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v6"/><path d="M5 12a7 7 0 0 1 14 0v8H5z"/></svg></div>
+            <div class="txt">
+              <h6>"Be still" — verse for your morning</h6>
+              <p>Pour Over picks Psalm 46:10 tomorrow because you mentioned <em>presence</em> and <em>quieting</em>.</p>
+              <span class="src">scripture · biased to your journal week</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:24px;font-size:.86rem;color:var(--ink-muted);font-style:italic;">
+        Themes only. No quotes. The user feels known — not surveilled. Your journal stays on your device; only abstracted themes inform tomorrow.
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PULL QUOTE ===== -->
+  <section class="pullquote reveal">
+    <span class="mark" aria-hidden>“</span>
+    <p>I stopped opening five tabs in the morning. DayBeans opens one — and somehow it knows what kind of day I need to face. Plus, I won a free Caribou last Tuesday.</p>
+    <div class="by">— Beta tester · April 2026</div>
+  </section>
+
+  <!-- ===== COFFEE GIVEAWAY / CONTEST ===== -->
+  <section id="contest">
+    <div class="giveaway reveal">
+      <div>
+        <span style="font-size:.72rem;color:var(--crema);text-transform:uppercase;letter-spacing:.18em;font-weight:600;">First-pour rewards</span>
+        <h3>Pour your morning. <em>We'll buy the coffee.</em></h3>
+        <p>
+          Brew your morning with DayBeans 7 days in a row and we'll drop a $5 gift card from your
+          favorite roaster in your inbox. Every Friday, we raffle a year of beans from a local
+          roaster — the kind that knows the farmer.
+        </p>
+        <div class="partners">
+          <span>Starbucks</span>
+          <span>Caribou</span>
+          <span>Scooter's</span>
+          <span>+ your local roaster</span>
+        </div>
+      </div>
+      <div class="cta">
+        <strong>This week's brew</strong>
+        <small>Free 12oz pour-over from Caribou for the first 100 morning streaks.</small>
+        <a href="#login" class="btn crema" style="margin-top:6px;">Start a streak
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== LOGIN ===== -->
+  <section id="login">
+    <span class="section-eyebrow reveal">Get started</span>
+    <h2 class="section-title reveal">First pour's <em>on us.</em></h2>
+
+    <div class="login-card reveal">
+      <div class="login-pitch">
+        <h3>Mornings with <em>fewer tabs.</em></h3>
+        <p>Free during early access. Bring your own LLM key (or use ours). Your journal, goals, and bookmarks are exportable anytime.</p>
+        <div class="login-perks">
+          <div><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>One quiet page, regenerated each morning at the hour you choose.</span></div>
+          <div><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>Curated to your job, hobbies, faith — or none of those.</span></div>
+          <div><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>15 themes, your own wallpaper, drop-shadow that knows what time it is.</span></div>
+          <div><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>Streak rewards — actual coffee, not metaphors.</span></div>
+        </div>
+      </div>
+
+      <form class="login-form" id="loginForm" onsubmit="event.preventDefault(); window.flashSubmit();">
+        <h4>Sign in or claim your spot</h4>
+        <p class="helper">No card. Free during early access. Boba folks welcome anyway.</p>
+        <div class="login-sso">
+          <button type="button" class="sso-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.99.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84A11 11 0 0 0 12 23z"/><path fill="#FBBC05" d="M5.84 14.1c-.22-.66-.35-1.36-.35-2.1s.13-1.44.35-2.1V7.06H2.18A11 11 0 0 0 1 12c0 1.78.43 3.46 1.18 4.94l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.07.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84C6.71 7.31 9.14 5.38 12 5.38z"/></svg>
+            Google
+          </button>
+          <button type="button" class="sso-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden><path d="M16.365 1.43c0 1.14-.46 2.23-1.21 3.05-.74.83-1.93 1.46-3.05 1.37-.13-1.13.4-2.27 1.16-3.06.81-.85 2.07-1.45 3.1-1.36zM20.5 17.4c-.43.99-.95 1.97-1.59 2.9-.88 1.27-1.74 2.55-3.27 2.55-1.5 0-1.96-.93-3.69-.93s-2.24.91-3.66.95c-1.49.05-2.46-1.36-3.34-2.62-1.79-2.58-3.16-7.3-1.32-10.49.91-1.58 2.55-2.59 4.31-2.62 1.5-.04 2.91.99 3.85.99.93 0 2.66-1.22 4.49-1.04.77.03 2.92.31 4.31 2.34-3.79 2.07-3.18 7.43.91 9.96z"/></svg>
+            Apple
+          </button>
+        </div>
+        <div class="login-divider">or with email</div>
+        <div class="field">
+          <label for="email">Email</label>
+          <input id="email" type="email" placeholder="you@morning.dev" autocomplete="email" />
+        </div>
+        <div class="field">
+          <label for="pass">Password</label>
+          <input id="pass" type="password" placeholder="•••••••••" autocomplete="current-password" />
+        </div>
+        <div class="login-meta">
+          <label style="display:flex;align-items:center;gap:6px;color:var(--ink-soft);font-size:.84rem;">
+            <input type="checkbox" /> Keep me signed in
+          </label>
+          <a href="#">Forgot password?</a>
+        </div>
+        <div class="login-success" id="loginSuccess" role="status" aria-live="polite">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <span>Welcome — check your email. First brew on us.</span>
+        </div>
+        <button type="submit" class="btn primary lg" style="width:100%; justify-content:center;" id="loginSubmit">
+          Brew my morning
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </button>
+        <div class="login-foot">
+          New here? <a href="#">Create an account</a> · <a href="#">Privacy</a> & <a href="#">Terms</a>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer>
+    <div>
+      <div class="closing-line">"I am here. I am enough. I am loved. I am loving. I am exactly where I need to be."</div>
+      <div style="margin-top:14px;">© 2026 DayBeans · Whatever your bean.</div>
+    </div>
+    <ul aria-label="footer">
+      <li><a href="#how">How it brews</a></li>
+      <li><a href="#curated">Curated</a></li>
+      <li><a href="#magic">The magic</a></li>
+      <li><a href="#contest">Free coffee</a></li>
+      <li><a href="#login">Sign in</a></li>
+    </ul>
+  </footer>
+
+  <!-- ===== Theme picker (light / dusk) ===== -->
+  <div class="picker" role="group" aria-label="Theme">
+    <button data-theme-id="light" aria-label="Dawn" class="active" title="Dawn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+    </button>
+    <button data-theme-id="dusk" aria-label="Dusk" title="Dusk">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    </button>
+  </div>
+
+  <script>
+    // ===== Theme switcher =====
+    const html = document.documentElement;
+    function setTheme(id) {
+      html.dataset.theme = id;
+      document.querySelectorAll('.picker button').forEach(function (b) {
+        b.classList.toggle('active', b.dataset.themeId === id);
+      });
+    }
+    document.querySelectorAll('.picker button').forEach(function (el) {
+      el.addEventListener('click', function () { setTheme(el.dataset.themeId); });
+    });
+
+    // ===== Tab panel switcher =====
+    document.querySelectorAll('#tabsBar .tab-pill').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        const id = btn.dataset.panel;
+        document.querySelectorAll('#tabsBar .tab-pill').forEach(function (b) {
+          const active = b.dataset.panel === id;
+          b.classList.toggle('active', active);
+          b.setAttribute('aria-selected', active ? 'true' : 'false');
+        });
+        document.querySelectorAll('.tab-panel').forEach(function (p) {
+          p.classList.toggle('active', p.dataset.panel === id);
+        });
+      });
+    });
+
+    // ===== Heatmap rendering — deterministic, lived-in =====
+    function renderHeatmap(targetId, count) {
+      const el = document.getElementById(targetId);
+      if (!el) return;
+      for (let i = 0; i < count; i++) {
+        const span = document.createElement('span');
+        const recency = i / count;
+        const seed = Math.sin(i * 13.7) * 43758.5453;
+        const r = (seed - Math.floor(seed));
+        const intensity = Math.min(1, r * .7 + recency * .55);
+        let level = 0;
+        if (intensity > .85) level = 4;
+        else if (intensity > .65) level = 3;
+        else if (intensity > .45) level = 2;
+        else if (intensity > .25) level = 1;
+        if (level > 0) span.classList.add('l' + level);
+        span.style.animationDelay = (i * 7) + 'ms';
+        el.appendChild(span);
+      }
+    }
+    renderHeatmap('heroHeatmap', 60);
+    renderHeatmap('bcHeat', 120);
+
+    // ===== Reveal on scroll =====
+    const obs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          e.target.classList.add('in');
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(function (el) { obs.observe(el); });
+
+    // ===== Nav border + scroll progress =====
+    const nav = document.getElementById('nav');
+    const progress = document.getElementById('scrollProgress');
+    function onScroll() {
+      const y = window.scrollY;
+      nav.classList.toggle('scrolled', y > 12);
+      const pageHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const p = pageHeight > 0 ? y / pageHeight : 0;
+      progress.style.transform = 'scaleX(' + p + ')';
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    // ===== Submit feedback (no innerHTML) =====
+    window.flashSubmit = function () {
+      const success = document.getElementById('loginSuccess');
+      const submit = document.getElementById('loginSubmit');
+      if (!success || !submit) return;
+      success.classList.add('show');
+      submit.disabled = true;
+      submit.style.opacity = '.6';
+      setTimeout(function () {
+        success.classList.remove('show');
+        submit.disabled = false;
+        submit.style.opacity = '';
+      }, 2800);
+    };
+
+    // ===== Subtle parallax on hero card =====
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!reduce) {
+      const card = document.querySelector('.hero-card');
+      const art = document.querySelector('.hero-art');
+      if (art && card) {
+        art.addEventListener('mousemove', function (e) {
+          const r = art.getBoundingClientRect();
+          const px = (e.clientX - r.left) / r.width - .5;
+          const py = (e.clientY - r.top) / r.height - .5;
+          card.style.transform = 'rotate(-1.5deg) translateY(' + (-6 - py * -8) + 'px) rotateY(' + (px * 6) + 'deg) rotateX(' + (-py * 4) + 'deg)';
+        });
+        art.addEventListener('mouseleave', function () { card.style.transform = ''; });
+      }
+    }
+  </script>
+</body>
+</html>

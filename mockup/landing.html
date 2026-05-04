@@ -1,0 +1,970 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DayBeans — A morning, gathered.</title>
+  <meta name="description" content="One quiet page that gathers your scripture, today's edge in tech, what to read, and your goals — written for who you are." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* =====================================================================
+       Theme tokens — five flavors selectable from the live picker. Default
+       is "light" (the app's signature cream + sage). Each theme overrides
+       only the surface/accent variables; everything else recomputes from
+       them, so swapping themes ripples through the whole page in one frame.
+       ===================================================================== */
+    :root {
+      --bg: #f5f2ec;
+      --bg-1: #f7f3ec; --bg-2: #ebe7df;
+      --surface: #ffffff;
+      --surface-2: #fafaf6;
+      --ink: #1a1f1c;
+      --ink-soft: #4d564f;
+      --ink-muted: #8a948d;
+      --line: rgba(35,50,42,.10);
+      --line-strong: rgba(35,50,42,.20);
+      --sage: #5d7a6c;
+      --sage-deep: #3e5a4d;
+      --sage-soft: #dde6df;
+      --gold: #b08d57;
+      --gold-soft: #ecdec2;
+      --accent: #c2410c;
+      --paper: #f4ead8;
+      --shadow-soft: 0 1px 2px rgba(20,30,25,.04), 0 16px 40px rgba(20,30,25,.06);
+      --shadow-lift: 0 2px 4px rgba(20,30,25,.06), 0 24px 56px rgba(20,30,25,.12);
+    }
+
+    [data-theme="dusk"] {
+      --bg: #15171b; --bg-1: #1b1e23; --bg-2: #0e1014;
+      --surface: #1c2026; --surface-2: #232830;
+      --ink: #ece7da; --ink-soft: #b9bdb6; --ink-muted: #7c8079;
+      --line: rgba(236,231,218,.10); --line-strong: rgba(236,231,218,.22);
+      --sage: #95b3a2; --sage-deep: #c4dccc; --sage-soft: rgba(149,179,162,.18);
+      --gold: #d3b070; --gold-soft: rgba(211,176,112,.18);
+      --accent: #f7873f; --paper: #20211d;
+      --shadow-soft: 0 1px 2px rgba(0,0,0,.4), 0 24px 50px rgba(0,0,0,.45);
+      --shadow-lift: 0 2px 6px rgba(0,0,0,.5), 0 36px 72px rgba(0,0,0,.55);
+    }
+
+    [data-theme="aurora"] {
+      --bg: #0a0a18; --bg-1: #1a0d36; --bg-2: #04181c;
+      --surface: #161228; --surface-2: #1d1738;
+      --ink: #e9e4f8; --ink-soft: #b8acd8; --ink-muted: #8678a4;
+      --line: rgba(233,228,248,.10); --line-strong: rgba(112,180,210,.32);
+      --sage: #7ae0c4; --sage-deep: #a8eed7; --sage-soft: rgba(122,224,196,.18);
+      --gold: #e8b96a; --gold-soft: rgba(232,185,106,.18);
+      --accent: #c97ee0; --paper: #1c1640;
+      --shadow-soft: 0 1px 2px rgba(0,0,0,.5), 0 20px 60px rgba(122,224,196,.12);
+      --shadow-lift: 0 2px 6px rgba(0,0,0,.5), 0 36px 72px rgba(201,126,224,.18);
+    }
+
+    [data-theme="sepia"] {
+      --bg: #f4ead2; --bg-1: #f7eed8; --bg-2: #e9dfbe;
+      --surface: #fcf5e2; --surface-2: #f0e3c5;
+      --ink: #3b2a18; --ink-soft: #6c5236; --ink-muted: #9c8868;
+      --line: rgba(59,42,24,.12); --line-strong: rgba(59,42,24,.24);
+      --sage: #7e6a3e; --sage-deep: #5a4a2a; --sage-soft: rgba(126,106,62,.20);
+      --gold: #a9803c; --gold-soft: #ecdcb0;
+      --accent: #9b4f1d; --paper: #f0e3c5;
+      --shadow-soft: 0 1px 2px rgba(75,52,28,.08), 0 16px 40px rgba(75,52,28,.12);
+      --shadow-lift: 0 2px 6px rgba(75,52,28,.12), 0 28px 56px rgba(75,52,28,.18);
+    }
+
+    [data-theme="ai"] {
+      --bg: #07090f; --bg-1: #0c1320; --bg-2: #04060a;
+      --surface: #0f161e; --surface-2: #141d2a;
+      --ink: #dceaf4; --ink-soft: #9bb1c6; --ink-muted: #6e8194;
+      --line: rgba(220,234,244,.10); --line-strong: rgba(94,225,230,.32);
+      --sage: #5ce1e6; --sage-deep: #88f0eb; --sage-soft: rgba(92,225,230,.16);
+      --gold: #a0e85a; --gold-soft: rgba(160,232,90,.18);
+      --accent: #3b82f6; --paper: #101828;
+      --shadow-soft: 0 1px 2px rgba(0,0,0,.5), 0 20px 60px rgba(92,225,230,.12);
+      --shadow-lift: 0 2px 6px rgba(0,0,0,.5), 0 36px 72px rgba(92,225,230,.20);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: "Inter", system-ui, -apple-system, sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.6;
+      letter-spacing: -.005em;
+      overflow-x: hidden;
+      transition: background .6s ease, color .6s ease;
+    }
+    .serif { font-family: "Fraunces", Georgia, serif; letter-spacing: -.02em; }
+    a { color: inherit; text-decoration: none; }
+    button { font-family: inherit; cursor: pointer; }
+
+    .bg-canvas {
+      position: fixed; inset: 0; z-index: -2;
+      background:
+        radial-gradient(80% 60% at 50% -10%, var(--sage-soft) 0%, transparent 60%),
+        radial-gradient(70% 50% at 90% 20%, var(--gold-soft) 0%, transparent 55%),
+        linear-gradient(180deg, var(--bg-1) 0%, var(--bg-2) 100%);
+      transition: background .6s ease;
+    }
+    .bg-orb {
+      position: fixed; z-index: -1;
+      width: 760px; height: 760px;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: .55;
+      pointer-events: none;
+      animation: drift 22s ease-in-out infinite alternate;
+      will-change: transform;
+    }
+    .bg-orb.a { top: -260px; left: -180px; background: var(--sage); animation-delay: -3s; }
+    .bg-orb.b { top: 30%; right: -240px; background: var(--gold); opacity: .35; animation-delay: -8s; }
+    .bg-orb.c { bottom: -300px; left: 30%; background: var(--accent); opacity: .22; animation-delay: -14s; }
+    @keyframes drift {
+      0%   { transform: translate3d(0,0,0) scale(1); }
+      50%  { transform: translate3d(40px, 60px, 0) scale(1.07); }
+      100% { transform: translate3d(-40px, 30px, 0) scale(.96); }
+    }
+    @media (prefers-reduced-motion: reduce) { .bg-orb { animation: none; } }
+
+    /* Nav */
+    .nav {
+      position: sticky; top: 0; z-index: 50;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 36px;
+      backdrop-filter: saturate(140%) blur(14px);
+      -webkit-backdrop-filter: saturate(140%) blur(14px);
+      background: color-mix(in oklab, var(--bg) 70%, transparent);
+      border-bottom: 1px solid transparent;
+      transition: border-color .25s ease, background .6s ease;
+    }
+    .nav.scrolled { border-bottom-color: var(--line); }
+    .brand {
+      display: inline-flex; align-items: center; gap: 12px;
+      font-family: "Fraunces", serif; font-weight: 500; font-size: 1.08rem;
+      letter-spacing: -.01em;
+    }
+    .brand-mark {
+      width: 34px; height: 34px; border-radius: 999px;
+      background: linear-gradient(135deg, var(--sage), var(--gold));
+      display: inline-flex; align-items: center; justify-content: center;
+      color: #fff; box-shadow: 0 4px 14px color-mix(in oklab, var(--sage) 40%, transparent);
+    }
+    .nav-links { display: flex; gap: 30px; align-items: center; font-size: .92rem; color: var(--ink-soft); }
+    .nav-links a { transition: color .15s ease; }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-cta { display: inline-flex; gap: 10px; align-items: center; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 10px 18px; border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--surface); color: var(--ink);
+      font-size: .9rem; font-weight: 500; letter-spacing: .005em;
+      transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease, background .15s ease, color .15s ease;
+    }
+    .btn:hover { border-color: var(--line-strong); transform: translateY(-1px); box-shadow: var(--shadow-soft); }
+    .btn.primary { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+    .btn.primary:hover { background: var(--sage-deep); border-color: var(--sage-deep); color: #fff; }
+    .btn.sage { background: var(--sage); color: #fff; border-color: var(--sage); }
+    .btn.sage:hover { background: var(--sage-deep); border-color: var(--sage-deep); }
+    .btn.ghost { background: transparent; }
+    .btn.lg { padding: 14px 26px; font-size: 1rem; }
+
+    /* Hero */
+    .hero { padding: 80px 36px 60px; max-width: 1240px; margin: 0 auto; }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 6px 12px; border-radius: 999px;
+      background: color-mix(in oklab, var(--sage) 14%, transparent);
+      border: 1px solid color-mix(in oklab, var(--sage) 28%, transparent);
+      color: var(--sage-deep);
+      font-size: .72rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase;
+    }
+    .hero-eyebrow .dot {
+      width: 6px; height: 6px; border-radius: 50%; background: var(--sage);
+      animation: pulse 1.8s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: .55; transform: scale(.7); } }
+    .hero-grid {
+      display: grid; grid-template-columns: 1.15fr .85fr; gap: 60px; align-items: center;
+      margin-top: 24px;
+    }
+    @media (max-width: 980px) { .hero-grid { grid-template-columns: 1fr; gap: 40px; } }
+    .hero-headline {
+      font-family: "Fraunces", serif;
+      font-weight: 400;
+      font-size: clamp(2.6rem, 6.4vw, 5rem);
+      line-height: 1.04;
+      letter-spacing: -.025em;
+      margin: 18px 0 18px;
+    }
+    .hero-headline em { font-style: italic; font-weight: 300; color: var(--sage-deep); }
+    .hero-headline .reveal-word {
+      display: inline-block;
+      transform: translateY(28px); opacity: 0;
+      animation: revealUp .9s cubic-bezier(.2,.7,.2,1) forwards;
+    }
+    .hero-headline .reveal-word:nth-child(1) { animation-delay: .05s; }
+    .hero-headline .reveal-word:nth-child(2) { animation-delay: .14s; }
+    .hero-headline .reveal-word:nth-child(3) { animation-delay: .22s; }
+    .hero-headline .reveal-word:nth-child(4) { animation-delay: .30s; }
+    .hero-headline .reveal-word:nth-child(5) { animation-delay: .38s; }
+    .hero-headline .reveal-word:nth-child(6) { animation-delay: .46s; }
+    .hero-headline .reveal-word:nth-child(7) { animation-delay: .54s; }
+    @keyframes revealUp { to { transform: translateY(0); opacity: 1; } }
+    .hero-sub {
+      font-size: 1.18rem; line-height: 1.55;
+      color: var(--ink-soft); max-width: 560px;
+      animation: revealUp .9s cubic-bezier(.2,.7,.2,1) .6s both;
+    }
+    .hero-cta {
+      margin-top: 30px; display: flex; gap: 12px; flex-wrap: wrap;
+      animation: revealUp .9s cubic-bezier(.2,.7,.2,1) .75s both;
+    }
+    .hero-cta .btn .arr { transition: transform .2s ease; }
+    .hero-cta .btn:hover .arr { transform: translateX(3px); }
+    .hero-meta {
+      margin-top: 28px; display: flex; gap: 20px; flex-wrap: wrap;
+      font-size: .82rem; color: var(--ink-muted);
+      animation: revealUp .9s cubic-bezier(.2,.7,.2,1) .9s both;
+    }
+    .hero-meta .check { display: inline-flex; align-items: center; gap: 6px; }
+    .hero-art { position: relative; perspective: 1400px; }
+    .hero-card {
+      position: relative;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 26px 26px 22px;
+      box-shadow: var(--shadow-lift);
+      transform: rotate(-1.5deg) translateY(0);
+      animation: float 7s ease-in-out infinite alternate;
+      transition: transform .25s cubic-bezier(.2,.7,.2,1);
+    }
+    @keyframes float {
+      from { transform: rotate(-1.5deg) translateY(0); }
+      to   { transform: rotate(-1.5deg) translateY(-12px); }
+    }
+    .hero-card::before {
+      content: "";
+      position: absolute; inset: -1px; border-radius: inherit;
+      background: linear-gradient(135deg, color-mix(in oklab, var(--sage) 36%, transparent), transparent 40%, color-mix(in oklab, var(--gold) 30%, transparent));
+      z-index: -1; filter: blur(20px); opacity: .6;
+    }
+    .hero-card-eyebrow {
+      font-size: .68rem; color: var(--ink-muted);
+      text-transform: uppercase; letter-spacing: .14em; font-weight: 600;
+    }
+    .hero-card-title { font-family: "Fraunces", serif; font-size: 1.6rem; line-height: 1.1; margin: 6px 0 16px; }
+    .hero-card-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+    .ring-stat {
+      display: flex; flex-direction: column; align-items: center;
+      padding: 12px 6px; border-radius: 10px;
+    }
+    .ring-svg { width: 56px; height: 56px; transform: rotate(-90deg); }
+    .ring-bg { fill: none; stroke: var(--line-strong); stroke-width: 5; }
+    .ring-fg { fill: none; stroke: var(--sage); stroke-width: 5; stroke-linecap: round;
+               stroke-dasharray: 169.65; stroke-dashoffset: 169.65;
+               animation: drawRing 1.6s cubic-bezier(.2,.7,.2,1) .8s forwards; }
+    .ring-stat:nth-child(2) .ring-fg { animation-delay: 1.0s; }
+    .ring-stat:nth-child(3) .ring-fg { animation-delay: 1.2s; --ring-end: 110; stroke: var(--gold); }
+    .ring-stat:nth-child(4) .ring-fg { animation-delay: 1.4s; --ring-end: 70; stroke: var(--accent); }
+    .ring-num { font-family: "Fraunces", serif; font-size: 1.25rem; line-height: 1; margin-top: 8px; }
+    .ring-num small { font-size: .7rem; color: var(--ink-muted); }
+    .ring-label { font-size: .64rem; color: var(--ink-muted); text-transform: uppercase; letter-spacing: .14em; margin-top: 4px; }
+    @keyframes drawRing { to { stroke-dashoffset: var(--ring-end, 50); } }
+    .hero-heatmap { margin-top: 18px; display: grid; grid-template-columns: repeat(20, 1fr); gap: 4px; }
+    .hero-heatmap span {
+      aspect-ratio: 1/1; border-radius: 3px;
+      background: var(--surface-2); border: 1px solid var(--line);
+      opacity: 0; transform: scale(.6);
+      animation: cellPop .35s ease forwards;
+    }
+    .hero-heatmap span.l1 { background: color-mix(in oklab, var(--sage) 28%, var(--surface-2)); border-color: transparent; }
+    .hero-heatmap span.l2 { background: color-mix(in oklab, var(--sage) 50%, var(--surface-2)); border-color: transparent; }
+    .hero-heatmap span.l3 { background: color-mix(in oklab, var(--sage) 75%, var(--surface-2)); border-color: transparent; }
+    .hero-heatmap span.l4 { background: var(--sage); border-color: transparent; box-shadow: 0 0 0 2px color-mix(in oklab, var(--sage) 40%, transparent); }
+    @keyframes cellPop { to { opacity: 1; transform: scale(1); } }
+    .hero-chip {
+      position: absolute;
+      background: var(--surface); border: 1px solid var(--line);
+      border-radius: 14px; padding: 12px 14px;
+      box-shadow: var(--shadow-lift);
+      display: inline-flex; align-items: center; gap: 10px;
+      font-size: .82rem; color: var(--ink-soft);
+      animation: floatY 5s ease-in-out infinite alternate;
+    }
+    .hero-chip.a { top: -22px; left: -18px; transform: rotate(-3deg); animation-delay: -1.2s; }
+    .hero-chip.b { bottom: -28px; right: -10px; transform: rotate(2deg); animation-delay: -2.4s; animation-name: floatYRight; }
+    .hero-chip .dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--gold); box-shadow: 0 0 0 4px color-mix(in oklab, var(--gold) 24%, transparent);
+    }
+    .hero-chip.b .dot { background: var(--accent); box-shadow: 0 0 0 4px color-mix(in oklab, var(--accent) 24%, transparent); }
+    @keyframes floatY {
+      from { transform: rotate(-3deg) translateY(0); }
+      to   { transform: rotate(-3deg) translateY(-8px); }
+    }
+    @keyframes floatYRight {
+      from { transform: rotate(2deg) translateY(0); }
+      to   { transform: rotate(2deg) translateY(8px); }
+    }
+
+    section { padding: 80px 36px; max-width: 1240px; margin: 0 auto; }
+    @media (max-width: 700px) { section { padding: 60px 22px; } }
+    .section-eyebrow {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-size: .72rem; color: var(--sage-deep);
+      text-transform: uppercase; letter-spacing: .18em; font-weight: 600;
+    }
+    .section-eyebrow::before {
+      content: ""; width: 28px; height: 1px; background: var(--sage); display: inline-block;
+    }
+    .section-title {
+      font-family: "Fraunces", serif;
+      font-size: clamp(2rem, 4.4vw, 3.4rem);
+      line-height: 1.06; letter-spacing: -.02em;
+      margin: 14px 0 14px; max-width: 760px;
+    }
+    .section-title em { font-style: italic; color: var(--sage-deep); font-weight: 300; }
+    .section-sub { font-size: 1.05rem; color: var(--ink-soft); max-width: 660px; line-height: 1.6; }
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity .9s ease, transform .9s cubic-bezier(.2,.7,.2,1); }
+    .reveal.in { opacity: 1; transform: translateY(0); }
+
+    .pillars { margin-top: 48px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+    @media (max-width: 880px) { .pillars { grid-template-columns: 1fr; } }
+    .pillar {
+      position: relative;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 28px;
+      transition: transform .25s cubic-bezier(.2,.7,.2,1), box-shadow .25s ease, border-color .25s ease;
+      overflow: hidden;
+    }
+    .pillar::before {
+      content: ""; position: absolute; inset: 0;
+      background: radial-gradient(120% 80% at 0% 0%, color-mix(in oklab, var(--accent-color, var(--sage)) 18%, transparent), transparent 60%);
+      pointer-events: none; opacity: 0; transition: opacity .25s ease;
+    }
+    .pillar:hover { transform: translateY(-6px); box-shadow: var(--shadow-lift); border-color: var(--line-strong); }
+    .pillar:hover::before { opacity: 1; }
+    .pillar-icon {
+      width: 56px; height: 56px; border-radius: 16px;
+      display: inline-flex; align-items: center; justify-content: center;
+      background: color-mix(in oklab, var(--accent-color, var(--sage)) 14%, transparent);
+      color: var(--accent-color, var(--sage-deep));
+      margin-bottom: 18px;
+    }
+    .pillar-title { font-family: "Fraunces", serif; font-size: 1.4rem; margin: 0 0 8px; }
+    .pillar-body { color: var(--ink-soft); font-size: .98rem; line-height: 1.6; margin: 0 0 16px; }
+    .pillar-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
+    .pillar-list li { display: flex; align-items: flex-start; gap: 8px; font-size: .88rem; color: var(--ink-soft); }
+    .pillar-list li::before {
+      content: ""; width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent-color, var(--sage));
+      margin-top: 8px; flex-shrink: 0;
+    }
+    .pillar.mind { --accent-color: var(--sage); }
+    .pillar.work { --accent-color: var(--accent); }
+    .pillar.life { --accent-color: var(--gold); }
+
+    .wholelife {
+      margin-top: 56px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 36px;
+      box-shadow: var(--shadow-soft);
+      display: grid; grid-template-columns: 1fr 1.2fr; gap: 40px; align-items: center;
+    }
+    @media (max-width: 980px) { .wholelife { grid-template-columns: 1fr; gap: 32px; } }
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .stat {
+      display: flex; flex-direction: column; align-items: center;
+      padding: 14px 8px; border-radius: 14px;
+    }
+    .stat svg { width: 70px; height: 70px; transform: rotate(-90deg); }
+    .stat .num { font-family: "Fraunces", serif; font-size: 1.5rem; margin-top: 8px; }
+    .stat .num small { font-size: .78rem; color: var(--ink-muted); }
+    .stat .lbl { font-size: .62rem; color: var(--ink-muted); text-transform: uppercase; letter-spacing: .14em; margin-top: 4px; }
+    .heatmap-big { display: grid; grid-template-columns: repeat(20, 1fr); gap: 4px; }
+    .heatmap-big span {
+      aspect-ratio: 1/1; border-radius: 3px;
+      background: var(--surface-2); border: 1px solid var(--line);
+    }
+    .heatmap-big span.l1 { background: color-mix(in oklab, var(--sage) 25%, var(--surface-2)); border-color: transparent; }
+    .heatmap-big span.l2 { background: color-mix(in oklab, var(--sage) 48%, var(--surface-2)); border-color: transparent; }
+    .heatmap-big span.l3 { background: color-mix(in oklab, var(--sage) 72%, var(--surface-2)); border-color: transparent; }
+    .heatmap-big span.l4 { background: var(--sage); border-color: transparent; }
+    .heatmap-cap {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 14px; font-size: .76rem; color: var(--ink-muted);
+    }
+    .heatmap-cap .dots { display: flex; gap: 3px; }
+    .heatmap-cap .dots span { width: 11px; height: 11px; border-radius: 3px; display: inline-block; }
+
+    .themes-strip { margin-top: 40px; display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 14px; }
+    .theme-chip {
+      position: relative;
+      background: var(--surface); border: 1px solid var(--line);
+      border-radius: 14px; padding: 12px;
+      cursor: pointer; transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+      text-align: left;
+    }
+    .theme-chip:hover { transform: translateY(-3px); box-shadow: var(--shadow-soft); border-color: var(--line-strong); }
+    .theme-chip.active {
+      border-color: var(--sage);
+      box-shadow: 0 0 0 3px color-mix(in oklab, var(--sage) 22%, transparent);
+    }
+    .theme-chip .swatch {
+      height: 60px; border-radius: 8px; overflow: hidden; display: grid; grid-template-columns: repeat(5, 1fr);
+      border: 1px solid var(--line);
+    }
+    .theme-chip .swatch span { display: block; }
+    .theme-chip .name {
+      margin-top: 10px; font-size: .82rem; font-weight: 500; color: var(--ink);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .theme-chip .name .meta { font-size: .68rem; color: var(--ink-muted); font-weight: 400; }
+
+    .pullquote { margin: 90px auto; max-width: 880px; text-align: center; padding: 48px 32px; }
+    .pullquote .mark {
+      font-family: "Fraunces", serif; font-size: 5rem; line-height: 0; color: var(--sage); display: block; margin-bottom: 8px;
+    }
+    .pullquote p {
+      font-family: "Fraunces", serif; font-style: italic; font-weight: 300;
+      font-size: clamp(1.4rem, 2.6vw, 2.2rem); line-height: 1.4;
+      letter-spacing: -.01em; color: var(--ink); margin: 0 0 18px;
+    }
+    .pullquote .by { font-size: .8rem; color: var(--ink-muted); text-transform: uppercase; letter-spacing: .18em; }
+
+    #login { padding-bottom: 120px; }
+    .login-card {
+      margin-top: 40px;
+      display: grid; grid-template-columns: 1.05fr .95fr; gap: 0;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: var(--shadow-lift);
+    }
+    @media (max-width: 880px) { .login-card { grid-template-columns: 1fr; } }
+    .login-pitch {
+      padding: 48px;
+      background:
+        radial-gradient(80% 60% at 0% 0%, color-mix(in oklab, var(--sage) 30%, transparent), transparent 60%),
+        radial-gradient(60% 50% at 100% 100%, color-mix(in oklab, var(--gold) 26%, transparent), transparent 60%),
+        var(--surface-2);
+      display: flex; flex-direction: column; gap: 18px; justify-content: center;
+      border-right: 1px solid var(--line);
+    }
+    @media (max-width: 880px) { .login-pitch { border-right: 0; border-bottom: 1px solid var(--line); padding: 36px; } }
+    .login-pitch h3 { font-family: "Fraunces", serif; font-size: 2rem; margin: 0; line-height: 1.1; letter-spacing: -.02em; }
+    .login-pitch p { color: var(--ink-soft); margin: 0; font-size: 1rem; max-width: 380px; }
+    .login-perks { display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
+    .login-perks div { font-size: .9rem; color: var(--ink-soft); display: flex; gap: 10px; align-items: flex-start; }
+    .login-perks svg { color: var(--sage-deep); flex-shrink: 0; margin-top: 2px; }
+
+    .login-form { padding: 48px; display: flex; flex-direction: column; gap: 16px; }
+    @media (max-width: 880px) { .login-form { padding: 36px; } }
+    .login-form h4 { font-family: "Fraunces", serif; font-size: 1.4rem; margin: 0 0 4px; }
+    .login-form .helper { font-size: .88rem; color: var(--ink-muted); margin: 0 0 8px; }
+    .login-sso { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 8px; }
+    .sso-btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+      padding: 12px 14px; border-radius: 12px; border: 1px solid var(--line);
+      background: var(--surface); color: var(--ink); font-size: .9rem; font-weight: 500;
+      transition: border-color .15s ease, transform .15s ease;
+    }
+    .sso-btn:hover { border-color: var(--line-strong); transform: translateY(-1px); }
+    .login-divider {
+      display: flex; align-items: center; gap: 12px;
+      margin: 8px 0; font-size: .72rem; color: var(--ink-muted); text-transform: uppercase; letter-spacing: .14em;
+    }
+    .login-divider::before, .login-divider::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+    .field { display: flex; flex-direction: column; gap: 6px; }
+    .field label { font-size: .78rem; font-weight: 500; color: var(--ink-soft); }
+    .field input {
+      background: var(--surface-2); color: var(--ink);
+      border: 1px solid var(--line); border-radius: 12px;
+      padding: 12px 14px; font: inherit; font-size: .94rem;
+      transition: border-color .15s ease, box-shadow .15s ease;
+    }
+    .field input:focus { outline: none; border-color: var(--sage); box-shadow: 0 0 0 3px color-mix(in oklab, var(--sage) 22%, transparent); }
+    .login-meta { display: flex; justify-content: space-between; align-items: center; font-size: .82rem; }
+    .login-meta a { color: var(--sage-deep); }
+    .login-meta a:hover { color: var(--ink); text-decoration: underline; }
+    .login-foot { margin-top: 6px; text-align: center; font-size: .82rem; color: var(--ink-muted); }
+    .login-foot a { color: var(--sage-deep); }
+    .login-success {
+      display: none;
+      align-items: center; gap: 8px;
+      padding: 12px 14px; border-radius: 12px;
+      background: color-mix(in oklab, var(--sage) 18%, transparent);
+      border: 1px solid color-mix(in oklab, var(--sage) 36%, transparent);
+      color: var(--sage-deep);
+      font-size: .9rem; font-weight: 500;
+    }
+    .login-success.show { display: inline-flex; }
+
+    footer {
+      padding: 50px 36px 60px; max-width: 1240px; margin: 0 auto;
+      border-top: 1px solid var(--line);
+      display: flex; justify-content: space-between; gap: 30px; flex-wrap: wrap;
+      color: var(--ink-muted); font-size: .82rem;
+    }
+    footer .closing-line {
+      font-family: "Fraunces", serif; font-style: italic; font-weight: 300;
+      font-size: 1.05rem; color: var(--ink-soft); max-width: 460px; line-height: 1.5;
+    }
+    footer ul { list-style: none; padding: 0; margin: 0; display: flex; gap: 22px; }
+    footer ul a { color: var(--ink-muted); transition: color .15s ease; }
+    footer ul a:hover { color: var(--ink); }
+
+    .picker {
+      position: fixed; bottom: 22px; right: 22px; z-index: 60;
+      background: var(--surface); border: 1px solid var(--line-strong);
+      border-radius: 999px; padding: 6px;
+      display: flex; gap: 4px;
+      box-shadow: var(--shadow-lift);
+      backdrop-filter: blur(10px);
+    }
+    .picker button {
+      width: 32px; height: 32px; border-radius: 999px; border: 1px solid var(--line);
+      background: transparent; padding: 0;
+      display: inline-flex; align-items: center; justify-content: center;
+      transition: transform .15s ease, border-color .15s ease;
+      position: relative;
+    }
+    .picker button:hover { transform: scale(1.08); border-color: var(--line-strong); }
+    .picker button.active { border-color: var(--ink); box-shadow: 0 0 0 2px var(--bg); }
+    .picker button .swatch { width: 100%; height: 100%; border-radius: 999px; }
+    .picker button[data-theme-id="light"]  .swatch { background: linear-gradient(135deg, #fff 50%, #5d7a6c 50%); }
+    .picker button[data-theme-id="dusk"]   .swatch { background: linear-gradient(135deg, #1c2026 50%, #95b3a2 50%); }
+    .picker button[data-theme-id="aurora"] .swatch { background: linear-gradient(135deg, #161228 50%, #7ae0c4 50%); }
+    .picker button[data-theme-id="sepia"]  .swatch { background: linear-gradient(135deg, #fcf5e2 50%, #a9803c 50%); }
+    .picker button[data-theme-id="ai"]     .swatch { background: linear-gradient(135deg, #0f161e 50%, #5ce1e6 50%); }
+
+    .scroll-progress {
+      position: fixed; top: 0; left: 0; right: 0; height: 2px; z-index: 100;
+      background: linear-gradient(90deg, var(--sage), var(--gold), var(--accent));
+      transform-origin: 0 50%; transform: scaleX(0);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .001s !important; transition-duration: .001s !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-canvas"></div>
+  <div class="bg-orb a"></div>
+  <div class="bg-orb b"></div>
+  <div class="bg-orb c"></div>
+  <div class="scroll-progress" id="scrollProgress"></div>
+
+  <nav class="nav" id="nav">
+    <a href="#top" class="brand" aria-label="DayBeans, home">
+      <span class="brand-mark" aria-hidden>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2v20M2 12h20"/>
+        </svg>
+      </span>
+      <span>DayBeans</span>
+    </a>
+    <div class="nav-links" aria-label="primary">
+      <a href="#how">How it works</a>
+      <a href="#themes">Themes</a>
+      <a href="#login">Sign in</a>
+    </div>
+    <div class="nav-cta">
+      <a href="#login" class="btn ghost">Sign in</a>
+      <a href="#login" class="btn sage">Get started <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden><path d="M5 12h14M13 5l7 7-7 7"/></svg></a>
+    </div>
+  </nav>
+
+  <header class="hero" id="top">
+    <span class="hero-eyebrow"><span class="dot"></span>For one quiet morning, every morning</span>
+    <div class="hero-grid">
+      <div>
+        <h1 class="hero-headline">
+          <span class="reveal-word">A</span>
+          <span class="reveal-word">morning,</span>
+          <span class="reveal-word"><em>gathered.</em></span>
+          <br>
+          <span class="reveal-word">A</span>
+          <span class="reveal-word">life,</span>
+          <span class="reveal-word"><em>tended</em></span>
+          <span class="reveal-word">to.</span>
+        </h1>
+        <p class="hero-sub">
+          One quiet page that gathers your scripture, today's edge in tech, what to read,
+          and the goals you said mattered — written each day for who <em>you</em> are.
+        </p>
+        <div class="hero-cta">
+          <a href="#login" class="btn sage lg">
+            Start free
+            <svg class="arr" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </a>
+          <a href="#how" class="btn ghost lg">See it in motion</a>
+        </div>
+        <div class="hero-meta">
+          <span class="check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Bring your own LLM key</span>
+          <span class="check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> 15 themes, including yours</span>
+          <span class="check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Your journal stays yours</span>
+        </div>
+      </div>
+
+      <div class="hero-art">
+        <div class="hero-chip a" aria-hidden>
+          <span class="dot"></span> 12-day streak · keep it light
+        </div>
+        <div class="hero-card" aria-label="Today preview">
+          <div class="hero-card-eyebrow">Sunday · May 3</div>
+          <div class="hero-card-title">How you're showing up</div>
+          <div class="hero-card-row">
+            <div class="ring-stat">
+              <svg class="ring-svg" viewBox="0 0 60 60"><circle class="ring-bg" cx="30" cy="30" r="27"/><circle class="ring-fg" cx="30" cy="30" r="27" style="--ring-end: 50;"/></svg>
+              <div class="ring-num">14<small>/19</small></div>
+              <div class="ring-label">Today</div>
+            </div>
+            <div class="ring-stat">
+              <svg class="ring-svg" viewBox="0 0 60 60"><circle class="ring-bg" cx="30" cy="30" r="27"/><circle class="ring-fg" cx="30" cy="30" r="27" style="--ring-end: 28;"/></svg>
+              <div class="ring-num">6<small>/8</small></div>
+              <div class="ring-label">Mind</div>
+            </div>
+            <div class="ring-stat">
+              <svg class="ring-svg" viewBox="0 0 60 60"><circle class="ring-bg" cx="30" cy="30" r="27"/><circle class="ring-fg" cx="30" cy="30" r="27"/></svg>
+              <div class="ring-num">87%</div>
+              <div class="ring-label">7 days</div>
+            </div>
+            <div class="ring-stat">
+              <svg class="ring-svg" viewBox="0 0 60 60"><circle class="ring-bg" cx="30" cy="30" r="27"/><circle class="ring-fg" cx="30" cy="30" r="27"/></svg>
+              <div class="ring-num">12d</div>
+              <div class="ring-label">Streak</div>
+            </div>
+          </div>
+          <div class="hero-heatmap" id="heroHeatmap"></div>
+        </div>
+        <div class="hero-chip b" aria-hidden>
+          <span class="dot"></span> One sentence to carry today
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section id="how">
+    <span class="section-eyebrow reveal">How it works</span>
+    <h2 class="section-title reveal">Three windows. <em>One whole life.</em></h2>
+    <p class="section-sub reveal">
+      Each morning, your dashboard re-gathers itself around your week — what you've journaled,
+      who you said you wanted to be, what's worth knowing in the world. Always quiet. Always today.
+    </p>
+
+    <div class="pillars">
+      <article class="pillar mind reveal">
+        <div class="pillar-icon" aria-hidden>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12c4 0 6 3 9 3s5-3 9-3M12 3v18"/></svg>
+        </div>
+        <h3 class="pillar-title">Mindfulness</h3>
+        <p class="pillar-body">A quiet opening, a verse picked from your faith, and a journal that learns the shape of your week.</p>
+        <ul class="pillar-list">
+          <li>Daily opening + prayer + carry line</li>
+          <li>Scripture biased to your themes</li>
+          <li>Breath timer, articles, journal log</li>
+        </ul>
+      </article>
+      <article class="pillar work reveal">
+        <div class="pillar-icon" aria-hidden>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        </div>
+        <h3 class="pillar-title">Business / AI</h3>
+        <p class="pillar-body">Your edge today, in eight scannable lines. Curated stories, dev voices, repos, and a watchlist.</p>
+        <ul class="pillar-list">
+          <li>Story of the day, briefing, top picks</li>
+          <li>Quick Scan: 8 headlines, source-linked</li>
+          <li>Voice of the devs · trending repos</li>
+        </ul>
+      </article>
+      <article class="pillar life reveal">
+        <div class="pillar-icon" aria-hidden>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.5 19 2c1 2 2 4.2 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6"/></svg>
+        </div>
+        <h3 class="pillar-title">Personal</h3>
+        <p class="pillar-body">Self-help that meets you where you actually are. Articles biased to last week's struggles.</p>
+        <ul class="pillar-list">
+          <li>Three small reads, picked for you</li>
+          <li>Habits, sleep, finance check-ins</li>
+          <li>One quiet motivation a day</li>
+        </ul>
+      </article>
+    </div>
+
+    <div class="wholelife reveal">
+      <div>
+        <span class="section-eyebrow">Whole-life view</span>
+        <h3 class="serif" style="font-size:1.7rem; margin:10px 0 8px; line-height:1.15;">Your goals, all in one place.</h3>
+        <p style="color:var(--ink-soft); margin:0 0 18px; font-size:.96rem; max-width:420px;">
+          Check goals off here or from any section — it all syncs. Articles read, disconnect minutes, and check-ins flow up automatically.
+        </p>
+        <div class="stats-grid">
+          <div class="stat">
+            <svg viewBox="0 0 70 70"><circle cx="35" cy="35" r="32" fill="none" stroke="var(--line-strong)" stroke-width="6"/><circle cx="35" cy="35" r="32" fill="none" stroke="var(--sage)" stroke-width="6" stroke-linecap="round" stroke-dasharray="201" stroke-dashoffset="60"/></svg>
+            <div class="num">14<small>/19</small></div>
+            <div class="lbl">Today</div>
+          </div>
+          <div class="stat">
+            <svg viewBox="0 0 70 70"><circle cx="35" cy="35" r="32" fill="none" stroke="var(--line-strong)" stroke-width="6"/><circle cx="35" cy="35" r="32" fill="none" stroke="var(--sage)" stroke-width="6" stroke-linecap="round" stroke-dasharray="201" stroke-dashoffset="40"/></svg>
+            <div class="num">87%</div>
+            <div class="lbl">Last 7</div>
+          </div>
+          <div class="stat">
+            <svg viewBox="0 0 70 70"><circle cx="35" cy="35" r="32" fill="none" stroke="var(--line-strong)" stroke-width="6"/><circle cx="35" cy="35" r="32" fill="none" stroke="var(--gold)" stroke-width="6" stroke-linecap="round" stroke-dasharray="201" stroke-dashoffset="78"/></svg>
+            <div class="num">12d</div>
+            <div class="lbl">Best streak</div>
+          </div>
+          <div class="stat">
+            <svg viewBox="0 0 70 70"><circle cx="35" cy="35" r="32" fill="none" stroke="var(--line-strong)" stroke-width="6"/><circle cx="35" cy="35" r="32" fill="none" stroke="var(--gold)" stroke-width="6" stroke-linecap="round" stroke-dasharray="201" stroke-dashoffset="120"/></svg>
+            <div class="num">22</div>
+            <div class="lbl">Journaled</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="heatmap-big" id="bigHeatmap"></div>
+        <div class="heatmap-cap">
+          <span>60-day rhythm</span>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span>Less</span>
+            <div class="dots">
+              <span style="background:var(--surface-2);border:1px solid var(--line);"></span>
+              <span style="background:color-mix(in oklab, var(--sage) 25%, var(--surface-2));"></span>
+              <span style="background:color-mix(in oklab, var(--sage) 48%, var(--surface-2));"></span>
+              <span style="background:color-mix(in oklab, var(--sage) 72%, var(--surface-2));"></span>
+              <span style="background:var(--sage);"></span>
+            </div>
+            <span>More</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="themes">
+    <span class="section-eyebrow reveal">Themes</span>
+    <h2 class="section-title reveal">A page that wears <em>your morning.</em></h2>
+    <p class="section-sub reveal">
+      Fifteen palettes from cream-and-sage to deep cyber teal. Drop your own background image,
+      pick how strong the overlay reads. The whole app shifts in one frame — try it now:
+    </p>
+
+    <div class="themes-strip">
+      <button class="theme-chip active" data-theme-id="light">
+        <div class="swatch"><span style="background:#fff"></span><span style="background:#fafaf6"></span><span style="background:#5d7a6c"></span><span style="background:#b08d57"></span><span style="background:#c2410c"></span></div>
+        <div class="name"><span>Light</span><span class="meta">cream + sage</span></div>
+      </button>
+      <button class="theme-chip" data-theme-id="dusk">
+        <div class="swatch"><span style="background:#1c2026"></span><span style="background:#232830"></span><span style="background:#95b3a2"></span><span style="background:#d3b070"></span><span style="background:#f7873f"></span></div>
+        <div class="name"><span>Dusk</span><span class="meta">moss · brass</span></div>
+      </button>
+      <button class="theme-chip" data-theme-id="aurora">
+        <div class="swatch"><span style="background:#161228"></span><span style="background:#1d1738"></span><span style="background:#7ae0c4"></span><span style="background:#e8b96a"></span><span style="background:#c97ee0"></span></div>
+        <div class="name"><span>Aurora</span><span class="meta">violet · mint</span></div>
+      </button>
+      <button class="theme-chip" data-theme-id="sepia">
+        <div class="swatch"><span style="background:#fcf5e2"></span><span style="background:#f0e3c5"></span><span style="background:#7e6a3e"></span><span style="background:#a9803c"></span><span style="background:#9b4f1d"></span></div>
+        <div class="name"><span>Sepia</span><span class="meta">aged paper</span></div>
+      </button>
+      <button class="theme-chip" data-theme-id="ai">
+        <div class="swatch"><span style="background:#0f161e"></span><span style="background:#141d2a"></span><span style="background:#5ce1e6"></span><span style="background:#a0e85a"></span><span style="background:#3b82f6"></span></div>
+        <div class="name"><span>AI</span><span class="meta">cyber teal</span></div>
+      </button>
+    </div>
+  </section>
+
+  <section class="pullquote reveal">
+    <span class="mark" aria-hidden>“</span>
+    <p>I stopped opening five tabs in the morning. DayBeans opens one — and somehow it knows what kind of day I need to face.</p>
+    <div class="by">— Beta tester · April 2026</div>
+  </section>
+
+  <section id="login">
+    <span class="section-eyebrow reveal">Get started</span>
+    <h2 class="section-title reveal">Begin tomorrow <em>quiet.</em></h2>
+
+    <div class="login-card reveal">
+      <div class="login-pitch">
+        <h3>It's free<br/>to begin.</h3>
+        <p>Bring your own LLM key (or use ours during early access). Your journal, goals, and bookmarks are yours — exportable anytime.</p>
+        <div class="login-perks">
+          <div><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>One quiet page, regenerated each morning at the hour you choose.</span></div>
+          <div><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>Bookmark, share, journal — all in a side panel that pins.</span></div>
+          <div><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>15 themes plus your own wallpaper. The page wears your morning.</span></div>
+          <div><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>Local-first — your journal stays on your device. Export anytime.</span></div>
+        </div>
+      </div>
+
+      <form class="login-form" id="loginForm" onsubmit="event.preventDefault(); window.flashSubmit();">
+        <h4>Sign in or create your space</h4>
+        <p class="helper">No credit card. Free during early access.</p>
+        <div class="login-sso">
+          <button type="button" class="sso-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.99.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84A11 11 0 0 0 12 23z"/><path fill="#FBBC05" d="M5.84 14.1c-.22-.66-.35-1.36-.35-2.1s.13-1.44.35-2.1V7.06H2.18A11 11 0 0 0 1 12c0 1.78.43 3.46 1.18 4.94l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.07.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84C6.71 7.31 9.14 5.38 12 5.38z"/></svg>
+            Google
+          </button>
+          <button type="button" class="sso-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden><path d="M16.365 1.43c0 1.14-.46 2.23-1.21 3.05-.74.83-1.93 1.46-3.05 1.37-.13-1.13.4-2.27 1.16-3.06.81-.85 2.07-1.45 3.1-1.36zM20.5 17.4c-.43.99-.95 1.97-1.59 2.9-.88 1.27-1.74 2.55-3.27 2.55-1.5 0-1.96-.93-3.69-.93s-2.24.91-3.66.95c-1.49.05-2.46-1.36-3.34-2.62-1.79-2.58-3.16-7.3-1.32-10.49.91-1.58 2.55-2.59 4.31-2.62 1.5-.04 2.91.99 3.85.99.93 0 2.66-1.22 4.49-1.04.77.03 2.92.31 4.31 2.34-3.79 2.07-3.18 7.43.91 9.96z"/></svg>
+            Apple
+          </button>
+        </div>
+        <div class="login-divider">or with email</div>
+        <div class="field">
+          <label for="email">Email</label>
+          <input id="email" type="email" placeholder="you@morning.dev" autocomplete="email" />
+        </div>
+        <div class="field">
+          <label for="pass">Password</label>
+          <input id="pass" type="password" placeholder="•••••••••" autocomplete="current-password" />
+        </div>
+        <div class="login-meta">
+          <label style="display:flex;align-items:center;gap:6px;color:var(--ink-soft);font-size:.84rem;">
+            <input type="checkbox" /> Keep me signed in
+          </label>
+          <a href="#">Forgot password?</a>
+        </div>
+        <div class="login-success" id="loginSuccess" role="status" aria-live="polite">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          <span>Welcome — check your email to confirm.</span>
+        </div>
+        <button type="submit" class="btn primary lg" style="width:100%; justify-content:center;" id="loginSubmit">
+          Continue
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </button>
+        <div class="login-foot">
+          New here? <a href="#">Create an account</a> · Reading the <a href="#">Privacy</a> & <a href="#">Terms</a>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <footer>
+    <div>
+      <div class="closing-line">"I am here. I am enough. I am loved. I am loving. I am exactly where I need to be."</div>
+      <div style="margin-top:14px;">© 2026 DayBeans</div>
+    </div>
+    <ul aria-label="footer">
+      <li><a href="#how">How it works</a></li>
+      <li><a href="#themes">Themes</a></li>
+      <li><a href="#login">Sign in</a></li>
+      <li><a href="#">Privacy</a></li>
+      <li><a href="#">Terms</a></li>
+    </ul>
+  </footer>
+
+  <div class="picker" role="group" aria-label="Theme">
+    <button data-theme-id="light"  aria-label="Light"   class="active"><span class="swatch"></span></button>
+    <button data-theme-id="dusk"   aria-label="Dusk"><span class="swatch"></span></button>
+    <button data-theme-id="aurora" aria-label="Aurora"><span class="swatch"></span></button>
+    <button data-theme-id="sepia"  aria-label="Sepia"><span class="swatch"></span></button>
+    <button data-theme-id="ai"     aria-label="AI"><span class="swatch"></span></button>
+  </div>
+
+  <script>
+    // ===== Theme switcher (live, no persistence) =====
+    const html = document.documentElement;
+    function setTheme(id) {
+      html.dataset.theme = id;
+      document.querySelectorAll('.picker button').forEach(function (b) {
+        b.classList.toggle('active', b.dataset.themeId === id);
+      });
+      document.querySelectorAll('.theme-chip').forEach(function (c) {
+        c.classList.toggle('active', c.dataset.themeId === id);
+      });
+    }
+    document.querySelectorAll('.picker button, .theme-chip').forEach(function (el) {
+      el.addEventListener('click', function () { setTheme(el.dataset.themeId); });
+    });
+
+    // ===== Heatmap rendering — deterministic shapes that look "lived in" =====
+    function renderHeatmap(targetId, count) {
+      const el = document.getElementById(targetId);
+      if (!el) return;
+      for (let i = 0; i < count; i++) {
+        const span = document.createElement('span');
+        const recency = i / count;
+        const seed = Math.sin(i * 13.7) * 43758.5453;
+        const r = (seed - Math.floor(seed));
+        const intensity = Math.min(1, r * .7 + recency * .55);
+        let level = 0;
+        if (intensity > .85) level = 4;
+        else if (intensity > .65) level = 3;
+        else if (intensity > .45) level = 2;
+        else if (intensity > .25) level = 1;
+        if (level > 0) span.classList.add('l' + level);
+        span.style.animationDelay = (i * 7) + 'ms';
+        el.appendChild(span);
+      }
+    }
+    renderHeatmap('heroHeatmap', 60);
+    renderHeatmap('bigHeatmap', 120);
+
+    // ===== Reveal on scroll =====
+    const obs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          e.target.classList.add('in');
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(function (el) { obs.observe(el); });
+
+    // ===== Nav border + scroll progress =====
+    const nav = document.getElementById('nav');
+    const progress = document.getElementById('scrollProgress');
+    function onScroll() {
+      const y = window.scrollY;
+      nav.classList.toggle('scrolled', y > 12);
+      const pageHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const p = pageHeight > 0 ? y / pageHeight : 0;
+      progress.style.transform = 'scaleX(' + p + ')';
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    // ===== Submit feedback (no innerHTML — toggle a sibling status element) =====
+    window.flashSubmit = function () {
+      const success = document.getElementById('loginSuccess');
+      const submit = document.getElementById('loginSubmit');
+      if (!success || !submit) return;
+      success.classList.add('show');
+      submit.disabled = true;
+      submit.style.opacity = '.6';
+      setTimeout(function () {
+        success.classList.remove('show');
+        submit.disabled = false;
+        submit.style.opacity = '';
+      }, 2800);
+    };
+
+    // ===== Subtle parallax on hero card (reduce-motion aware) =====
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!reduce) {
+      const card = document.querySelector('.hero-card');
+      const art = document.querySelector('.hero-art');
+      if (art && card) {
+        art.addEventListener('mousemove', function (e) {
+          const r = art.getBoundingClientRect();
+          const px = (e.clientX - r.left) / r.width - .5;
+          const py = (e.clientY - r.top) / r.height - .5;
+          card.style.transform = 'rotate(-1.5deg) translateY(' + (-6 - py * -8) + 'px) rotateY(' + (px * 6) + 'deg) rotateX(' + (-py * 4) + 'deg)';
+        });
+        art.addEventListener('mouseleave', function () { card.style.transform = ''; });
+      }
+    }
+  </script>
+</body>
+</html>
