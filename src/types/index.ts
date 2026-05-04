@@ -65,3 +65,13 @@ export type Pref = {
 };
 
 export type GoalProgress = { current: number; target: number; pct: number };
+
+// S0-T03 — DayBean type contracts. Re-exported from focused modules so
+// every consumer can import from "@/types".
+export * from "./journal-theme";
+export * from "./suggested-goal";
+export * from "./partner";
+export * from "./voucher";
+export * from "./refresh";
+export * from "./slow-sip";
+export * from "./onboarding";
