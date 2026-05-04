@@ -3,11 +3,12 @@ import { useState } from "react";
 import { addGoal } from "@/server/actions/goals";
 import type { Section, GoalType, GoalCategory } from "@/types";
 import { GoalCategoryPicker } from "@/components/goals/GoalCategoryPicker";
+import { TAB_LABELS } from "@/lib/constants";
 
 const SECTIONS: Array<{ value: Section; label: string }> = [
-  { value: "mindfulness", label: "Mindfulness" },
-  { value: "business",    label: "Business" },
-  { value: "personal",    label: "Personal" },
+  { value: "mindfulness", label: TAB_LABELS.mindfulness },
+  { value: "business",    label: TAB_LABELS.business },
+  { value: "personal",    label: TAB_LABELS.personal },
 ];
 
 const TYPES: Array<{ value: GoalType; label: string }> = [

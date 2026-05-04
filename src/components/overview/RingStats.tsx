@@ -9,6 +9,7 @@ import {
 } from "@/lib/progress-overview";
 import { isoOffset } from "@/lib/dates";
 import { Ring } from "@/components/primitives/Ring";
+import { TAB_LABELS } from "@/lib/constants";
 import type { Section, Goal, DayRecord, ClickCounts } from "@/types";
 
 function completedFor(goals: Goal[], day: DayRecord, clicks?: ClickCounts): number {
@@ -68,9 +69,9 @@ export async function RingStats({ userId, iso }: { userId: string; iso: string }
     <div className="rings-grid" style={{ gridTemplateColumns: "repeat(8, minmax(0, 1fr))" }}>
       {/* Row 1 — today + by section */}
       <Ring pct={ringFraction(completedToday, totalGoals)} variant="sage" big={`${completedToday}/${totalGoals}`} small="Today" />
-      <Ring pct={ringFraction(m.completed, m.goals.length)} variant="sage" big={`${m.completed}/${m.goals.length}`} small="Mindfulness" />
-      <Ring pct={ringFraction(b.completed, b.goals.length)} variant="sage" big={`${b.completed}/${b.goals.length}`} small="Business" />
-      <Ring pct={ringFraction(p.completed, p.goals.length)} variant="sage" big={`${p.completed}/${p.goals.length}`} small="Personal" />
+      <Ring pct={ringFraction(m.completed, m.goals.length)} variant="sage" big={`${m.completed}/${m.goals.length}`} small={TAB_LABELS.mindfulness} />
+      <Ring pct={ringFraction(b.completed, b.goals.length)} variant="sage" big={`${b.completed}/${b.goals.length}`} small={TAB_LABELS.business} />
+      <Ring pct={ringFraction(p.completed, p.goals.length)} variant="sage" big={`${p.completed}/${p.goals.length}`} small={TAB_LABELS.personal} />
 
       {/* Row 2 — averages + streaks */}
       <Ring pct={sevenAvg} variant="sage" big={`${Math.round(sevenAvg * 100)}%`} small="Last 7 days" />

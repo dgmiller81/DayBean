@@ -15,7 +15,20 @@ async function main() {
 
   // Once an admin sets their own password, never clobber it with the env hash.
   // Only seed passwordHash on initial create or when it's still null.
-  const shouldSeedPassword = isSimpleMode && !existing?.passwordHash && !!adminPasswordHash;
+  // Escape hatch: FORCE_RESEED_PASSWORD=true forces the env hash to win, used
+  // for prod password resets where the operator can't reach the DB directly
+  // (Railway: set the new SIMPLE_PASSWORD_HASH + this flag, redeploy, unset).
+  const forceReseed = process.env.FORCE_RESEED_PASSWORD === "true";
+  const shouldSeedPassword =
+    isSimpleMode &&
+    !!adminPasswordHash &&
+    (forceReseed || !existing?.passwordHash);
+
+  if (forceReseed) {
+    console.warn(
+      "[seed] FORCE_RESEED_PASSWORD=true — overwriting admin passwordHash from env. Unset this flag once verified.",
+    );
+  }
 
   const user = await db.user.upsert({
     where: { id: "local-default" },

@@ -1,12 +1,13 @@
 import { getFilter } from "@/server/queries/filter";
 import { setFilter } from "@/server/actions/prefs";
+import { TAB_LABELS } from "@/lib/constants";
 import type { Filter } from "@/types";
 
 const PILLS: Array<{ value: Filter; label: string; dotClass?: string }> = [
   { value: "all",          label: "All" },
-  { value: "mindfulness",  label: "Mindfulness", dotClass: "sec-mindfulness" },
-  { value: "business",     label: "Business",    dotClass: "sec-business" },
-  { value: "personal",     label: "Personal",    dotClass: "sec-personal" },
+  { value: "mindfulness",  label: TAB_LABELS.mindfulness, dotClass: "sec-mindfulness" },
+  { value: "business",     label: TAB_LABELS.business,    dotClass: "sec-business" },
+  { value: "personal",     label: TAB_LABELS.personal,    dotClass: "sec-personal" },
 ];
 
 export async function FilterPills({ userId }: { userId: string }) {
