@@ -1,7 +1,8 @@
 "use client";
 import { useState } from "react";
 import { addGoal } from "@/server/actions/goals";
-import type { Section, GoalType } from "@/types";
+import type { Section, GoalType, GoalCategory } from "@/types";
+import { GoalCategoryPicker } from "@/components/goals/GoalCategoryPicker";
 
 const SECTIONS: Array<{ value: Section; label: string }> = [
   { value: "mindfulness", label: "Mindfulness" },
@@ -21,6 +22,7 @@ export function AddGoalAnyForm({ userId }: { userId: string }) {
   const [section, setSection] = useState<Section>("mindfulness");
   const [type, setType] = useState<GoalType>("check");
   const [target, setTarget] = useState(1);
+  const [category, setCategory] = useState<GoalCategory | null>(null);
   const [pending, setPending] = useState(false);
 
   if (!open) {
@@ -57,9 +59,11 @@ export function AddGoalAnyForm({ userId }: { userId: string }) {
             title: title.trim(),
             type,
             target: type === "check" ? 1 : Math.max(1, target),
+            category,
           });
           setTitle("");
           setTarget(1);
+          setCategory(null);
           setOpen(false);
         } finally {
           setPending(false);
@@ -103,6 +107,10 @@ export function AddGoalAnyForm({ userId }: { userId: string }) {
           aria-label="Target"
           style={{ padding: "8px 12px", borderRadius: "var(--radius-sm)", border: "1px solid var(--line)", background: "var(--surface-solid)", color: "var(--ink)", opacity: type === "check" ? 0.5 : 1 }}
         />
+      </div>
+      <div style={{ display: "grid", gap: 4 }}>
+        <span style={{ fontSize: 11, color: "var(--ink-muted)", letterSpacing: 0.2 }}>Category</span>
+        <GoalCategoryPicker value={category} onChange={setCategory} />
       </div>
       <div style={{ display: "flex", gap: 8 }}>
         <button

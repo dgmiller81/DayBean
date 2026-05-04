@@ -3,6 +3,8 @@ export type SectionOrGeneral = Section | "general";
 export type Filter = "all" | Section;
 export type GoalType = "check" | "count" | "time";
 
+import type { GoalCategory } from "./slow-sip";
+
 export type Goal = {
   id: string;
   specId: string;
@@ -13,6 +15,7 @@ export type Goal = {
   target: number;
   isDefault: boolean;
   createdAt: Date;
+  category?: GoalCategory | null;
 };
 
 export type Task = {

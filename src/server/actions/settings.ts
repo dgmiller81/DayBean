@@ -163,6 +163,13 @@ export type SettingsSummary = {
   credentials: LlmCredentialSummary[];
   /** When set, the env (.env file) is overriding any per-user credential. */
   envOverride: { provider: LlmProvider; model: string } | null;
+  // S3 — Slow Sip personalization signals.
+  hobbies: string[];
+  livesWith: string[];
+  financeMode: boolean;
+  netWorth: string | null;
+  cashOnHand: string | null;
+  savingsTarget: string | null;
 };
 
 export async function getSettings(): Promise<SettingsSummary> {
@@ -173,15 +180,19 @@ export async function getSettings(): Promise<SettingsSummary> {
     db.llmCredential.findMany({ where: { userId } }),
   ]);
 
-  let interests: string[] = [];
-  if (pref?.contentInterests) {
+  const parseStringArray = (raw: string | null | undefined): string[] => {
+    if (!raw) return [];
     try {
-      const parsed = JSON.parse(pref.contentInterests);
-      if (Array.isArray(parsed)) interests = parsed.filter((s) => typeof s === "string");
+      const parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? parsed.filter((s) => typeof s === "string") : [];
     } catch {
-      /* ignore */
+      return [];
     }
-  }
+  };
+
+  const interests = parseStringArray(pref?.contentInterests ?? null);
+  const hobbies = parseStringArray(pref?.hobbies ?? null);
+  const livesWith = parseStringArray(pref?.livesWith ?? null);
 
   const envCfg = getEnvLlmConfig();
 
@@ -199,5 +210,11 @@ export async function getSettings(): Promise<SettingsSummary> {
       model: c.model,
     })),
     envOverride: envCfg ? { provider: envCfg.provider, model: envCfg.model } : null,
+    hobbies,
+    livesWith,
+    financeMode: pref?.financeMode ?? false,
+    netWorth: pref?.netWorth ?? null,
+    cashOnHand: pref?.cashOnHand ?? null,
+    savingsTarget: pref?.savingsTarget ?? null,
   };
 }

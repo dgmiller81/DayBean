@@ -60,6 +60,15 @@ export async function refreshDailyContent(
     }
   }
 
+  let hobbies: string[] = [];
+  let livesWith: string[] = [];
+  if (pref?.hobbies) {
+    try { const p = JSON.parse(pref.hobbies); if (Array.isArray(p)) hobbies = p.filter((s) => typeof s === "string"); } catch {}
+  }
+  if (pref?.livesWith) {
+    try { const p = JSON.parse(pref.livesWith); if (Array.isArray(p)) livesWith = p.filter((s) => typeof s === "string"); } catch {}
+  }
+
   const ctx: LlmContext = {
     userId,
     iso,
@@ -69,6 +78,8 @@ export async function refreshDailyContent(
     faith: pref?.faith ?? null,
     scripturePref: pref?.scripturePref ?? null,
     contentInterests: interests,
+    hobbies,
+    livesWith,
     recentJournalThemes: journalSignal.themes,
     journalThemeWeights: journalSignal.weights,
     recentJournalExcerpts: journalSignal.recentExcerpts,

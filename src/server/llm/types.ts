@@ -11,6 +11,10 @@ export interface LlmContext {
   /** Set only when faith==='christian'. e.g. 'kjv', 'niv'. */
   scripturePref: string | null;
   contentInterests: string[];
+  /** User-selected hobbies. Bias personal.articles toward these. */
+  hobbies: string[];
+  /** Who the user lives with (partner, kids, parents, roommates, alone). */
+  livesWith: string[];
   /** Theme names sorted by hit count (desc). Empty if no journal hits. */
   recentJournalThemes: string[];
   /** Optional: theme name → hit count, for weighting context. */

@@ -3,10 +3,12 @@
 import { db } from "@/server/db";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
-import type { Goal, Section, GoalType } from "@/types";
+import type { Goal, GoalCategory, Section, GoalType } from "@/types";
+import { GoalCategorySchema } from "@/types";
 import { compositeGoalId, specIdFromCompositeId } from "@/lib/default-goals";
 import { parseGoalsJson, serializeGoalsJson } from "@/server/json";
 import { findGoal } from "@/server/queries/goals";
+import { getCurrentUserId } from "@/server/auth-context";
 
 const SectionSchema = z.enum(["mindfulness", "business", "personal"]);
 const GoalTypeSchema = z.enum(["check", "count", "time"]);
@@ -18,6 +20,7 @@ const AddGoalInput = z.object({
   title: z.string().trim().min(1).max(200),
   type: GoalTypeSchema,
   target: z.number().int().min(1).max(10_000),
+  category: GoalCategorySchema.nullish(),
 });
 
 export async function addGoal(input: z.infer<typeof AddGoalInput>): Promise<Goal> {
@@ -33,6 +36,7 @@ export async function addGoal(input: z.infer<typeof AddGoalInput>): Promise<Goal
       type: v.type,
       target: v.target,
       isDefault: false,
+      category: v.category ?? null,
     },
   });
   revalidatePath("/");
@@ -46,7 +50,26 @@ export async function addGoal(input: z.infer<typeof AddGoalInput>): Promise<Goal
     target: r.target,
     isDefault: r.isDefault,
     createdAt: r.createdAt,
+    category: (r.category as GoalCategory | null) ?? null,
   };
+}
+
+const SetGoalCategoryInput = z.object({
+  goalId: z.string().min(1),
+  category: GoalCategorySchema.nullable(),
+});
+
+export async function setGoalCategory(
+  input: z.infer<typeof SetGoalCategoryInput>,
+): Promise<void> {
+  const v = SetGoalCategoryInput.parse(input);
+  const userId = await getCurrentUserId();
+  await ensureGoalOwned(userId, v.goalId);
+  await db.goal.update({
+    where: { id: v.goalId },
+    data: { category: v.category },
+  });
+  revalidatePath("/");
 }
 
 const RemoveGoalInput = z.object({ userId: z.string(), goalId: z.string() });
