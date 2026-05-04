@@ -5,6 +5,7 @@ import { SettingsButton } from "./settings/SettingsButton";
 import { TopbarRefreshButton } from "./TopbarRefreshButton";
 import { BrandMark } from "./primitives/BrandMark";
 import { APP_NAME } from "@/lib/constants";
+import type { ReactNode } from "react";
 import type { DailyContent } from "@/types/daily-content";
 import type { SettingsSummary } from "@/server/actions/settings";
 import type { LatestRefresh } from "@/server/queries/refresh-log";
@@ -16,6 +17,7 @@ export function Topbar({
   dailyContent,
   settings,
   latestRefresh,
+  refreshStatusSlot,
 }: {
   theme: Theme;
   name: string;
@@ -23,6 +25,7 @@ export function Topbar({
   dailyContent: DailyContent;
   settings: SettingsSummary;
   latestRefresh: LatestRefresh | null;
+  refreshStatusSlot?: ReactNode;
 }) {
   const llmConfigured = settings.credentials.length > 0 || !!settings.envOverride;
   const lastStatus: "ok" | "failed" | "none" = !latestRefresh
@@ -46,7 +49,7 @@ export function Topbar({
         <StreakPill count={0} />
         <TopbarRefreshButton llmConfigured={llmConfigured} lastStatus={lastStatus} />
         <EditContentLink iso={iso} initialContent={dailyContent} latestRefresh={latestRefresh} />
-        <SettingsButton initial={settings} initialTheme={theme} />
+        <SettingsButton initial={settings} initialTheme={theme} refreshStatusSlot={refreshStatusSlot} />
         <ThemeToggle initial={theme} />
       </div>
     </div>

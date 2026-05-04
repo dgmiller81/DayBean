@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { testDb } from "../test-db";
 import { fixtureFor } from "@/lib/daily-content-fixture";
+import { dedupeContent } from "@/lib/dedupe-content";
 import { setDailyContent } from "@/server/actions/daily-content";
 import { DailyContentValidationError } from "@/server/errors/daily-content";
 import { getDailyContent, getDailyContentWithMeta } from "@/server/queries/daily-content";
@@ -53,7 +54,8 @@ describe("setDailyContent — round trip", () => {
     expect(row!.source).toBe("manual");
 
     const readBack = await getDailyContent(userId, ISO);
-    expect(readBack).toEqual(fixture);
+    // Read path applies dedupeContent — compare against the deduped form.
+    expect(readBack).toEqual(dedupeContent(fixture));
   });
 
   it("upserts on second write (single row per user-day)", async () => {
@@ -84,15 +86,15 @@ describe("getDailyContent / getDailyContentWithMeta — fallback", () => {
     const userId = await makeUser("u_nofallback");
     const meta = await getDailyContentWithMeta(userId, ISO);
     expect(meta.source).toBe("fixture");
-    expect(meta.content).toEqual(fixtureFor(ISO));
+    expect(meta.content).toEqual(dedupeContent(fixtureFor(ISO)));
   });
 
-  it("returns the DB row when one exists, with source as written", async () => {
+  it("returns the DB row when one exists, with source='primary'", async () => {
     const userId = await makeUser("u_dbhit");
     const custom = { ...fixtureFor(ISO), subhead: "from DB" };
     await setDailyContent(userId, ISO, custom, "manual");
     const meta = await getDailyContentWithMeta(userId, ISO);
-    expect(meta.source).toBe("manual");
+    expect(meta.source).toBe("primary");
     expect(meta.content.subhead).toBe("from DB");
   });
 
@@ -104,7 +106,7 @@ describe("getDailyContent / getDailyContentWithMeta — fallback", () => {
 
     const metaA = await getDailyContentWithMeta(a, ISO);
     const metaB = await getDailyContentWithMeta(b, ISO);
-    expect(metaA.source).toBe("manual");
+    expect(metaA.source).toBe("primary");
     expect(metaA.content.subhead).toBe("A's content");
     expect(metaB.source).toBe("fixture");
   });
@@ -121,6 +123,6 @@ describe("getDailyContent / getDailyContentWithMeta — fallback", () => {
     });
     const meta = await getDailyContentWithMeta(userId, ISO);
     expect(meta.source).toBe("fixture");
-    expect(meta.content).toEqual(fixtureFor(ISO));
+    expect(meta.content).toEqual(dedupeContent(fixtureFor(ISO)));
   });
 });

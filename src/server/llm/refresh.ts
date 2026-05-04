@@ -1,6 +1,6 @@
 import "server-only";
 import { db } from "@/server/db";
-import { DailyContentSchema } from "@/types/daily-content";
+import { DailyContentSchema, type DailyContent } from "@/types/daily-content";
 import { setDailyContent } from "@/server/actions/daily-content";
 import { todayISO } from "@/lib/dates";
 import { getJournalSignal } from "@/server/queries/journal-themes";
@@ -8,8 +8,7 @@ import { dedupeContent } from "@/lib/dedupe-content";
 import { getAdapter, type LlmProvider } from "./index";
 import { getEnvLlmConfig } from "./env-config";
 import type { LlmContext } from "./types";
-
-export type RefreshSource = "manual" | "cron" | "cold-start";
+import type { RefreshPhase } from "@/types/refresh";
 
 export type RefreshResult =
   | { ok: true; iso: string }
@@ -17,11 +16,22 @@ export type RefreshResult =
   | { ok: false; code: "provider-error"; message: string }
   | { ok: false; code: "validation-error"; message: string };
 
+// RefreshLog.source is the legacy column kept for backward compatibility.
+// `phase` is the new authoritative tag (S0-T02). Map phase → source so the
+// pre-S2 reports keep working until they're rewritten to read `phase`.
+function phaseToLegacySource(phase: RefreshPhase): "manual" | "cron" | "cold-start" {
+  if (phase === "manual") return "manual";
+  if (phase === "cold-start") return "cold-start";
+  return "cron"; // morning | evening-prebrew
+}
+
 export async function refreshDailyContent(
   userId: string,
   iso: string,
-  source: RefreshSource,
+  phase: RefreshPhase,
 ): Promise<RefreshResult> {
+  const legacySource = phaseToLegacySource(phase);
+
   // Env replaces DB when configured.
   const envConfig = getEnvLlmConfig();
   const dbCred = envConfig ? null : await db.llmCredential.findFirst({ where: { userId } });
@@ -29,7 +39,7 @@ export async function refreshDailyContent(
 
   if (!provider) {
     await db.refreshLog.create({
-      data: { userId, iso, source, status: "no-credential", errorCode: "no-credential" },
+      data: { userId, iso, source: legacySource, phase, status: "no-credential", errorCode: "no-credential" },
     });
     return { ok: false, code: "no-credential" };
   }
@@ -66,7 +76,7 @@ export async function refreshDailyContent(
   };
 
   const log = await db.refreshLog.create({
-    data: { userId, iso, source, status: "ok", errorCode: null },
+    data: { userId, iso, source: legacySource, phase, status: "ok", errorCode: null },
   });
 
   try {
@@ -80,7 +90,14 @@ export async function refreshDailyContent(
 
     const deduped = dedupeContent(validated);
 
-    await setDailyContent(userId, iso, deduped, "llm");
+    if (phase === "evening-prebrew") {
+      await writeBackupSlot(userId, iso, deduped, "evening-prebrew");
+    } else {
+      // morning | cold-start | manual all populate the primary slot.
+      await setDailyContent(userId, iso, deduped, "llm");
+      await stampPrimarySlot(userId, iso, phase);
+    }
+
     await db.refreshLog.update({
       where: { id: log.id },
       data: { status: "ok", finishedAt: new Date() },
@@ -100,6 +117,60 @@ export async function refreshDailyContent(
   }
 }
 
+/**
+ * Manual user-triggered refresh — always populates the primary slot.
+ */
 export async function refreshTodayFor(userId: string): Promise<RefreshResult> {
   return refreshDailyContent(userId, todayISO(), "manual");
+}
+
+/**
+ * Stamp the primary-slot metadata on the row that `setDailyContent` just
+ * upserted. setDailyContent writes contentJson + source; we add the dual-run
+ * bookkeeping (primarySource, primaryAt) so the read precedence in
+ * daily-content.ts can tell which run produced the row.
+ */
+async function stampPrimarySlot(
+  userId: string,
+  iso: string,
+  phase: Exclude<RefreshPhase, "evening-prebrew">,
+): Promise<void> {
+  await db.dailyContent.update({
+    where: { userId_iso: { userId, iso } },
+    data: { primarySource: phase, primaryAt: new Date() },
+  });
+}
+
+/**
+ * Write the backup slot only — never touches contentJson. Called for
+ * evening-prebrew runs. Idempotent: subsequent runs overwrite the backup.
+ */
+async function writeBackupSlot(
+  userId: string,
+  iso: string,
+  content: DailyContent,
+  backupSource: "evening-prebrew" | "manual-prebrew",
+): Promise<void> {
+  const backupContentJson = JSON.stringify(content);
+  const now = new Date();
+  await db.dailyContent.upsert({
+    where: { userId_iso: { userId, iso } },
+    // If no row yet: create one with empty primary slot. The morning brew
+    // (or cold-start) on Day N will populate contentJson; the backup is
+    // already there to cover failure.
+    create: {
+      userId,
+      iso,
+      contentJson: "",
+      source: "fixture",
+      backupContentJson,
+      backupSource,
+      backupAt: now,
+    },
+    update: {
+      backupContentJson,
+      backupSource,
+      backupAt: now,
+    },
+  });
 }

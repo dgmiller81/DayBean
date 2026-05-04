@@ -9,6 +9,7 @@ import { MindfulnessPanel } from "@/components/panels/MindfulnessPanel";
 import { BusinessPanel } from "@/components/panels/BusinessPanel";
 import { PersonalPanel } from "@/components/panels/PersonalPanel";
 import { OverviewPanel } from "@/components/panels/OverviewPanel";
+import { RefreshStatus } from "@/components/settings/RefreshStatus";
 import { todayISO } from "@/lib/dates";
 import { db } from "@/server/db";
 import { getCurrentUserIdOrNull } from "@/server/auth-context";
@@ -115,7 +116,15 @@ export default async function Page({
   return (
     <main className="app">
       <StickyHeader iso={iso} initialTab={tab} />
-      <Topbar theme={theme} name={name} iso={iso} dailyContent={content} settings={settings} latestRefresh={latestRefresh} />
+      <Topbar
+        theme={theme}
+        name={name}
+        iso={iso}
+        dailyContent={content}
+        settings={settings}
+        latestRefresh={latestRefresh}
+        refreshStatusSlot={<RefreshStatus userId={userId} todayIso={today} />}
+      />
       <Hero
         name={name}
         iso={iso}
