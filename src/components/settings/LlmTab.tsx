@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import {
   saveLlmCredential,
   deleteLlmCredential,
@@ -25,9 +25,14 @@ const PROVIDERS: LlmProvider[] = ["lmstudio", "openai", "anthropic"];
 export function LlmTab({
   initial,
   envOverride,
+  refreshStatusSlot,
 }: {
   initial: LlmCredentialSummary[];
   envOverride: { provider: LlmProvider; model: string } | null;
+  /** Server-rendered <RefreshStatus /> callout passed in from the page-level
+   * server component. Lives in this client component as an opaque ReactNode
+   * because LlmTab can't `await` an async server component itself. */
+  refreshStatusSlot?: ReactNode;
 }) {
   const [credentials, setCredentials] = useState<LlmCredentialSummary[]>(initial);
   const [provider, setProvider] = useState<LlmProvider>("lmstudio");
@@ -86,6 +91,7 @@ export function LlmTab({
 
   return (
     <div style={{ display: "grid", gap: 16 }}>
+      {refreshStatusSlot}
       <p style={{ color: "var(--ink-soft)", fontSize: 13, margin: 0 }}>
         Configure an LLM provider to enable the "Refresh today's content" button. Keys are
         encrypted at rest with AES-256-GCM and never returned to the browser.

@@ -36,7 +36,10 @@ export async function POST(req: Request) {
 
   const results: Array<{ userId: string; ok: boolean; code?: string }> = [];
   for (const u of eligible) {
-    const r = await refreshDailyContent(u.id, iso, "cron");
+    // Legacy endpoint maps to the morning phase (the original behavior was
+    // "fire at the user's refreshHour"). Newer schedulers should hit
+    // /api/cron/morning-brew or /api/cron/evening-prebrew directly.
+    const r = await refreshDailyContent(u.id, iso, "morning");
     results.push({
       userId: u.id,
       ok: r.ok,

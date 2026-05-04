@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import type { SettingsSummary } from "@/server/actions/settings";
 import { ProfileTab } from "./ProfileTab";
 import { LlmTab } from "./LlmTab";
@@ -14,11 +14,13 @@ export function SettingsModal({
   initialTheme,
   open,
   onClose,
+  refreshStatusSlot,
 }: {
   initial: SettingsSummary;
   initialTheme: Theme;
   open: boolean;
   onClose: () => void;
+  refreshStatusSlot?: ReactNode;
 }) {
   const [tab, setTab] = useState<Tab>("llm");
   const modalRef = useRef<HTMLDivElement | null>(null);
@@ -278,7 +280,7 @@ export function SettingsModal({
         </div>
 
         <div style={{ padding: 20, overflowY: "auto" }}>
-          {tab === "llm" && <LlmTab initial={initial.credentials} envOverride={initial.envOverride} />}
+          {tab === "llm" && <LlmTab initial={initial.credentials} envOverride={initial.envOverride} refreshStatusSlot={refreshStatusSlot} />}
           {tab === "profile" && <ProfileTab initial={{ name: initial.name, bio: initial.bio }} />}
           {tab === "context" && <JobInterestsTab initial={{ jobTitle: initial.jobTitle, contentInterests: initial.contentInterests, refreshHour: initial.refreshHour }} />}
           {tab === "themes" && (
