@@ -16,6 +16,11 @@ model User {
   onboardedAt  DateTime?
   createdAt    DateTime  @default(now())
 
+  /// S7-T03 — non-null when the user has requested deletion. The sweep cron
+  /// deletes the row (and cascades) when `pendingDeletionAt < now`.
+  /// 24h grace lets the user undo.
+  pendingDeletionAt DateTime?
+
   goals          Goal[]
   tasks          Task[]
   days           Day[]
@@ -32,6 +37,10 @@ model User {
   suggestedGoals SuggestedGoal[]
   vouchers       Voucher[]
   rewardClaims   RewardClaim[]
+
+  // S7-T02 — User-initiated data export. Each row is a one-shot, 24h-valid
+  // download token. Cascades on user delete so we never leave dangling links.
+  dataExports    DataExport[]
 }
 
 model Pref {
@@ -296,4 +305,22 @@ model RewardClaim {
   claimedAt    DateTime @default(now())
 
   @@index([userId, claimedAt])
+}
+
+// S7-T02 — User-initiated data export. Click "Email my export" → server emails
+// a tokenized link that expires 24h later. The download is one-shot
+// (`completedAt` is set on first GET and the link 410s afterward).
+model DataExport {
+  id          String    @id @default(cuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token       String    @unique
+  /// When the link expires (24h from request).
+  expiresAt   DateTime
+  /// When the user actually downloaded (or null). One-shot — set on first GET.
+  completedAt DateTime?
+  createdAt   DateTime  @default(now())
+
+  @@index([userId, createdAt])
+  @@index([token])
 }

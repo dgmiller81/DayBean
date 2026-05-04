@@ -11,10 +11,13 @@ import "server-only";
 import type { CronJobFn, CronJobName, CronJobResult } from "./types";
 import { runMorningBrew } from "./morning-brew";
 import { runEveningPrebrew } from "./evening-prebrew";
+import { runDeletionSweep } from "./sweep-deletions";
 
 const registry: Record<CronJobName, CronJobFn> = {
   "morning-brew": runMorningBrew,
   "evening-prebrew": runEveningPrebrew,
+  // S7-T03 — sweep deletes ripe Users whose pendingDeletionAt < now.
+  "sweep-deletions": runDeletionSweep,
 };
 
 export function isJobName(name: string): name is CronJobName {

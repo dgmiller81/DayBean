@@ -9,7 +9,7 @@ import { NextResponse, type NextRequest } from "next/server";
 // already-onboarded users back to /. /api routes (besides whitelisted ones)
 // still require an authed session, but should not be force-redirected to
 // onboarding — they have their own response semantics.
-const PUBLIC_PATHS = new Set(["/login", "/onboarding"]);
+const PUBLIC_PATHS = new Set(["/login", "/onboarding", "/privacy"]);
 const PUBLIC_PREFIXES = ["/api/health", "/api/cron", "/_next", "/favicon"];
 const ONBOARDING_BYPASS_PREFIXES = ["/api/", "/onboarding"];
 
