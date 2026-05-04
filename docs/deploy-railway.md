@@ -24,6 +24,9 @@ SQLite stays the local-development DB in either case.
    | `CRON_SECRET` | `openssl rand -base64 32` | Required on Railway (boot guard). |
    | `LMSTUDIO_BASE_URL` | optional | Default `http://localhost:1234/v1` (won't reach LM Studio from Railway — set per-user OpenAI/Anthropic keys instead). |
    | `NODE_ENV` | `production` | Railway sets this by default; pinning is fine. |
+   | `PREBREW_POLICY` | optional, default `always` | S2 dual-run cost-graduation. `always` (Stage 0) → pre-brew everyone; `tiered` / `reactive` / `smart-resume` to dial cost down later. |
+   | `RESEND_API_KEY` | optional | S5 voucher emails. When unset, claim flow logs `[email:dev]` and continues — fine for pre-launch. Set this once you're issuing real codes. |
+   | `EMAIL_FROM` | optional | Default `"DayBeans <hello@daybeans.com>"`. Override with your verified Resend sender. |
 
 4. Do **not** set `PORT` manually — Railway injects it, and `next start` reads it automatically.
 
@@ -54,21 +57,26 @@ SQLite stays the local-development DB in either case.
 3. Open Settings → LLM Provider → add a credential → Test connection.
 4. Click "edit content" → "Refresh today's content" → confirm the hero updates with LLM-generated text.
 
-## Daily cron — refresh content automatically
+## Daily crons — refresh content automatically
 
-Phase 10 ships `/api/cron/refresh` (POST, Bearer-token-gated). To trigger it nightly:
+Two cron-triggered jobs ship today; both are gated by an `X-Cron-Secret` header (S2 dual-run resilience):
 
-1. In Railway, add a **Cron Job** service in the same project.
-2. Schedule: `0 4 * * *` (daily 04:00 UTC — adjust to your timezone).
-3. Command:
-   ```bash
-   curl -fsS -X POST \
-     -H "Authorization: Bearer $CRON_SECRET" \
-     "$WEB_PUBLIC_URL/api/cron/refresh" || exit 1
-   ```
-   (where `WEB_PUBLIC_URL` is the public domain of your Web service and `CRON_SECRET` is the same value set on the Web service).
+| Job | Endpoint | Recommended schedule | Notes |
+|---|---|---|---|
+| Morning brew | `/api/cron/morning-brew` | `0 * * * *` (top of every hour) | Iterates users; runs only when a user's local hour matches `Pref.refreshHour` AND no successful morning RefreshLog exists for today. |
+| Evening pre-brew | `/api/cron/evening-prebrew` | `0 * * * *` (same hourly tick) | Iterates users; runs only when local hour matches `Pref.prebrewHour` (default 17) AND `PREBREW_POLICY` allows it. Writes `backupContentJson` for tomorrow. |
 
-The endpoint iterates every user with an `LlmCredential`, runs a refresh for today (`source='cron'`), and returns `{ iso, processedUsers, okCount, failures }`.
+In Railway, add a **Cron Job** service in the same project for each. Command shape:
+
+```bash
+curl -fsS -X POST \
+  -H "X-Cron-Secret: $CRON_SECRET" \
+  "$WEB_PUBLIC_URL/api/cron/morning-brew" || exit 1
+```
+
+(where `WEB_PUBLIC_URL` is your service's public domain and `CRON_SECRET` matches the value set on the Web service.)
+
+The pre-S2 `/api/cron/refresh` endpoint still works (Bearer-token-gated) and now runs phase=`morning` under the hood — keep it scheduled if you've already wired it; new deploys should prefer the per-phase endpoints above.
 
 ## Things deferred to later phases
 
