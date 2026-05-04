@@ -1,5 +1,6 @@
 import "server-only";
 import { getRefreshStatus } from "@/server/queries/refresh-status";
+import { formatRelative } from "@/lib/relative-time";
 
 /**
  * S2-T06 — Surface dual-run scheduler health in Settings → LLM. Three states:
@@ -62,16 +63,4 @@ export async function RefreshStatus({
 
 function formatClock(d: Date): string {
   return d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
-}
-
-function formatRelative(d: Date): string {
-  const diffMs = Date.now() - d.getTime();
-  if (diffMs < 60_000) return "just now";
-  const minutes = Math.floor(diffMs / 60_000);
-  if (minutes < 60) return `${minutes} ${minutes === 1 ? "minute" : "minutes"} ago`;
-  const hours = Math.floor(minutes / 60);
-  if (hours < 24) return `${hours} ${hours === 1 ? "hour" : "hours"} ago`;
-  const days = Math.floor(hours / 24);
-  if (days === 1) return "yesterday";
-  return `${days} days ago`;
 }

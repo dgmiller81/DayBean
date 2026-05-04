@@ -137,8 +137,19 @@ single most important input for shaping today's content.
    title + content interests + faith preference. Default to the gentlest,
    most universal version of each card.
 
-5. **Never quote the journal word-for-word** in any output field. Themes
-   and feelings only. The user should feel KNOWN, not surveilled.
+5. **PRIVACY CONTRACT — Never quote the journal word-for-word in any output
+   field, including the prayer, opening, articles' titles or summaries,
+   reflection, motivation, briefings, or anywhere else.**
+   - You may name a feeling or a theme ("rest", "anxious about the launch")
+     but you may NOT echo a 4-or-more-word substring from any journal
+     excerpt provided. If you find yourself reusing 4 consecutive words from
+     the user's journal, rewrite that span entirely.
+   - Themes and feelings only. The user should feel KNOWN, not surveilled.
+   - The reflection / mindfulness opening MUST name exactly ONE theme from
+     the provided list when at least one theme has weight ≥ 1.0. Use the
+     theme as a noun phrase, not a copy-paste of a journal sentence.
+   - If you cannot satisfy this rule for a particular field, leave that
+     field blank rather than violate it.
 
 ──────────────────────────────────────────────────────────────────────
 HARD CONSTRAINTS
@@ -187,18 +198,20 @@ export function buildUserPrompt(ctx: LlmContext): string {
 
   if (ctx.recentJournalThemes.length) {
     lines.push("");
-    lines.push("Recent journal themes (most-frequent first):");
+    lines.push("Top journal themes (highest weight first — bias content toward these):");
     for (const t of ctx.recentJournalThemes.slice(0, 6)) {
       const w = ctx.journalThemeWeights?.[t];
-      lines.push(`  · ${t}${w ? ` (${w} mentions)` : ""}`);
+      lines.push(`  · ${t}${typeof w === "number" ? ` (weight ${w.toFixed(2)})` : ""}`);
     }
+    lines.push("The reflection block MUST name exactly one of these themes by noun.");
   }
 
   if (ctx.recentJournalExcerpts.length) {
     lines.push("");
     lines.push(
-      "Recent journal excerpts — the user's own words, most recent first. " +
-      "Use as soft bias only. Abstract themes; do NOT quote verbatim:",
+      "Recent journal excerpts (3–5, most recent first) — for theme/feeling " +
+      "context only. PRIVACY CONTRACT: do NOT echo any 4-or-more-word substring " +
+      "from these excerpts. Abstract, never quote.",
     );
     for (const ex of ctx.recentJournalExcerpts) {
       lines.push(`  > ${ex.replace(/\n/g, " ")}`);

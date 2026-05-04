@@ -3,6 +3,8 @@
 import { db } from "@/server/db";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
+import { onJournalEntryWritten } from "@/server/lib/journal-write-hook";
+import { recomputeJournalThemes } from "@/server/actions/journal-themes";
 
 const Iso = z.string().regex(/^\d{4}-\d{2}-\d{2}$/);
 const Page = z.enum(["mindfulness", "business", "personal", "overview"]);
@@ -16,7 +18,7 @@ const AddInput = z.object({
 
 export async function addJournalEntry(input: z.infer<typeof AddInput>): Promise<void> {
   const v = AddInput.parse(input);
-  await db.journalEntry.create({
+  const created = await db.journalEntry.create({
     data: { userId: v.userId, iso: v.iso, page: v.page, content: v.content },
   });
   if (v.page === "mindfulness") {
@@ -25,6 +27,17 @@ export async function addJournalEntry(input: z.infer<typeof AddInput>): Promise<
       update: { notes: v.content },
       create: { userId: v.userId, iso: v.iso, notes: v.content },
     });
+  }
+  // Post-write hook: theme recompute + intent detection. Failures are logged
+  // inside the hook and never bubble up to this action.
+  try {
+    await onJournalEntryWritten({
+      userId: v.userId,
+      entryId: created.id,
+      content: v.content,
+    });
+  } catch (e) {
+    console.error("[addJournalEntry] post-write hook failed", { error: (e as Error).message });
   }
   revalidatePath("/");
 }
@@ -46,6 +59,15 @@ export async function deleteJournalEntry(input: z.infer<typeof DeleteInput>): Pr
     await db.day.updateMany({
       where: { userId: v.userId, iso: before.iso },
       data: { notes: "" },
+    });
+  }
+  // Deletion changes the corpus — recompute themes. No intent detection
+  // (no content to scan).
+  try {
+    await recomputeJournalThemes(v.userId);
+  } catch (e) {
+    console.error("[deleteJournalEntry] recomputeJournalThemes failed", {
+      error: (e as Error).message,
     });
   }
   revalidatePath("/");
@@ -73,6 +95,15 @@ export async function updateJournalEntry(input: z.infer<typeof UpdateInput>): Pr
       update: { notes: v.content },
       create: { userId: v.userId, iso: before.iso, notes: v.content },
     });
+  }
+  try {
+    await onJournalEntryWritten({
+      userId: v.userId,
+      entryId: before.id,
+      content: v.content,
+    });
+  } catch (e) {
+    console.error("[updateJournalEntry] post-write hook failed", { error: (e as Error).message });
   }
   revalidatePath("/");
 }

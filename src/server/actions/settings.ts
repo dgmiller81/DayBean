@@ -7,6 +7,8 @@ import { encrypt, last4Of } from "@/server/crypto";
 import { getCurrentUserId } from "@/server/auth-context";
 import { getAdapter, type LlmProvider } from "@/server/llm";
 import { getEnvLlmConfig } from "@/server/llm/env-config";
+import { listJournalThemes } from "@/server/actions/journal-themes";
+import type { JournalTheme } from "@/types";
 
 const ProviderSchema = z.enum(["openai", "anthropic", "lmstudio"]);
 
@@ -170,14 +172,17 @@ export type SettingsSummary = {
   netWorth: string | null;
   cashOnHand: string | null;
   savingsTarget: string | null;
+  // S4 — "What we heard" (journal-extracted themes for the listening tab).
+  journalThemes: JournalTheme[];
 };
 
 export async function getSettings(): Promise<SettingsSummary> {
   const userId = await getCurrentUserId();
-  const [user, pref, creds] = await Promise.all([
+  const [user, pref, creds, journalThemes] = await Promise.all([
     db.user.findUnique({ where: { id: userId } }),
     db.pref.findUnique({ where: { userId } }),
     db.llmCredential.findMany({ where: { userId } }),
+    listJournalThemes(),
   ]);
 
   const parseStringArray = (raw: string | null | undefined): string[] => {
@@ -216,5 +221,6 @@ export async function getSettings(): Promise<SettingsSummary> {
     netWorth: pref?.netWorth ?? null,
     cashOnHand: pref?.cashOnHand ?? null,
     savingsTarget: pref?.savingsTarget ?? null,
+    journalThemes,
   };
 }
