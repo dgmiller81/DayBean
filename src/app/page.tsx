@@ -81,6 +81,24 @@ export default async function Page({
   if (!meCheck?.onboardedAt) {
     redirect("/onboarding");
   }
+  // S6-T05: middleware reads db_onboarded to short-circuit the onboarding
+  // redirect at the edge. Backfill it here for users who were already
+  // onboarded before that cookie existed (or whose cookie was cleared).
+  if (!c.get("db_onboarded")) {
+    try {
+      c.set("db_onboarded", "1", {
+        path: "/",
+        maxAge: 60 * 60 * 24 * 365,
+        sameSite: "lax",
+        httpOnly: false,
+      });
+    } catch {
+      // cookies().set is allowed in async server components during render in
+      // Next 15, but if a future runtime tightens that we don't want to crash
+      // the page — middleware will simply redirect once more next request and
+      // either auth.ts (login) or onboarding.ts (completion) writes it.
+    }
+  }
   const [user, settings] = await Promise.all([
     db.user.findUnique({ where: { id: userId } }),
     getSettings(),

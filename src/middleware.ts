@@ -3,8 +3,15 @@ import { NextResponse, type NextRequest } from "next/server";
 // We can't import server-only env reader here (middleware runs in edge runtime),
 // so we read process.env directly. The boot guard already validated values on
 // node startup; this is just routing.
-const PUBLIC_PATHS = new Set(["/login"]);
+//
+// /onboarding is public-after-auth: the onboarding gate redirects authed users
+// who lack the db_onboarded cookie there, and the page itself short-circuits
+// already-onboarded users back to /. /api routes (besides whitelisted ones)
+// still require an authed session, but should not be force-redirected to
+// onboarding — they have their own response semantics.
+const PUBLIC_PATHS = new Set(["/login", "/onboarding"]);
 const PUBLIC_PREFIXES = ["/api/health", "/api/cron", "/_next", "/favicon"];
+const ONBOARDING_BYPASS_PREFIXES = ["/api/", "/onboarding"];
 
 export function middleware(req: NextRequest) {
   const authMode = process.env.AUTH_MODE ?? "none";
@@ -25,6 +32,23 @@ export function middleware(req: NextRequest) {
     url.pathname = "/login";
     url.search = "";
     return NextResponse.redirect(url);
+  }
+
+  // S6-T05: gate authed users at the onboarding step. db_onboarded is written
+  // by the login action (when user.onboardedAt is non-null), the onboarding
+  // completion action, and a backfill in /'s server render. Skip the gate for
+  // /api/* (let them 401/200 normally) and the onboarding route itself.
+  const onboarded = req.cookies.get("db_onboarded");
+  if (!onboarded) {
+    const skipGate = ONBOARDING_BYPASS_PREFIXES.some((p) =>
+      pathname.startsWith(p),
+    );
+    if (!skipGate) {
+      const url = req.nextUrl.clone();
+      url.pathname = "/onboarding";
+      url.search = "";
+      return NextResponse.redirect(url);
+    }
   }
 
   return NextResponse.next();
