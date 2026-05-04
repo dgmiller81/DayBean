@@ -256,7 +256,7 @@ function mockGenerate(prompt: string, iteration: number): string {
         {
           kind: "lead",
           eyebrow: "Story of the day",
-          badges: [["b-product", "ship"]],
+          badges: [{ className: "b-product", label: "ship" }],
           title: "A modest release with real teeth",
           body: "The product update is small, deliberate, and useful in the actual workflow. That is rarer than it sounds.",
           url: "https://example.com/story",
@@ -266,7 +266,7 @@ function mockGenerate(prompt: string, iteration: number): string {
       scan,
       articles: [
         {
-          badges: [["b-research", "paper"]],
+          badges: [{ className: "b-research", label: "paper" }],
           title: "A clear note on attention budgets",
           summary: "Practical, not theoretical.",
           url: "https://example.com/article",

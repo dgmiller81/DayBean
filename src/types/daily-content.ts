@@ -10,7 +10,7 @@ export const ArticleSchema = z.object({
 export const TopStorySchema = z.object({
   kind: z.enum(["lead", ""]).optional().default(""),
   eyebrow: z.string(),
-  badges: z.array(z.tuple([z.string(), z.string()])).default([]),
+  badges: z.array(z.object({ className: z.string(), label: z.string() })).default([]),
   title: z.string(),
   body: z.string(),
   url: z.string().url(),
@@ -58,7 +58,7 @@ export const DailyContentSchema = z.object({
     topStories: z.array(TopStorySchema),
     scan: z.array(ScanItemSchema),
     articles: z.array(z.object({
-      badges: z.array(z.tuple([z.string(), z.string()])).default([]),
+      badges: z.array(z.object({ className: z.string(), label: z.string() })).default([]),
       title: z.string(),
       summary: z.string(),
       url: z.string().url(),
