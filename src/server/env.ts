@@ -26,6 +26,17 @@ const Schema = z.object({
   // 10/min unauthenticated to 30/min. Used by getGitHubBuzz() for the
   // Business → "GitHub buzz" card.
   GITHUB_TOKEN: optStr,
+
+  // --- Voucher email (S5-T05). Both optional — when RESEND_API_KEY is unset
+  //     the email client logs the would-be email and returns a fake
+  //     messageId, so the claim flow still works in dev / pre-launch.
+  RESEND_API_KEY: optStr,
+  EMAIL_FROM: optStr,            // e.g. "DayBeans <hello@daybeans.com>"
+
+  // S0-T09 — Dual-run cost-graduation policy. Validated separately in
+  // src/server/config.ts (default 'always'); listed here so the schema
+  // accepts the value and so deploy docs have one place to read.
+  PREBREW_POLICY: optStr,
 });
 
 export type Env = z.infer<typeof Schema>;
