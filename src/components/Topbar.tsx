@@ -1,10 +1,9 @@
-import { ThemeToggle, type Theme } from "./primitives/ThemeToggle";
+import { type Theme } from "./primitives/ThemeToggle";
 import { StreakPill } from "./primitives/StreakPill";
 import { StreakRewardBadge } from "./rewards/StreakRewardBadge";
-import { EditContentLink } from "./content/EditContentLink";
-import { SettingsButton } from "./settings/SettingsButton";
 import { TopbarRefreshButton } from "./TopbarRefreshButton";
 import { BrandMark } from "./primitives/BrandMark";
+import { ProfileMenu } from "./ProfileMenu";
 import { APP_NAME } from "@/lib/constants";
 import type { ReactNode } from "react";
 import type { DailyContent } from "@/types/daily-content";
@@ -52,9 +51,18 @@ export function Topbar({
         <StreakPill count={streakLength} />
         <StreakRewardBadge streakLength={streakLength} />
         <TopbarRefreshButton llmConfigured={llmConfigured} lastStatus={lastStatus} />
-        <EditContentLink iso={iso} initialContent={dailyContent} latestRefresh={latestRefresh} />
-        <SettingsButton initial={settings} initialTheme={theme} refreshStatusSlot={refreshStatusSlot} />
-        <ThemeToggle initial={theme} />
+        {/* Profile menu replaces the previous quartet of icons (settings,
+            edit-content, theme-toggle, sign-out). All four entry points live
+            inside the dropdown now. */}
+        <ProfileMenu
+          name={name}
+          initialTheme={theme}
+          settings={settings}
+          refreshStatusSlot={refreshStatusSlot}
+          iso={iso}
+          dailyContent={dailyContent}
+          latestRefresh={latestRefresh}
+        />
       </div>
     </div>
   );

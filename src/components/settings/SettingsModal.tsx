@@ -24,20 +24,46 @@ type Tab =
   // S7-T03 — account-deletion + privacy controls.
   | "privacy";
 
+function isTab(s: string): s is Tab {
+  return (
+    s === "profile" ||
+    s === "llm" ||
+    s === "context" ||
+    s === "hobbies" ||
+    s === "household" ||
+    s === "finance" ||
+    s === "journal-themes" ||
+    s === "themes" ||
+    s === "privacy"
+  );
+}
+
 export function SettingsModal({
   initial,
   initialTheme,
   open,
   onClose,
   refreshStatusSlot,
+  initialTab,
 }: {
   initial: SettingsSummary;
   initialTheme: Theme;
   open: boolean;
   onClose: () => void;
   refreshStatusSlot?: ReactNode;
+  /** Which tab to open on. Defaults to "llm". The ProfileMenu uses this to
+   *  jump straight to "themes" when the user picks the Themes menu item. */
+  initialTab?: string;
 }) {
-  const [tab, setTab] = useState<Tab>("llm");
+  const [tab, setTab] = useState<Tab>(
+    initialTab && isTab(initialTab) ? initialTab : "llm",
+  );
+
+  // When `initialTab` changes (e.g. user picks "Themes" from the profile menu
+  // while the modal was already open), jump to that tab.
+  useEffect(() => {
+    if (initialTab && isTab(initialTab)) setTab(initialTab);
+  }, [initialTab]);
   const modalRef = useRef<HTMLDivElement | null>(null);
   const scrimRef = useRef<HTMLDivElement | null>(null);
   const [spotlight, setSpotlight] = useState<{ x: number; y: number } | null>(null);
