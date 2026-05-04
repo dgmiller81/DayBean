@@ -3,6 +3,8 @@ import { StreakPill } from "./primitives/StreakPill";
 import { EditContentLink } from "./content/EditContentLink";
 import { SettingsButton } from "./settings/SettingsButton";
 import { TopbarRefreshButton } from "./TopbarRefreshButton";
+import { BrandMark } from "./primitives/BrandMark";
+import { APP_NAME } from "@/lib/constants";
 import type { DailyContent } from "@/types/daily-content";
 import type { SettingsSummary } from "@/server/actions/settings";
 import type { LatestRefresh } from "@/server/queries/refresh-log";
@@ -32,13 +34,12 @@ export function Topbar({
   return (
     <div className="topbar">
       <div className="brand">
-        <div className="brand-mark">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-            <path d="M12 2v20M2 12h20" />
-          </svg>
-        </div>
+        {/* S1-T01 — BrandMark replaces the legacy plus-sign mark; centralized in
+            src/components/primitives/BrandMark.tsx so a future logo swap touches
+            one file. */}
+        <BrandMark size={36} ariaLabel={APP_NAME} />
         <div className="brand-name">
-          DayBeans <span>· for {name}</span>
+          {APP_NAME} <span>· for {name}</span>
         </div>
       </div>
       <div className="topbar-tools">
