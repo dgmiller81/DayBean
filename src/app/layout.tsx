@@ -48,7 +48,10 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const raw = (await cookies()).get("mm_theme")?.value;
+  // S1-T05 — Read either prefix during the cookie migration window.
+  // Writes go to db_*; mm_* support stays for ~60 days then can be removed.
+  const cookieJar = await cookies();
+  const raw = cookieJar.get("db_theme")?.value ?? cookieJar.get("mm_theme")?.value;
   const theme = raw && VALID_THEMES.has(raw) ? raw : "light";
 
   // Pull the user's background-image preferences so the bg layer can render

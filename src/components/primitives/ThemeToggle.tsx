@@ -32,7 +32,11 @@ export function ThemeToggle({ initial }: { initial: Theme }) {
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
-    document.cookie = `mm_theme=${theme}; path=/; max-age=31536000; SameSite=Lax`;
+    // S1-T05 — write to db_theme; clear legacy mm_theme.
+    document.cookie = `db_theme=${theme}; path=/; max-age=31536000; SameSite=Lax`;
+    if (typeof document !== "undefined" && document.cookie.includes("mm_theme=")) {
+      document.cookie = "mm_theme=; path=/; max-age=0; SameSite=Lax";
+    }
   }, [theme]);
 
   const dark = isDark(theme);

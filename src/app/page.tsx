@@ -60,9 +60,13 @@ export default async function Page({
   }
 
   const c = await cookies();
-  const rawTheme = c.get("mm_theme")?.value;
+  // S1-T05 — db_* preferred; mm_* still honored during migration window.
+  const rawTheme = c.get("db_theme")?.value ?? c.get("mm_theme")?.value;
   const theme: Theme = rawTheme && VALID_THEMES.has(rawTheme as Theme) ? (rawTheme as Theme) : "light";
-  const tab = (c.get("mm_tab")?.value as Tab | undefined) ?? "mindfulness";
+  const tab =
+    (c.get("db_tab")?.value as Tab | undefined) ??
+    (c.get("mm_tab")?.value as Tab | undefined) ??
+    "mindfulness";
 
   const userId = await getCurrentUserIdOrNull();
   if (!userId) {

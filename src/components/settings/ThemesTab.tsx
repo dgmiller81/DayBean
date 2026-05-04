@@ -24,7 +24,11 @@ const THEMES: Array<{ id: Theme; label: string; group: "Light" | "Dark" }> = [
 
 function applyThemeNow(theme: Theme) {
   document.documentElement.dataset.theme = theme;
-  document.cookie = `mm_theme=${theme}; path=/; max-age=31536000; SameSite=Lax`;
+  // S1-T05 — db_theme is canonical; clear legacy mm_theme.
+  document.cookie = `db_theme=${theme}; path=/; max-age=31536000; SameSite=Lax`;
+  if (document.cookie.includes("mm_theme=")) {
+    document.cookie = "mm_theme=; path=/; max-age=0; SameSite=Lax";
+  }
 }
 
 function applyBgImageNow(url: string | null) {
@@ -53,7 +57,8 @@ function readLiveTheme(fallback: Theme): Theme {
   const live = document.documentElement.dataset.theme as Theme | undefined;
   if (live && KNOWN_THEMES.includes(live)) return live;
   // Fall back to the cookie if the dataset isn't set yet.
-  const m = document.cookie.match(/(?:^|;\s*)mm_theme=([^;]+)/);
+  // S1-T05 — accept either prefix.
+  const m = document.cookie.match(/(?:^|;\s*)(?:db_theme|mm_theme)=([^;]+)/);
   if (m) {
     const cookied = decodeURIComponent(m[1]) as Theme;
     if (KNOWN_THEMES.includes(cookied)) return cookied;
