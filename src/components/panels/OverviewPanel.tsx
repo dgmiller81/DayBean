@@ -1,6 +1,7 @@
 import { getCurrentUserId } from "@/server/auth-context";
 import { todayISO } from "@/lib/dates";
 import { OverviewHero } from "@/components/overview/OverviewHero";
+import { SuggestedGoalsCard } from "@/components/overview/SuggestedGoalsCard";
 import { CategoryRollup } from "@/components/overview/CategoryRollup";
 import { SectionBars } from "@/components/overview/SectionBars";
 import { FilterPills } from "@/components/overview/FilterPills";
@@ -22,6 +23,8 @@ export async function OverviewPanel() {
       </div>
 
       <OverviewHero userId={userId} iso={iso} />
+
+      <SuggestedGoalsCard />
 
       <CategoryRollup userId={userId} iso={iso} />
 

@@ -1,0 +1,502 @@
+[
+  {
+    "id": "je-000",
+    "iso": "2026-05-03",
+    "content": "today was busy at the office and the launch on Friday is still on my mind. I keep replaying the demo in my head, and I'm not sure I'll be ready in time."
+  },
+  {
+    "id": "je-001",
+    "iso": "2026-05-02",
+    "content": "I felt small in the team meeting again. My ideas were good, but I held them back. I wish I could just speak up without rehearsing every sentence first."
+  },
+  {
+    "id": "je-002",
+    "iso": "2026-05-01",
+    "content": "the kids were impossible at bedtime. I snapped at the oldest and immediately regretted it. I want to be the kind of parent who breathes before reacting."
+  },
+  {
+    "id": "je-003",
+    "iso": "2026-04-30",
+    "content": "spent the morning in the garden, pulling weeds and listening to birds. The basil is starting to come back. It was the calmest hour I have had in weeks."
+  },
+  {
+    "id": "je-004",
+    "iso": "2026-04-29",
+    "content": "money is tight again this month. The car repair wiped out the buffer. I am tired of feeling like one bill away from a quiet panic."
+  },
+  {
+    "id": "je-005",
+    "iso": "2026-04-28",
+    "content": "tried to pray this morning and could not focus. My mind kept drifting to email. Maybe sitting still IS the prayer; I do not know."
+  },
+  {
+    "id": "je-006",
+    "iso": "2026-04-27",
+    "content": "ran four miles before sunrise and felt like myself for the first time in days. The body remembers what the mind forgets."
+  },
+  {
+    "id": "je-007",
+    "iso": "2026-04-26",
+    "content": "an old friend texted out of the blue. We are catching up next week. I had not realized how much I missed her until I saw her name on the screen."
+  },
+  {
+    "id": "je-008",
+    "iso": "2026-04-25",
+    "content": "my mother called and I let it go to voicemail. I will call her back tomorrow. Or the day after. I keep meaning to be a better daughter."
+  },
+  {
+    "id": "je-009",
+    "iso": "2026-04-24",
+    "content": "the new manager keeps rescheduling our one-on-one. I know it is not personal, but it makes me feel invisible. I should ask for what I need directly."
+  },
+  {
+    "id": "je-010",
+    "iso": "2026-04-23",
+    "content": "started reading a novel before bed instead of scrolling. Slept better. The phone is louder than I gave it credit for."
+  },
+  {
+    "id": "je-011",
+    "iso": "2026-04-22",
+    "content": "watched my son lose his soccer game and try not to cry. He is learning what loss feels like, and I am learning that I cannot protect him from it."
+  },
+  {
+    "id": "je-012",
+    "iso": "2026-04-21",
+    "content": "the launch slipped a week. Part of me is relieved, part of me is furious. I think I needed the deadline more than the deadline needed me."
+  },
+  {
+    "id": "je-013",
+    "iso": "2026-04-20",
+    "content": "rain all afternoon. I stayed in with a book and a kettle of tea. There was no productivity in any of it, and that felt like a small rebellion."
+  },
+  {
+    "id": "je-014",
+    "iso": "2026-04-19",
+    "content": "I am tired of pretending the budget will fix itself. I sat down with the numbers tonight. Painful, but at least the picture is honest now."
+  },
+  {
+    "id": "je-015",
+    "iso": "2026-04-18",
+    "content": "had dinner with my partner and did not check my phone once. We laughed about nothing for an hour. I want more nights like this."
+  },
+  {
+    "id": "je-016",
+    "iso": "2026-04-17",
+    "content": "the team shipped a hard fix today. I am proud of them. I forget sometimes that the work is also a kind of love."
+  },
+  {
+    "id": "je-017",
+    "iso": "2026-04-16",
+    "content": "anxious about the presentation Wednesday. I keep imagining everything going wrong. The catastrophizing voice is loud this week."
+  },
+  {
+    "id": "je-018",
+    "iso": "2026-04-15",
+    "content": "started a new sketchbook. Filled four pages of bad drawings. The point is the practice, not the result, and the practice felt good."
+  },
+  {
+    "id": "je-019",
+    "iso": "2026-04-14",
+    "content": "the dog has been clingy since the move. He follows me from room to room. I wonder if he can sense how unsettled I still feel."
+  },
+  {
+    "id": "je-020",
+    "iso": "2026-04-13",
+    "content": "I keep checking my phone first thing in the morning. I want to break that habit. Tomorrow I am going to leave it on the dresser overnight."
+  },
+  {
+    "id": "je-021",
+    "iso": "2026-04-12",
+    "content": "saw my therapist today. She asked me what I would say to a friend in my situation, and the answer was kinder than what I have been saying to myself."
+  },
+  {
+    "id": "je-022",
+    "iso": "2026-04-11",
+    "content": "the kids made waffles for breakfast and the kitchen looked like a crime scene. Worth it. They are getting old enough to be useful."
+  },
+  {
+    "id": "je-023",
+    "iso": "2026-04-10",
+    "content": "lost my temper in traffic again. I scared myself a little. There is something underneath the anger that I have not figured out yet."
+  },
+  {
+    "id": "je-024",
+    "iso": "2026-04-09",
+    "content": "we walked the trail behind the church and watched the sun fall behind the ridge. My partner held my hand the whole way back."
+  },
+  {
+    "id": "je-025",
+    "iso": "2026-04-08",
+    "content": "the financial advisor pushed me to lock in a number I am not ready for. I asked for another week. Saying no felt strangely good."
+  },
+  {
+    "id": "je-026",
+    "iso": "2026-04-07",
+    "content": "I am behind on the side project again. The day evaporates. Maybe the issue is not time management, maybe it is fear of finishing."
+  },
+  {
+    "id": "je-027",
+    "iso": "2026-04-06",
+    "content": "tried meditation for ten minutes. My back hurt and my brain refused to settle. I am still glad I sat down."
+  },
+  {
+    "id": "je-028",
+    "iso": "2026-04-05",
+    "content": "the boss complimented my work in front of the room and I did not know where to put my eyes. Why is being seen so hard."
+  },
+  {
+    "id": "je-029",
+    "iso": "2026-04-04",
+    "content": "argued with my brother about politics again. Walked it back over text afterwards. We are both tired of being right."
+  },
+  {
+    "id": "je-030",
+    "iso": "2026-05-03",
+    "content": "the baby slept through the night for the first time in three weeks. I lay in bed listening for a cry that never came."
+  },
+  {
+    "id": "je-031",
+    "iso": "2026-05-02",
+    "content": "ordered groceries instead of going out. Saved twenty dollars and an hour. Tiny wins, stacked, are how I climb out of this."
+  },
+  {
+    "id": "je-032",
+    "iso": "2026-05-01",
+    "content": "the air was cold this morning and the coffee tasted like a small mercy. I think I am learning to notice the good before the day eats it."
+  },
+  {
+    "id": "je-033",
+    "iso": "2026-04-30",
+    "content": "feeling lonely in a way that surprised me, even with people around all day. There is a particular kind of quiet that crowds make."
+  },
+  {
+    "id": "je-034",
+    "iso": "2026-04-29",
+    "content": "wrote two pages of the novel and they were honest. That is more than I have written in a month. I will take it."
+  },
+  {
+    "id": "je-035",
+    "iso": "2026-04-28",
+    "content": "the new hire asked a question in the all-hands and I saw myself ten years ago. I made a note to mentor her properly, not just in passing."
+  },
+  {
+    "id": "je-036",
+    "iso": "2026-04-27",
+    "content": "we lit a candle for grandma at dinner. The kids asked questions. I told them what I remembered, and the remembering felt like a kind of prayer."
+  },
+  {
+    "id": "je-037",
+    "iso": "2026-04-26",
+    "content": "scrolled too long before bed. Woke up tired and resentful of myself. Tomorrow the phone goes in the kitchen drawer at nine."
+  },
+  {
+    "id": "je-038",
+    "iso": "2026-04-25",
+    "content": "fixed the leaky faucet by myself with a YouTube video and a wrench. Smaller than it sounds, bigger than it sounds. Both things at once."
+  },
+  {
+    "id": "je-039",
+    "iso": "2026-04-24",
+    "content": "I am not sure faith is something I have anymore so much as something I keep returning to. The doubt is part of the practice."
+  },
+  {
+    "id": "je-040",
+    "iso": "2026-04-23",
+    "content": "long meeting that should have been a Slack message. I felt my whole afternoon drain out of me. Need to push back next time."
+  },
+  {
+    "id": "je-041",
+    "iso": "2026-04-22",
+    "content": "took the kids to the lake. The youngest asked why the water was older than people. I did not have a good answer. I love that."
+  },
+  {
+    "id": "je-042",
+    "iso": "2026-04-21",
+    "content": "the doctor said the bloodwork was fine. I cried a little in the car after. Relief is heavier than I expect every time."
+  },
+  {
+    "id": "je-043",
+    "iso": "2026-04-20",
+    "content": "drafted the resignation letter and did not send it. It is sitting in drafts. I am not sure if writing it is a step toward leaving or a way of staying."
+  },
+  {
+    "id": "je-044",
+    "iso": "2026-04-19",
+    "content": "the partner did the dishes without being asked and I almost cried. We are tired in the same direction these days, which is its own kind of love."
+  },
+  {
+    "id": "je-045",
+    "iso": "2026-04-18",
+    "content": "I want to stop saying yes to things I do not want to do. I am going to practice the no out loud before the next ask comes."
+  },
+  {
+    "id": "je-046",
+    "iso": "2026-04-17",
+    "content": "the dawn light through the kitchen window felt like a small grace. I am trying to start mornings like this on purpose."
+  },
+  {
+    "id": "je-047",
+    "iso": "2026-04-16",
+    "content": "spent the afternoon teaching my daughter to ride without training wheels. She fell. She got back on. I want to remember the look on her face."
+  },
+  {
+    "id": "je-048",
+    "iso": "2026-04-15",
+    "content": "anxious about the bank statement. The story I tell about money is louder than the actual numbers. I should look at the numbers."
+  },
+  {
+    "id": "je-049",
+    "iso": "2026-04-14",
+    "content": "watched a sermon online that hit harder than I expected. The line about being known and loved at the same time stayed with me all day."
+  },
+  {
+    "id": "je-050",
+    "iso": "2026-04-13",
+    "content": "the team retro went sideways. I wish I had spoken up sooner. Silence is a choice and I keep making it."
+  },
+  {
+    "id": "je-051",
+    "iso": "2026-04-12",
+    "content": "did the laundry, the dishes, the dog. Nothing remarkable. Some days the holiness IS in the small obediences."
+  },
+  {
+    "id": "je-052",
+    "iso": "2026-04-11",
+    "content": "called dad on the way home. He sounded older than last time. I do not know how to ask the questions I need to ask."
+  },
+  {
+    "id": "je-053",
+    "iso": "2026-04-10",
+    "content": "felt jealous reading a friend's announcement on social media. Then guilty. Then tired. Closed the app and went outside."
+  },
+  {
+    "id": "je-054",
+    "iso": "2026-04-09",
+    "content": "started lifting again after the injury. The numbers are humbling. The body is patient if I am."
+  },
+  {
+    "id": "je-055",
+    "iso": "2026-04-08",
+    "content": "the client wants the deck moved up a week. I said yes because I could not figure out how to say anything else. Tomorrow I will renegotiate."
+  },
+  {
+    "id": "je-056",
+    "iso": "2026-04-07",
+    "content": "we built a fort in the living room and ate dinner inside it. The kids will remember this. I want to be the kind of adult my kids remember being silly."
+  },
+  {
+    "id": "je-057",
+    "iso": "2026-04-06",
+    "content": "I am scared the marriage is harder than it should be at this stage. I do not want to write that. I am going to bring it to therapy next week."
+  },
+  {
+    "id": "je-058",
+    "iso": "2026-04-05",
+    "content": "got a real read of the budget tonight. Two months of runway is not the disaster I feared, but it is not nothing. I will draw a plan tomorrow."
+  },
+  {
+    "id": "je-059",
+    "iso": "2026-04-04",
+    "content": "an article on attention rewired the way I think about my mornings. The first hour is the day's posture. I want my posture to be still."
+  },
+  {
+    "id": "je-060",
+    "iso": "2026-05-03",
+    "content": "picked up the guitar for the first time in months. My fingers remember more than my head does. That is true of a lot of things."
+  },
+  {
+    "id": "je-061",
+    "iso": "2026-05-02",
+    "content": "the rain on the windows tonight feels like an old friend. I do not need to do anything about it. It is just here."
+  },
+  {
+    "id": "je-062",
+    "iso": "2026-05-01",
+    "content": "I keep snapping at my partner about small things. I think I am angry about something else. I want to find the actual thing and address it."
+  },
+  {
+    "id": "je-063",
+    "iso": "2026-04-30",
+    "content": "long run, slow miles, no music. The mind quieted around mile three. The legs were done by mile six. A fair trade."
+  },
+  {
+    "id": "je-064",
+    "iso": "2026-04-29",
+    "content": "we hosted neighbors for dinner. The house felt full in a way it has not in a while. I want to do this once a month, easy."
+  },
+  {
+    "id": "je-065",
+    "iso": "2026-04-28",
+    "content": "anxious about the launch demo on Friday. I keep walking through the failure modes. Need to remember the team has my back."
+  },
+  {
+    "id": "je-066",
+    "iso": "2026-04-27",
+    "content": "I told my therapist about the anger and she did not flinch. She asked what it was protecting. I am still sitting with the question."
+  },
+  {
+    "id": "je-067",
+    "iso": "2026-04-26",
+    "content": "watched the sunrise from the porch with coffee and no phone. Twelve minutes. The day felt like mine before the world arrived."
+  },
+  {
+    "id": "je-068",
+    "iso": "2026-04-25",
+    "content": "the kids asked if we could pray for grandma at bedtime. I forget how natural it is for them. I am still learning from people half my size."
+  },
+  {
+    "id": "je-069",
+    "iso": "2026-04-24",
+    "content": "spent two hours debugging a config error that turned out to be a missing comma. Humbling. Software is mostly noticing the small thing."
+  },
+  {
+    "id": "je-070",
+    "iso": "2026-04-23",
+    "content": "cleaned the garage. Donated the boxes that have moved with us three times unopened. Felt lighter for an hour after."
+  },
+  {
+    "id": "je-071",
+    "iso": "2026-04-22",
+    "content": "the manager said I was on track for promotion. I should be excited. I am tired. I will sit with both."
+  },
+  {
+    "id": "je-072",
+    "iso": "2026-04-21",
+    "content": "took the youngest to the bookstore and let her pick anything. She picked four. I bought all four. Some days you just buy the books."
+  },
+  {
+    "id": "je-073",
+    "iso": "2026-04-20",
+    "content": "the mortgage application is finally in. I do not want to think about money again until they call. I will think about money again tomorrow."
+  },
+  {
+    "id": "je-074",
+    "iso": "2026-04-19",
+    "content": "ran into an old colleague at the coffee shop. We talked for forty minutes. Friendship is mostly proximity and showing up."
+  },
+  {
+    "id": "je-075",
+    "iso": "2026-04-18",
+    "content": "I have been hiding from the journal because I do not want to write the hard sentence. The hard sentence is that I am lonely in my own house."
+  },
+  {
+    "id": "je-076",
+    "iso": "2026-04-17",
+    "content": "we tried a new church on Sunday. The music was good, the sermon was earnest, and nobody asked me to sign up for anything. I will go back."
+  },
+  {
+    "id": "je-077",
+    "iso": "2026-04-16",
+    "content": "wrote a hard email to a vendor. Sent it. The hours of dread were worse than the email. They almost always are."
+  },
+  {
+    "id": "je-078",
+    "iso": "2026-04-15",
+    "content": "the dog ate part of the rug. I laughed first, then sighed, then ordered a new rug. Children of all species are expensive."
+  },
+  {
+    "id": "je-079",
+    "iso": "2026-04-14",
+    "content": "I am tired of the side hustle. I do not know if that means quit or means rest. The two answers feel different and I cannot tell which is which."
+  },
+  {
+    "id": "je-080",
+    "iso": "2026-04-13",
+    "content": "the partner and I picked names for a hypothetical second kid. Neither of us is sure we want one. Naming it made the question feel real."
+  },
+  {
+    "id": "je-081",
+    "iso": "2026-04-12",
+    "content": "got laid off in the morning. Wrote this in the afternoon. I am scared, and a little relieved, and trying to be honest about both."
+  },
+  {
+    "id": "je-082",
+    "iso": "2026-04-11",
+    "content": "the new role posting hit my inbox and I do not know if I want it. I keep waiting to know. Maybe knowing is a thing you do, not a thing you wait for."
+  },
+  {
+    "id": "je-083",
+    "iso": "2026-04-10",
+    "content": "took the kids to the science museum. The youngest stood in front of the planet exhibit for twenty minutes. I want to live like that."
+  },
+  {
+    "id": "je-084",
+    "iso": "2026-04-09",
+    "content": "ran the numbers on the move and it works. Not easily, but it works. We are going to do the thing."
+  },
+  {
+    "id": "je-085",
+    "iso": "2026-04-08",
+    "content": "an old photo turned up in a drawer and I sat on the floor with it for ten minutes. Time goes faster when you are inside it."
+  },
+  {
+    "id": "je-086",
+    "iso": "2026-04-07",
+    "content": "the kids fought all morning. By noon I had given up on the schedule. By two I had given up on the morality lesson. By four I was just trying to feed everyone."
+  },
+  {
+    "id": "je-087",
+    "iso": "2026-04-06",
+    "content": "started journaling longhand again. The hand is slower, which is the point. The thoughts catch up."
+  },
+  {
+    "id": "je-088",
+    "iso": "2026-04-05",
+    "content": "called my best friend about the layoff. She did not try to fix it. She just listened. That was the right answer."
+  },
+  {
+    "id": "je-089",
+    "iso": "2026-04-04",
+    "content": "watched the sunset from the back step. Nothing happened. That was the gift."
+  },
+  {
+    "id": "je-090",
+    "iso": "2026-05-03",
+    "content": "the resume is updated. The LinkedIn is updated. The hardest part is writing as if I believe in myself, but I am practicing."
+  },
+  {
+    "id": "je-091",
+    "iso": "2026-05-02",
+    "content": "the partner suggested couples counseling. I said yes faster than I expected. We are trying. That counts."
+  },
+  {
+    "id": "je-092",
+    "iso": "2026-05-01",
+    "content": "long walk with the dog after dinner. The neighborhood was quiet. I remembered how much I like this place when I slow down enough to see it."
+  },
+  {
+    "id": "je-093",
+    "iso": "2026-04-30",
+    "content": "I am praying for patience and being given more chances to practice it. The teacher has a sense of humor."
+  },
+  {
+    "id": "je-094",
+    "iso": "2026-04-29",
+    "content": "did the laundry while listening to a podcast about ancient stoics. Marcus Aurelius would have loved a tumble dryer. I am sure of it."
+  },
+  {
+    "id": "je-095",
+    "iso": "2026-04-28",
+    "content": "took a sick day for the first time in months. Slept eleven hours. The body keeps a longer ledger than I want to admit."
+  },
+  {
+    "id": "je-096",
+    "iso": "2026-04-27",
+    "content": "the launch went well. The demo did not crash. I am proud of the team and a little tearful. Pride and grief are sometimes the same wave."
+  },
+  {
+    "id": "je-097",
+    "iso": "2026-04-26",
+    "content": "started a savings envelope for a real vacation, not a wishful one. Twenty dollars in. It is not the amount, it is the act."
+  },
+  {
+    "id": "je-098",
+    "iso": "2026-04-25",
+    "content": "wrote a thank you note to a teacher I had in eighth grade. I do not know if I will send it. Writing it was already most of the point."
+  },
+  {
+    "id": "je-099",
+    "iso": "2026-04-24",
+    "content": "the rain stopped at dusk and the light turned gold. I called the kids to the porch. We did not say much. We will remember this."
+  }
+]

@@ -44,11 +44,21 @@ export async function refreshDailyContent(
     return { ok: false, code: "no-credential" };
   }
 
-  const [pref, user, journalSignal] = await Promise.all([
+  const [pref, user, journalSignal, themesRows] = await Promise.all([
     db.pref.findUnique({ where: { userId } }),
     db.user.findUnique({ where: { id: userId }, select: { name: true } }),
     getJournalSignal(userId, iso),
+    // S4-T03 — JournalTheme rows are the source of truth for theme bias.
+    // getJournalSignal still drives recentExcerpts + daysWithEntries.
+    db.journalTheme.findMany({
+      where: { userId, muted: false },
+      orderBy: { weight: "desc" },
+      take: 12,
+    }),
   ]);
+
+  const themes = themesRows.map((r) => r.theme);
+  const themeWeights = Object.fromEntries(themesRows.map((r) => [r.theme, r.weight]));
 
   let interests: string[] = [];
   if (pref?.contentInterests) {
@@ -80,8 +90,8 @@ export async function refreshDailyContent(
     contentInterests: interests,
     hobbies,
     livesWith,
-    recentJournalThemes: journalSignal.themes,
-    journalThemeWeights: journalSignal.weights,
+    recentJournalThemes: themes,
+    journalThemeWeights: themeWeights,
     recentJournalExcerpts: journalSignal.recentExcerpts,
     journalDaysWithEntries: journalSignal.daysWithEntries,
   };

@@ -8,9 +8,18 @@ import { ThemesTab } from "./ThemesTab";
 import { HobbiesTab } from "./HobbiesTab";
 import { HouseholdTab } from "./HouseholdTab";
 import { FinanceTab } from "./FinanceTab";
+import { JournalThemesTab } from "./JournalThemesTab";
 import type { Theme } from "@/components/primitives/ThemeToggle";
 
-type Tab = "profile" | "llm" | "context" | "hobbies" | "household" | "finance" | "themes";
+type Tab =
+  | "profile"
+  | "llm"
+  | "context"
+  | "hobbies"
+  | "household"
+  | "finance"
+  | "journal-themes"
+  | "themes";
 
 export function SettingsModal({
   initial,
@@ -263,6 +272,7 @@ export function SettingsModal({
             { id: "hobbies", label: "Hobbies" },
             { id: "household", label: "Household" },
             { id: "finance", label: "Finance" },
+            { id: "journal-themes", label: "What we heard" },
             { id: "themes", label: "Themes" },
           ] as const).map((t) => (
             <button
@@ -301,6 +311,7 @@ export function SettingsModal({
               }}
             />
           )}
+          {tab === "journal-themes" && <JournalThemesTab initial={initial.journalThemes} />}
           {tab === "themes" && (
             <ThemesTab
               initialTheme={initialTheme}

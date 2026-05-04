@@ -12,6 +12,12 @@ export default defineConfig({
     projects: [
       {
         extends: true,
+        resolve: {
+          alias: {
+            "@": path.resolve(__dirname, "./src"),
+            "server-only": serverOnlyMock,
+          },
+        },
         test: {
           name: "unit",
           environment: "jsdom",
