@@ -20,7 +20,27 @@ const DEFAULT_MODELS: Record<LlmProvider, string> = {
   lmstudio: "lmstudio-community/Meta-Llama-3.1-8B-Instruct-GGUF",
 };
 
-const PROVIDERS: LlmProvider[] = ["lmstudio", "openai", "anthropic"];
+// Cloud providers first — LM Studio is local-dev-only and doesn't reach a
+// hosted deployment. Picking a sensible default for prod users.
+const PROVIDERS: LlmProvider[] = ["openai", "anthropic", "lmstudio"];
+
+/** Pick the form's initial provider + model from what the user already has. */
+function pickInitial(
+  initial: LlmCredentialSummary[],
+  envOverride: { provider: LlmProvider; model: string } | null,
+): { provider: LlmProvider; model: string } {
+  // 1. If any credential is already saved server-side, surface the first one.
+  if (initial.length > 0) {
+    return { provider: initial[0].provider, model: initial[0].model };
+  }
+  // 2. Else, mirror the env override if one is set (form is read-mostly here,
+  //    but at least the dropdown shows the right provider).
+  if (envOverride) {
+    return { provider: envOverride.provider, model: envOverride.model };
+  }
+  // 3. Else default to OpenAI — LM Studio is local-only, won't reach a deployed app.
+  return { provider: "openai", model: DEFAULT_MODELS.openai };
+}
 
 export function LlmTab({
   initial,
@@ -35,9 +55,10 @@ export function LlmTab({
   refreshStatusSlot?: ReactNode;
 }) {
   const [credentials, setCredentials] = useState<LlmCredentialSummary[]>(initial);
-  const [provider, setProvider] = useState<LlmProvider>("lmstudio");
+  const initialPick = pickInitial(initial, envOverride);
+  const [provider, setProvider] = useState<LlmProvider>(initialPick.provider);
   const [apiKey, setApiKey] = useState("");
-  const [model, setModel] = useState(DEFAULT_MODELS.lmstudio);
+  const [model, setModel] = useState<string>(initialPick.model);
   const [pending, setPending] = useState(false);
   const [testResult, setTestResult] = useState<string>("");
 
