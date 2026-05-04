@@ -29,7 +29,7 @@ export default async function LoginPage() {
       >
         <div style={{ textAlign: "center", marginBottom: 24 }}>
           <h1 className="serif" style={{ fontSize: 28, fontWeight: 500, margin: 0, color: "var(--ink)" }}>
-            The Daily Mind
+            DayBeans
           </h1>
           <p style={{ marginTop: 8, color: "var(--ink-soft)", fontSize: 14 }}>
             Enter your password to continue.

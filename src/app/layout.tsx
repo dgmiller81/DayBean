@@ -21,7 +21,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "The Daily Mind",
+  title: "DayBeans",
   description: "A daily snapshot for spiritual, professional, and personal growth.",
 };
 

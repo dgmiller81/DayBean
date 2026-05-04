@@ -1,4 +1,4 @@
-# The Daily Mind — Master Implementation Roadmap
+# DayBeans — Master Implementation Roadmap
 
 > **Status:** v1 roadmap. Each phase below has (or will have) its own detailed plan file.
 > **Source materials:** `mockup/spec.md` (authoritative for v1 dashboard behavior), `mockup/morning-mindfulness-dashboard.html` (reference implementation).
@@ -9,7 +9,7 @@
 
 ## 1. Vision
 
-**The Daily Mind** is a single dashboard that collates a person's spiritual, professional, and personal life into one daily snapshot, then helps them stay consistent through tracking. The mockup proves the UX. This roadmap takes it from a self-contained HTML file to a real, persistent, multi-user application with LLM-driven daily content.
+**DayBeans** is a single dashboard that collates a person's spiritual, professional, and personal life into one daily snapshot, then helps them stay consistent through tracking. The mockup proves the UX. This roadmap takes it from a self-contained HTML file to a real, persistent, multi-user application with LLM-driven daily content.
 
 The four core panels (Mindfulness, Business/AI, Personal, Goals Overview) and their interactions — Goals & Tasks tracking (spec §7), Journal-driven Scripture (spec §9), heatmap, drawer, modal, breath timer — stay **exactly as specified**. We are rebuilding the same UX on a real foundation, then adding:
 
@@ -162,7 +162,7 @@ These will be re-stated in the relevant phase plans, but recording them here so 
 8. **No emojis anywhere in the UI** — spec §3.4. Inline SVG only.
 9. **Refresh scheduler is per-user, idempotent, and audited** — every refresh attempt writes a `RefreshLog` row (`userId`, `iso`, `triggeredBy: 'cron'|'cold-start'|'manual'`, `status`, `tokensUsed`, `error?`). A second cron tick for the same `(userId, iso)` is a no-op.
 10. **Boot-time guards refuse unsafe configs** — `DEPLOY_TARGET=railway` + `AUTH_MODE=none` aborts boot with a clear error. Missing `APP_ENCRYPTION_KEY` aborts boot. Missing `CRON_SECRET` on Railway aborts boot.
-11. **Web fetch is server-side only and content-typed** — articles are fetched via server actions; user agent is `TheDailyMind/<version>`; only `text/html` responses are accepted; size cap 1 MB; timeout 8s. SSRF guard rejects private IPs and `file://`, `gopher://`, etc.
+11. **Web fetch is server-side only and content-typed** — articles are fetched via server actions; user agent is `DayBeans/<version>`; only `text/html` responses are accepted; size cap 1 MB; timeout 8s. SSRF guard rejects private IPs and `file://`, `gopher://`, etc.
 12. **LM Studio is detected, never auto-installed** — `scripts/setup-lms.ts` checks for `lms` on PATH and prints install instructions if missing. It only runs `lms server start --port 1234` if the binary is present and the user opts in during onboarding.
 
 ---

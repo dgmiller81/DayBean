@@ -407,7 +407,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "The Daily Mind",
+  title: "DayBeans",
   description: "A daily snapshot for spiritual, professional, and personal growth.",
 };
 
@@ -795,7 +795,7 @@ export function Topbar({ theme, name }: { theme: "light" | "dark"; name: string 
     >
       <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
         <span className="serif" style={{ fontSize: 20, fontWeight: 600, color: "var(--ink)" }}>
-          The Daily Mind
+          DayBeans
         </span>
         <span style={{ color: "var(--ink-muted)", fontSize: 12 }}>· for {name}</span>
       </div>
@@ -1054,7 +1054,7 @@ git commit -m "test: theme toggle flips data-theme attribute"
 - [ ] **Step 1: Write `README.md`**
 
 ```markdown
-# The Daily Mind
+# DayBeans
 
 A daily snapshot dashboard for spiritual, professional, and personal growth.
 
@@ -1115,7 +1115,7 @@ git commit -m "docs: add README with quick start"
 ## Phase 1 Acceptance Criteria
 
 - [ ] `pnpm dev` boots the dashboard at `http://localhost:4111`
-- [ ] Topbar shows brand "The Daily Mind", a streak pill (showing 0), and a working theme toggle
+- [ ] Topbar shows brand "DayBeans", a streak pill (showing 0), and a working theme toggle
 - [ ] Theme toggle flips `<html data-theme>` between `light` and `dark` and persists via cookie
 - [ ] Hero shows greeting + today's date in serif (Fraunces) — falls back gracefully if Google Fonts blocked
 - [ ] 4-tab nav renders, each tab card has the correct section dot and eyebrow

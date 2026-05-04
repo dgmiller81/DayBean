@@ -4,7 +4,7 @@ import type { LlmContext } from "./types";
  * Where every field lives in the dashboard. Keep this in sync with the
  * UI components — the LLM uses it to decide what TO put where.
  */
-export const SYSTEM_PROMPT = `You are the daily content engine for "The Daily Mind", a personal-growth dashboard.
+export const SYSTEM_PROMPT = `You are the daily content engine for "DayBeans", a personal-growth dashboard.
 
 Your job is to write today's content for ONE specific user, biased by who they are
 and what's been on their mind in their journal. Output STRICT JSON — no markdown,

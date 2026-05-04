@@ -34,7 +34,7 @@ export default async function AdminPage() {
           Admin
         </h1>
         <p style={{ marginTop: 4, color: "var(--ink-soft)", fontSize: 14 }}>
-          Manage users for this Daily Mind deployment.
+          Manage users for this DayBeans deployment.
         </p>
       </header>
 

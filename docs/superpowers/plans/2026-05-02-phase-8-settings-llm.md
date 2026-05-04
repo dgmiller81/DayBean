@@ -810,7 +810,7 @@ export async function fetchArticle(rawUrl: string, userId: string): Promise<Fetc
         method: "GET",
         redirect: "manual",
         signal: ctrl.signal,
-        headers: { "user-agent": "TheDailyMind/1.0", accept: "text/html" },
+        headers: { "user-agent": "DayBeans/1.0", accept: "text/html" },
       });
     } catch (err) {
       const msg = (err as Error).message;
@@ -924,7 +924,7 @@ export interface LlmAdapter {
 ```ts
 import type { LlmContext } from "./types";
 
-export const SYSTEM_PROMPT = `You are the daily content engine for "The Daily Mind", a personal-growth dashboard.
+export const SYSTEM_PROMPT = `You are the daily content engine for "DayBeans", a personal-growth dashboard.
 Output STRICT JSON matching this shape (no markdown, no commentary):
 
 {
@@ -1824,7 +1824,7 @@ Mapped to the security doc and master roadmap design calls.
 - [ ] Caps body at 1 MB by streaming + counting (does not trust Content-Length)
 - [ ] Aborts after 8s wall-clock
 - [ ] Re-validates every redirect; max 3 hops
-- [ ] User-agent identifies as `TheDailyMind/1.0`
+- [ ] User-agent identifies as `DayBeans/1.0`
 
 **Rate limits (security.md §"Rate Limits & Abuse Prevention"):**
 - [ ] Manual refresh: 3/user/day; 4th throws `RateLimitError` and writes `RefreshLog{status:'rate-limited'}`

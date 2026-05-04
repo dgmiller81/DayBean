@@ -1,4 +1,4 @@
-# Deploying The Daily Mind to Railway
+# Deploying DayBeans to Railway
 
 Single-service Next.js deploy. Two DB paths are supported:
 

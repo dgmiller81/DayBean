@@ -78,7 +78,7 @@ async function search(query: string, withVelocity: boolean): Promise<GitHubRepo[
   const headers: Record<string, string> = {
     Accept: "application/vnd.github+json",
     "X-GitHub-Api-Version": "2022-11-28",
-    "User-Agent": "TheDailyMind/1.0",
+    "User-Agent": "DayBeans/1.0",
   };
   if (process.env.GITHUB_TOKEN) {
     headers["Authorization"] = `Bearer ${process.env.GITHUB_TOKEN}`;

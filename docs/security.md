@@ -1,6 +1,6 @@
 # Security Posture
 
-This document is the source of truth for how The Daily Mind handles secrets, authentication, and threat surfaces. It is reviewed at the end of every phase that touches the trust boundary (auth, LLM keys, scheduler, web fetch).
+This document is the source of truth for how DayBeans handles secrets, authentication, and threat surfaces. It is reviewed at the end of every phase that touches the trust boundary (auth, LLM keys, scheduler, web fetch).
 
 ## Trust Boundaries
 

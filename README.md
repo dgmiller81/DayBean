@@ -1,4 +1,4 @@
-# The Daily Mind
+# DayBeans
 
 A personal growth and learning dashboard — spiritual, professional, and personal — collated into a single morning snapshot. Built to run on your workstation or hosted on Railway.
 

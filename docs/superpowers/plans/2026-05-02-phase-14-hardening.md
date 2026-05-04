@@ -2049,7 +2049,7 @@ These exist in the plan for human reference and should NOT be automated:
 
 ### Why no "compliance" section
 
-The Daily Mind v1 has no enterprise customers, no PHI, no PCI scope, and no GDPR DPA obligations beyond reasonable hygiene (right to deletion is satisfied by per-user data isolation + a future `delete-account` button — itself v2 work). Compliance frameworks (SOC2, ISO 27001) require sustained evidence collection, not a one-time pass. They are explicitly v2 territory and do not block v1 sign-off.
+DayBeans v1 has no enterprise customers, no PHI, no PCI scope, and no GDPR DPA obligations beyond reasonable hygiene (right to deletion is satisfied by per-user data isolation + a future `delete-account` button — itself v2 work). Compliance frameworks (SOC2, ISO 27001) require sustained evidence collection, not a one-time pass. They are explicitly v2 territory and do not block v1 sign-off.
 
 ### Phase verification
 

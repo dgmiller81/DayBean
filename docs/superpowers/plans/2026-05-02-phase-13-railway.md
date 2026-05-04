@@ -101,7 +101,7 @@ The provider switcher is a small Node script (`scripts/set-db-provider.ts`) that
 | `DEPLOY_TARGET` | always (defaults if unset) | `local` | `local` \| `railway`. Boot guard branches on this. |
 | `DATABASE_PROVIDER` | only at build time | `sqlite` | `sqlite` \| `postgresql`. Read by the provider rewriter, never read at runtime. |
 | `DATABASE_URL` | always (Phase 1 already required it for SQLite as `file:./dev.db`) | — | On Railway: injected by the Postgres plugin as `postgresql://user:pass@host:port/db`. Locally: `file:./prisma/dev.db`. |
-| `NEXT_PUBLIC_APP_URL` | `DEPLOY_TARGET=railway` | — | Public origin, e.g. `https://thedailymind.app`. Used as the OAuth callback base in `full` mode and as the cron endpoint base. Must match the Railway custom domain. |
+| `NEXT_PUBLIC_APP_URL` | `DEPLOY_TARGET=railway` | — | Public origin, e.g. `https://daybeans.com`. Used as the OAuth callback base in `full` mode and as the cron endpoint base. Must match the Railway custom domain. |
 
 The following vars were introduced by earlier phases and Phase 13 only re-asserts their requirement on Railway:
 
@@ -688,7 +688,7 @@ const RAILWAY_OK = {
   AUTH_SECRET: "x".repeat(43),
   APP_ENCRYPTION_KEY: Buffer.alloc(32).toString("base64"),
   CRON_SECRET: "y".repeat(32),
-  NEXT_PUBLIC_APP_URL: "https://thedailymind.app",
+  NEXT_PUBLIC_APP_URL: "https://daybeans.com",
   DATABASE_URL: "postgresql://u:p@h:5432/d",
 };
 
@@ -937,7 +937,7 @@ This is the only doc (besides the plan itself) that ships in Phase 13. It is ope
 - [ ] **Step 1: Create the file with this skeleton**
 
 ```markdown
-# Deploying The Daily Mind to Railway
+# Deploying DayBeans to Railway
 
 This is the production hosting path. Local SQLite continues to work and is documented in `README.md`; this doc only covers Railway.
 
@@ -1002,7 +1002,7 @@ OAuth provider variables are *optional* — only set the pairs for the providers
 After saving, redeploy the app service. The first successful deploy logs a JSON banner like:
 
 ```json
-{"msg":"boot","version":"0.13.0","deploy_target":"railway","auth_mode":"full","db_provider":"postgresql","app_url":"https://thedailymind.app","secrets":{"AUTH_SECRET":"set","APP_ENCRYPTION_KEY":"set","CRON_SECRET":"set","DATABASE_URL":"set"},"oauth":{"google":true,"github":false,"azure":false,"twitter":false,"facebook":false}}
+{"msg":"boot","version":"0.13.0","deploy_target":"railway","auth_mode":"full","db_provider":"postgresql","app_url":"https://daybeans.com","secrets":{"AUTH_SECRET":"set","APP_ENCRYPTION_KEY":"set","CRON_SECRET":"set","DATABASE_URL":"set"},"oauth":{"google":true,"github":false,"azure":false,"twitter":false,"facebook":false}}
 ```
 
 If any `secrets.*` reads `unset`, the boot guard would already have aborted — its absence in the log means the deploy is broken. Re-check the `Variables` tab.
@@ -1010,8 +1010,8 @@ If any `secrets.*` reads `unset`, the boot guard would already have aborted — 
 ## 4. Custom domain
 
 1. In the app service, `Settings` -> `Networking` -> `Add Custom Domain`.
-2. Enter your domain (e.g. `thedailymind.app`). Railway issues a TLS cert via Let's Encrypt automatically once DNS resolves.
-3. At your DNS provider, add a `CNAME` record from `thedailymind.app` (or `www`, your call) to the Railway-provided target (e.g. `<id>.up.railway.app`).
+2. Enter your domain (e.g. `daybeans.com`). Railway issues a TLS cert via Let's Encrypt automatically once DNS resolves.
+3. At your DNS provider, add a `CNAME` record from `daybeans.com` (or `www`, your call) to the Railway-provided target (e.g. `<id>.up.railway.app`).
 4. **Update `NEXT_PUBLIC_APP_URL`** to the new domain. This is critical for OAuth: each provider's app config (in Google Console, GitHub Developer Settings, etc.) lists allowed redirect URIs that must match exactly. If `NEXT_PUBLIC_APP_URL` and the OAuth provider's redirect URI disagree, sign-in returns "redirect_uri_mismatch" with no useful Railway log.
 5. Redeploy after changing `NEXT_PUBLIC_APP_URL`.
 
@@ -1066,7 +1066,7 @@ Railway's Postgres plugin offers automated daily backups on paid plans. Enable t
 
 Add a `## Deploying` section to `README.md` (one paragraph + link), e.g.:
 
-> The Daily Mind ships in two shapes: local (SQLite) for personal use on a single workstation, and Railway (Postgres) for hosted, multi-device access. Local is the default — `pnpm install && pnpm db:migrate && pnpm dev` works out of the box. For the Railway path, see [`docs/deploy-railway.md`](docs/deploy-railway.md).
+> DayBeans ships in two shapes: local (SQLite) for personal use on a single workstation, and Railway (Postgres) for hosted, multi-device access. Local is the default — `pnpm install && pnpm db:migrate && pnpm dev` works out of the box. For the Railway path, see [`docs/deploy-railway.md`](docs/deploy-railway.md).
 
 - [ ] **Step 3: Append a pointer to `docs/security.md`**
 
@@ -1181,7 +1181,7 @@ Phase 14 (hardening) lands the full CSP, HSTS, audit log, and CSRF middleware. T
 
 ### Cutover plan: local SQLite -> Railway Postgres
 
-This is the question every operator will ask: *"I've been using The Daily Mind locally for two months. I want to start using the Railway deploy. What happens to my journal entries, my goals, my heatmap?"*
+This is the question every operator will ask: *"I've been using DayBeans locally for two months. I want to start using the Railway deploy. What happens to my journal entries, my goals, my heatmap?"*
 
 **The answer for v1: nothing migrates automatically. Local data stays local.**
 
@@ -1237,7 +1237,7 @@ After landing this phase, the very first deploy should be done by the lead, not 
 | `DEPLOY_TARGET=railway requires AUTH_MODE=full` | Forgot to set `AUTH_MODE` | Set `AUTH_MODE=full` |
 | `APP_ENCRYPTION_KEY is required on Railway` | Variable typo (`APP_ENCRYPT_KEY`?) or empty value | Re-paste from your password manager |
 | `CRON_SECRET is required on Railway` | Skipped because the cron isn't wired yet | Set it now anyway; the boot guard refuses to start without it. Wire the cron in Task 8. |
-| `NEXT_PUBLIC_APP_URL is required on Railway` | Set to `${{RAILWAY_PUBLIC_DOMAIN}}` and that variable doesn't resolve | Use a literal URL like `https://thedailymind.app` |
+| `NEXT_PUBLIC_APP_URL is required on Railway` | Set to `${{RAILWAY_PUBLIC_DOMAIN}}` and that variable doesn't resolve | Use a literal URL like `https://daybeans.com` |
 | `DATABASE_URL on Railway must be postgresql://...` | Pasted local SQLite URL by mistake; or Postgres plugin not attached | Attach the Postgres plugin and reference `${{Postgres.DATABASE_URL}}` |
 
 ### Why the healthcheck pings the DB

@@ -137,7 +137,7 @@ export function fixtureFor(iso: string): DailyContent {
           weekly: "—",
           license: "MIT",
           lang: "TypeScript",
-          pitch: "A daily mind dashboard. The repo you're looking at right now.",
+          pitch: "The DayBeans morning dashboard. The repo you're looking at right now.",
           url: "https://github.com/dgmiller81/the-daily-mind",
         },
       ],

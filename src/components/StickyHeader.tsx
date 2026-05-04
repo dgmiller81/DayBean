@@ -66,7 +66,7 @@ export function StickyHeader({
     <div className={`sticky-header${visible ? " visible" : ""}`} aria-hidden={!visible}>
       <div className="sticky-header-inner">
         <div className="sticky-title">
-          <span className="serif">The Daily Mind</span>
+          <span className="serif">DayBeans</span>
           <span className="sep" aria-hidden>~</span>
           <span className="sticky-date">{formatLongDate(iso)}</span>
         </div>

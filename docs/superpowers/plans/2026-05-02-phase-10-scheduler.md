@@ -1518,7 +1518,7 @@ Phase 13 will own the Railway-side wiring. The relevant entries it adds to `rail
 A few notes for whoever picks up Phase 13:
 
 - The cron service must be in the same Railway project as the web service so it has access to `CRON_SECRET` from the shared env. **Do not** put the secret in the cron's command line in plaintext — Railway exposes service env vars to cron commands, so `$CRON_SECRET` is the right pattern.
-- Use `$RAILWAY_PUBLIC_DOMAIN` (Railway-provided) rather than hard-coding the domain. If the deployment uses a custom domain, swap to `https://thedailymind.app`.
+- Use `$RAILWAY_PUBLIC_DOMAIN` (Railway-provided) rather than hard-coding the domain. If the deployment uses a custom domain, swap to `https://daybeans.com`.
 - The cron schedule is `* * * * *` (every minute) on purpose. The endpoint is cheap when no users are due — it does one DB query (`findMany` filtered by `onboardedAt`) and exits. The orchestrator's grace window absorbs minor cron drift.
 - If Railway's cron has a minimum interval longer than 1 minute on the chosen plan, the grace window in `due.ts` (5 min) covers up to a 5-minute interval. If Railway's interval is even longer, bump `GRACE_MINUTES` to match.
 

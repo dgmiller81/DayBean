@@ -38,7 +38,7 @@ export function Topbar({
           </svg>
         </div>
         <div className="brand-name">
-          The Daily Mind <span>· for {name}</span>
+          DayBeans <span>· for {name}</span>
         </div>
       </div>
       <div className="topbar-tools">
