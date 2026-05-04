@@ -62,8 +62,11 @@ export function StickyHeader({
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  // `inert` (not aria-hidden) when not visible — blocks focus AND hides from
+  // assistive tech. Without this, scrolling a focused tab button out of view
+  // triggers the "aria-hidden on focused ancestor" warning.
   return (
-    <div className={`sticky-header${visible ? " visible" : ""}`} aria-hidden={!visible}>
+    <div className={`sticky-header${visible ? " visible" : ""}`} inert={!visible}>
       <div className="sticky-header-inner">
         <div className="sticky-title">
           <span className="serif">DayBeans</span>
@@ -76,7 +79,6 @@ export function StickyHeader({
               key={t}
               type="button"
               role="tab"
-              tabIndex={visible ? 0 : -1}
               className={`sticky-tab${active === t ? " active" : ""}`}
               aria-selected={active === t}
               onClick={() => onTabClick(t)}

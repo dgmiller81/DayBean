@@ -1,10 +1,20 @@
 import { z } from "zod";
 
-// Note on URL fields: we use z.string() (not z.string().url()) on every URL
-// slot. Reason: OpenAI's structured outputs API rejects JSON Schema's
-// `format: 'uri'` keyword (it only accepts a subset of JSON Schema), so any
-// .url() field would crash the API call before generation. URL well-formedness
-// is best validated at render time (anchor href fallback / link click).
+// Notes on what this schema does NOT use, and why:
+//
+//  1. z.string().url() — OpenAI's structured outputs API rejects JSON Schema's
+//     `format: 'uri'` keyword. URL well-formedness is validated at render-time
+//     (anchor href fallback) instead.
+//
+//  2. .optional() — OpenAI's structured outputs strict mode requires every
+//     property listed in `properties` to also appear in `required`. Optional
+//     fields are rejected. To express "the LLM can skip this slot" we use
+//     .nullable() instead — the LLM returns null when the value isn't useful.
+//     Read paths normalize null → "" or [] for legacy consumers.
+//
+//  3. .default(...) — same reason as .optional(). Defaults imply the field
+//     can be missing in input, which OpenAI rejects. We post-process the
+//     parsed result if we need to map null → empty string / array.
 const Url = z.string();
 
 export const ArticleSchema = z.object({
@@ -15,9 +25,11 @@ export const ArticleSchema = z.object({
 });
 
 export const TopStorySchema = z.object({
-  kind: z.enum(["lead", ""]).optional().default(""),
+  // "lead" | "" — empty string means a non-lead story. nullable so OpenAI
+  // strict mode sees a required field. Read paths treat null as "".
+  kind: z.enum(["lead", ""]).nullable(),
   eyebrow: z.string(),
-  badges: z.array(z.object({ className: z.string(), label: z.string() })).default([]),
+  badges: z.array(z.object({ className: z.string(), label: z.string() })),
   title: z.string(),
   body: z.string(),
   url: Url,
@@ -27,14 +39,14 @@ export const TopStorySchema = z.object({
 export const ScanItemSchema = z.object({
   title: z.string(),
   url: Url,
-  src: z.string().optional().default(""),
+  src: z.string().nullable(),
 });
 
 export const QuoteSchema = z.object({
   text: z.string(),
   source: z.string(),
-  target: z.string().optional().default(""),
-  url: Url.optional(),
+  target: z.string().nullable(),
+  url: Url.nullable(),
 });
 
 export const RepoSchema = z.object({
@@ -65,7 +77,7 @@ export const DailyContentSchema = z.object({
     topStories: z.array(TopStorySchema),
     scan: z.array(ScanItemSchema),
     articles: z.array(z.object({
-      badges: z.array(z.object({ className: z.string(), label: z.string() })).default([]),
+      badges: z.array(z.object({ className: z.string(), label: z.string() })),
       title: z.string(),
       summary: z.string(),
       url: Url,
