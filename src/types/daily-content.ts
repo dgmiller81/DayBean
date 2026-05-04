@@ -1,9 +1,16 @@
 import { z } from "zod";
 
+// Note on URL fields: we use z.string() (not z.string().url()) on every URL
+// slot. Reason: OpenAI's structured outputs API rejects JSON Schema's
+// `format: 'uri'` keyword (it only accepts a subset of JSON Schema), so any
+// .url() field would crash the API call before generation. URL well-formedness
+// is best validated at render time (anchor href fallback / link click).
+const Url = z.string();
+
 export const ArticleSchema = z.object({
   title: z.string(),
   source: z.string(),
-  url: z.string().url(),
+  url: Url,
   summary: z.string(),
 });
 
@@ -13,13 +20,13 @@ export const TopStorySchema = z.object({
   badges: z.array(z.object({ className: z.string(), label: z.string() })).default([]),
   title: z.string(),
   body: z.string(),
-  url: z.string().url(),
+  url: Url,
   src: z.string(),
 });
 
 export const ScanItemSchema = z.object({
   title: z.string(),
-  url: z.string().url(),
+  url: Url,
   src: z.string().optional().default(""),
 });
 
@@ -27,7 +34,7 @@ export const QuoteSchema = z.object({
   text: z.string(),
   source: z.string(),
   target: z.string().optional().default(""),
-  url: z.string().url().optional(),
+  url: Url.optional(),
 });
 
 export const RepoSchema = z.object({
@@ -38,7 +45,7 @@ export const RepoSchema = z.object({
   license: z.string(),
   lang: z.string(),
   pitch: z.string(),
-  url: z.string().url(),
+  url: Url,
 });
 
 export const DailyContentSchema = z.object({
@@ -61,7 +68,7 @@ export const DailyContentSchema = z.object({
       badges: z.array(z.object({ className: z.string(), label: z.string() })).default([]),
       title: z.string(),
       summary: z.string(),
-      url: z.string().url(),
+      url: Url,
       src: z.string(),
     })),
     quotes: z.array(QuoteSchema),

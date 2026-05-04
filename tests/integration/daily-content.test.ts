@@ -26,11 +26,14 @@ describe("setDailyContent — validation", () => {
     await expect(setDailyContent(userId, ISO, bad)).rejects.toThrow(/god\.prayer/);
   });
 
-  it("rejects an invalid URL inside articles", async () => {
+  // URL well-formedness is intentionally NOT enforced by the Zod schema
+  // (see DailyContentSchema's note — OpenAI structured outputs reject
+  // `format: 'uri'`). Render-time anchor handling tolerates bad URLs.
+  it("accepts non-URL strings in url fields", async () => {
     const userId = await makeUser("u_url");
-    const bad = fixtureFor(ISO);
-    bad.mindfulness.articles[0].url = "not a url";
-    await expect(setDailyContent(userId, ISO, bad)).rejects.toThrow(/mindfulness\.articles\[0\]\.url/);
+    const lax = fixtureFor(ISO);
+    lax.mindfulness.articles[0].url = "not a url";
+    await expect(setDailyContent(userId, ISO, lax)).resolves.toBeDefined();
   });
 
   it("rejects when payload.date does not match the iso row key", async () => {
