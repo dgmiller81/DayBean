@@ -8,6 +8,7 @@ import {
   addTimeMinutes,
 } from "@/server/actions/goals";
 import { SectionDot } from "@/components/primitives/SectionDot";
+import { chipForCategory, labelForCategory } from "@/lib/category-colors";
 
 export type GoalRowProps = {
   userId: string;
@@ -87,6 +88,35 @@ export function GoalRow({
       <span className="goal-name">
         {showSectionDot && <SectionDot section={g.section} />}
         {g.title}
+        {g.category && (() => {
+          const chip = chipForCategory(g.category);
+          return (
+            <span
+              aria-label={`Category: ${labelForCategory(g.category)}`}
+              title={labelForCategory(g.category)}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                marginLeft: 6,
+                minWidth: 18,
+                maxWidth: 24,
+                height: 18,
+                padding: "0 5px",
+                background: chip.bg,
+                border: "1px solid",
+                borderColor: chip.border,
+                borderRadius: "var(--radius-sm)",
+                color: chip.fg,
+                fontSize: 10,
+                fontWeight: 600,
+                lineHeight: 1,
+              }}
+            >
+              {chip.letter}
+            </span>
+          );
+        })()}
       </span>
 
       {streak > 0 && (

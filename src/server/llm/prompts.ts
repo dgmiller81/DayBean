@@ -88,9 +88,26 @@ personal.headline         One sentence. Bias to a recent journal theme if any.
 personal.motivation       { text, author }. A short quote (≤ 2 sentences) +
                           attributed author. Real quote from real person.
 personal.articles         EXACTLY 3 articles. Self-help, psychology, relationships,
-                          finances, health — biased by user's interests AND
-                          recent journal struggles. Each:
-                          { title, source, url, summary }.
+                          finances, health — biased by user's interests, hobbies,
+                          who they live with (livesWith), and recent journal struggles.
+                          Each: { title, source, url, summary }.
+
+                          ROTATION RULES:
+                          - At least 1 of the 3 articles must directly reflect a
+                            named hobby (when hobbies are provided). Hobby content
+                            is craft-specific, not Pinterest-generic.
+                          - At least 1 of the 3 articles must reflect the user's
+                            household reality (livesWith): partner → relationship/
+                            shared-home content; kids → parenting/presence; parents
+                            → eldercare/family-of-origin; alone → friendship/solo
+                            living/finance independence; roommates → boundaries/
+                            shared-space life.
+                          - The third slot is open: psychology, finance, health,
+                            or another hobby angle — whatever fills the day best
+                            given the journal signal.
+                          - Across days, do NOT repeat the same hobby angle two
+                            days in a row. (The runtime tracks this via the seeded
+                            picker; you only need to vary your output naturally.)
 
 ──────────────────────────────────────────────────────────────────────
 HOW THE JOURNAL SHOULD INFLUENCE CONTENT
@@ -151,6 +168,12 @@ export function buildUserPrompt(ctx: LlmContext): string {
   if (ctx.bio) lines.push(`About them: ${ctx.bio}`);
   if (ctx.contentInterests.length) {
     lines.push(`Content interests: ${ctx.contentInterests.join(", ")}.`);
+  }
+  if (ctx.hobbies.length) {
+    lines.push(`Hobbies (bias personal.articles toward at least one): ${ctx.hobbies.join(", ")}.`);
+  }
+  if (ctx.livesWith.length) {
+    lines.push(`Lives with: ${ctx.livesWith.join(", ")}. (Bias at least one personal.articles slot to this household reality.)`);
   }
   if (ctx.faith && ctx.faith !== "none") {
     const faithLabel =

@@ -1,6 +1,6 @@
 import "server-only";
 import { db } from "@/server/db";
-import type { Goal, Section } from "@/types";
+import type { Goal, GoalCategory, Section } from "@/types";
 import { specIdFromCompositeId } from "@/lib/default-goals";
 
 type GoalRow = {
@@ -12,6 +12,7 @@ type GoalRow = {
   target: number;
   isDefault: boolean;
   createdAt: Date;
+  category: string | null;
 };
 
 function rowToGoal(r: GoalRow): Goal {
@@ -25,6 +26,7 @@ function rowToGoal(r: GoalRow): Goal {
     target: r.target,
     isDefault: r.isDefault,
     createdAt: r.createdAt,
+    category: (r.category as GoalCategory | null) ?? null,
   };
 }
 

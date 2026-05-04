@@ -5,9 +5,12 @@ import { ProfileTab } from "./ProfileTab";
 import { LlmTab } from "./LlmTab";
 import { JobInterestsTab } from "./JobInterestsTab";
 import { ThemesTab } from "./ThemesTab";
+import { HobbiesTab } from "./HobbiesTab";
+import { HouseholdTab } from "./HouseholdTab";
+import { FinanceTab } from "./FinanceTab";
 import type { Theme } from "@/components/primitives/ThemeToggle";
 
-type Tab = "profile" | "llm" | "context" | "themes";
+type Tab = "profile" | "llm" | "context" | "hobbies" | "household" | "finance" | "themes";
 
 export function SettingsModal({
   initial,
@@ -257,6 +260,9 @@ export function SettingsModal({
             { id: "llm", label: "LLM Provider" },
             { id: "profile", label: "Profile" },
             { id: "context", label: "Job & Interests" },
+            { id: "hobbies", label: "Hobbies" },
+            { id: "household", label: "Household" },
+            { id: "finance", label: "Finance" },
             { id: "themes", label: "Themes" },
           ] as const).map((t) => (
             <button
@@ -283,6 +289,18 @@ export function SettingsModal({
           {tab === "llm" && <LlmTab initial={initial.credentials} envOverride={initial.envOverride} refreshStatusSlot={refreshStatusSlot} />}
           {tab === "profile" && <ProfileTab initial={{ name: initial.name, bio: initial.bio }} />}
           {tab === "context" && <JobInterestsTab initial={{ jobTitle: initial.jobTitle, contentInterests: initial.contentInterests, refreshHour: initial.refreshHour }} />}
+          {tab === "hobbies" && <HobbiesTab initial={{ hobbies: initial.hobbies }} />}
+          {tab === "household" && <HouseholdTab initial={{ livesWith: initial.livesWith }} />}
+          {tab === "finance" && (
+            <FinanceTab
+              initial={{
+                financeMode: initial.financeMode,
+                netWorth: initial.netWorth,
+                cashOnHand: initial.cashOnHand,
+                savingsTarget: initial.savingsTarget,
+              }}
+            />
+          )}
           {tab === "themes" && (
             <ThemesTab
               initialTheme={initialTheme}
