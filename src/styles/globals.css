@@ -1,20 +1,23 @@
 @import "tailwindcss";
 
 :root {
-  --bg:#f5f2ec; --bg-grad-1:#f7f3ec; --bg-grad-2:#ebe7df;
-  --surface:rgba(255,255,255,0.74); --surface-solid:#fff; --surface-2:#fafaf6;
-  --ink:#1a1f1c; --ink-soft:#5a655e; --ink-muted:#8a948d;
-  --line:rgba(35,50,42,0.08); --line-strong:rgba(35,50,42,0.16);
+  /* S1-T03 — Dawn palette (DayBeans canonical). Coffee-warm cream + espresso
+     ink. The original sage/gold remain in the system as supporting accents.
+     See docs/daybeans/02-visual-identity.md §2.1.1. */
+  --bg:#f6efe4; --bg-grad-1:#faf3e6; --bg-grad-2:#ecdfc7;
+  --surface:rgba(255,250,240,0.80); --surface-solid:#fffaf0; --surface-2:#f4e9d3;
+  --ink:#2b1d10; --ink-soft:#5a4530; --ink-muted:#94816a;
+  --line:rgba(64,42,18,0.10); --line-strong:rgba(64,42,18,0.22);
   --sage:#5d7a6c; --sage-deep:#3e5a4d; --sage-soft:#dde6df;
   --gold:#b08d57; --gold-soft:#e8dec9; --rose:#c97b6e;
   --accent:#c2410c; --accent-soft:#fef0e6;
   --paper:#f4ead8; --paper-2:#ede0c4; --paper-ink:#3a2e1c; --paper-line:#c9b48a;
-  --shadow-sm:0 1px 2px rgba(20,30,25,.04),0 2px 8px rgba(20,30,25,.04);
-  --shadow-md:0 2px 4px rgba(20,30,25,.05),0 12px 32px rgba(20,30,25,.06);
+  --shadow-sm:0 1px 2px rgba(45,28,12,.05),0 2px 8px rgba(45,28,12,.05);
+  --shadow-md:0 2px 4px rgba(45,28,12,.06),0 12px 32px rgba(45,28,12,.08);
   --radius:18px; --radius-sm:10px;
   /* Sticky compressed header — theme-matching bar (same surface as the rest
      of the app), with a drop shadow whose intensity scales per theme. */
-  --header-shadow:0 18px 40px rgba(20,30,25,.18), 0 4px 10px rgba(20,30,25,.10);
+  --header-shadow:0 18px 40px rgba(45,28,12,.18), 0 4px 10px rgba(45,28,12,.10);
 }
 [data-theme="dark"] {
   --bg:#131614; --bg-grad-1:#161a18; --bg-grad-2:#0e110f;
