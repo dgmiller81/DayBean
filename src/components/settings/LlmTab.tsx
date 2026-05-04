@@ -64,7 +64,13 @@ export function LlmTab({
 
   const handleProviderChange = (p: LlmProvider) => {
     setProvider(p);
-    setModel(DEFAULT_MODELS[p]);
+    // If a credential is already saved for this provider, surface its model
+    // (so the user can edit without losing what they previously chose).
+    // Otherwise fall back to the per-provider default. Without this, switching
+    // the dropdown to look at another provider and back to a saved one
+    // overwrote the saved model with the hardcoded default on Save.
+    const existing = credentials.find((c) => c.provider === p);
+    setModel(existing ? existing.model : DEFAULT_MODELS[p]);
     setApiKey("");
     setTestResult("");
   };
