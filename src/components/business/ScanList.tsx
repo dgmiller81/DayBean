@@ -26,7 +26,7 @@ export async function ScanList({ userId, iso }: { userId: string; iso: string })
             userId={userId}
             href={item.url}
             title={item.title}
-            src={item.src}
+            src={item.src ?? ""}
             initialBookmarked={marks[i]}
             onTrack={track}
           />

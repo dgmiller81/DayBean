@@ -160,7 +160,11 @@ export function TasksDrawer({
         className={`drawer-right${open ? " open" : ""}${pinned ? " pinned" : ""}`}
         role={pinned ? "complementary" : "dialog"}
         aria-label="Tasks and goals drawer"
-        aria-hidden={!open}
+        // Use `inert` (not `aria-hidden`) when the drawer is closed: inert
+        // both blocks focus AND hides the subtree from assistive tech, which
+        // avoids the "aria-hidden on a focused ancestor" warning that fires
+        // when the in-drawer Close button retains focus right after click.
+        inert={!open}
         style={{ width: `${width}px` }}
       >
         <div
