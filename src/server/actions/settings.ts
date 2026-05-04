@@ -174,6 +174,8 @@ export type SettingsSummary = {
   savingsTarget: string | null;
   // S4 — "What we heard" (journal-extracted themes for the listening tab).
   journalThemes: JournalTheme[];
+  // S7-T03 — non-null while the user is in the 24h account-deletion grace window.
+  pendingDeletionAt: string | null;
 };
 
 export async function getSettings(): Promise<SettingsSummary> {
@@ -222,5 +224,6 @@ export async function getSettings(): Promise<SettingsSummary> {
     cashOnHand: pref?.cashOnHand ?? null,
     savingsTarget: pref?.savingsTarget ?? null,
     journalThemes,
+    pendingDeletionAt: user?.pendingDeletionAt?.toISOString() ?? null,
   };
 }

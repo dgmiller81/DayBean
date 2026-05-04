@@ -1,6 +1,10 @@
 // S0-T06 — Cron infra types.
 
-export type CronJobName = "morning-brew" | "evening-prebrew";
+export type CronJobName =
+  | "morning-brew"
+  | "evening-prebrew"
+  // S7-T03 — sweeps users whose 24h account-deletion grace window has passed.
+  | "sweep-deletions";
 
 export type CronJobFn = () => Promise<CronJobResult>;
 

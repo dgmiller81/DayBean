@@ -9,6 +9,7 @@ import { HobbiesTab } from "./HobbiesTab";
 import { HouseholdTab } from "./HouseholdTab";
 import { FinanceTab } from "./FinanceTab";
 import { JournalThemesTab } from "./JournalThemesTab";
+import { PrivacyTab } from "./PrivacyTab";
 import type { Theme } from "@/components/primitives/ThemeToggle";
 
 type Tab =
@@ -19,7 +20,9 @@ type Tab =
   | "household"
   | "finance"
   | "journal-themes"
-  | "themes";
+  | "themes"
+  // S7-T03 — account-deletion + privacy controls.
+  | "privacy";
 
 export function SettingsModal({
   initial,
@@ -274,6 +277,7 @@ export function SettingsModal({
             { id: "finance", label: "Finance" },
             { id: "journal-themes", label: "What we heard" },
             { id: "themes", label: "Themes" },
+            { id: "privacy", label: "Privacy" },
           ] as const).map((t) => (
             <button
               key={t.id}
@@ -317,6 +321,11 @@ export function SettingsModal({
               initialTheme={initialTheme}
               initialBgImageUrl={initial.bgImageUrl}
               initialBgOverlay={initial.bgOverlay}
+            />
+          )}
+          {tab === "privacy" && (
+            <PrivacyTab
+              initial={{ pendingDeletionAt: initial.pendingDeletionAt }}
             />
           )}
         </div>

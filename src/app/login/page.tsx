@@ -36,6 +36,18 @@ export default async function LoginPage() {
           </p>
         </div>
         <LoginForm />
+        <div style={{ marginTop: 20, textAlign: "center" }}>
+          <a
+            href="/privacy"
+            style={{
+              color: "var(--ink-muted)",
+              fontSize: 13,
+              textDecoration: "none",
+            }}
+          >
+            Privacy
+          </a>
+        </div>
       </div>
     </main>
   );
