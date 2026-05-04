@@ -1,13 +1,14 @@
 "use client";
 import { useState } from "react";
 import { addTask } from "@/server/actions/tasks";
+import { TAB_LABELS } from "@/lib/constants";
 import type { SectionOrGeneral } from "@/types";
 
 const SECTIONS: Array<{ value: SectionOrGeneral; label: string }> = [
   { value: "general",     label: "General" },
-  { value: "mindfulness", label: "Mindfulness" },
-  { value: "business",    label: "Business" },
-  { value: "personal",    label: "Personal" },
+  { value: "mindfulness", label: TAB_LABELS.mindfulness },
+  { value: "business",    label: TAB_LABELS.business },
+  { value: "personal",    label: TAB_LABELS.personal },
 ];
 
 export function AddTaskForm({ userId }: { userId: string }) {

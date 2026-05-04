@@ -2,12 +2,13 @@ import { aggregateForSection } from "@/lib/progress";
 import { listGoals } from "@/server/queries/goals";
 import { getDayOrEmpty } from "@/server/queries/days";
 import { getClicksForDay } from "@/server/queries/clicks";
+import { TAB_LABELS } from "@/lib/constants";
 import type { Section } from "@/types";
 
 const SECTIONS: Array<{ id: Section; label: string }> = [
-  { id: "mindfulness", label: "Mindfulness" },
-  { id: "business", label: "Business / AI" },
-  { id: "personal", label: "Personal" },
+  { id: "mindfulness", label: TAB_LABELS.mindfulness },
+  { id: "business", label: TAB_LABELS.business },
+  { id: "personal", label: TAB_LABELS.personal },
 ];
 
 export async function SectionBars({ userId, iso }: { userId: string; iso: string }) {

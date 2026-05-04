@@ -3,6 +3,7 @@ import { getDayOrEmpty } from "@/server/queries/days";
 import { getClicksForDay } from "@/server/queries/clicks";
 import { GoalList } from "@/components/goals/GoalList";
 import { AddBusinessGoalForm } from "./AddBusinessGoalForm";
+import { TAB_LABELS } from "@/lib/constants";
 
 export async function BusinessGoals({ userId, iso }: { userId: string; iso: string }) {
   const [goals, day, clicks] = await Promise.all([
@@ -15,7 +16,7 @@ export async function BusinessGoals({ userId, iso }: { userId: string; iso: stri
     <div className="card">
       <div className="card-header">
         <div>
-          <div className="card-eyebrow">Business goals</div>
+          <div className="card-eyebrow">{TAB_LABELS.business} goals</div>
           <div className="card-title">Today's intentions</div>
         </div>
       </div>
@@ -25,7 +26,7 @@ export async function BusinessGoals({ userId, iso }: { userId: string; iso: stri
         goals={goals}
         day={day}
         clicks={clicks}
-        emptyMessage="No business goals yet."
+        emptyMessage={`No ${TAB_LABELS.business} goals yet.`}
         footer={<AddBusinessGoalForm userId={userId} />}
       />
     </div>
