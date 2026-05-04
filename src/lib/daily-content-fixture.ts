@@ -50,7 +50,7 @@ export function fixtureFor(iso: string): DailyContent {
         {
           kind: "lead",
           eyebrow: "Story of the day",
-          badges: [["b-product", "Product"], ["tag", "AI"]],
+          badges: [{ className: "b-product", label: "Product" }, { className: "tag", label: "AI" }],
           title: "Open weights keep getting better, faster",
           body: "The gap between frontier closed models and the best open-weight releases has compressed again this quarter. The cost curve is the real story — what cost $50 of inference six months ago is now well under $10.",
           url: "https://huggingface.co/papers",
@@ -59,7 +59,7 @@ export function fixtureFor(iso: string): DailyContent {
         {
           kind: "",
           eyebrow: "Open-source story",
-          badges: [["b-open", "Open"], ["tag", "OSS"]],
+          badges: [{ className: "b-open", label: "Open" }, { className: "tag", label: "OSS" }],
           title: "Agent frameworks consolidate around a small core",
           body: "After a year of fragmentation, the open-source agent stack is settling on three or four primitives — tools, traces, evals, and a planning loop. Less framework, more library.",
           url: "https://github.com/trending",
@@ -68,7 +68,7 @@ export function fixtureFor(iso: string): DailyContent {
         {
           kind: "",
           eyebrow: "Risk story",
-          badges: [["b-security", "Security"], ["tag", "Risk"]],
+          badges: [{ className: "b-security", label: "Security" }, { className: "tag", label: "Risk" }],
           title: "Supply-chain attacks on ML registries pick up",
           body: "Two npm-style attacks against PyPI ML packages this month. The blast radius is wider than typical webapp incidents because training pipelines run with broad credentials.",
           url: "https://thehackernews.com",
@@ -87,28 +87,28 @@ export function fixtureFor(iso: string): DailyContent {
       ],
       articles: [
         {
-          badges: [["b-model", "Model"]],
+          badges: [{ className: "b-model", label: "Model" }],
           title: "What 'agentic coding' actually means in production",
           summary: "A grounded look at the gap between demo-day capability and shipping a feature with a long-running coding agent.",
           url: "https://www.anthropic.com/research",
           src: "anthropic.com",
         },
         {
-          badges: [["b-research", "Research"]],
+          badges: [{ className: "b-research", label: "Research" }],
           title: "Long-context retrieval: when more tokens hurt",
           summary: "Counter-intuitive findings on the performance cliff that shows up at very long contexts, and what to do about it.",
           url: "https://openai.com/research",
           src: "openai.com",
         },
         {
-          badges: [["b-product", "Tool"]],
+          badges: [{ className: "b-product", label: "Tool" }],
           title: "Notes on building an evaluation harness you'll keep",
           summary: "Why most teams' eval setups rot inside a quarter, and the small disciplines that prevent it.",
           url: "https://cursor.com/blog",
           src: "cursor.com",
         },
         {
-          badges: [["b-research", "Architecture"]],
+          badges: [{ className: "b-research", label: "Architecture" }],
           title: "Inference cost curves and the product implications",
           summary: "When unit economics shift this fast, what looked like a flagship feature becomes table stakes within a quarter.",
           url: "https://huggingface.co/papers",

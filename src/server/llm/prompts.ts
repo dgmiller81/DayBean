@@ -57,7 +57,7 @@ business.topStories       1–3 items. The first MAY be { kind: "lead", ... } �
                           { kind, eyebrow, badges, title, body, url, src }
                           eyebrow is a 2–3 word label (e.g. "Story of the day",
                           "Open-source story", "Risk story").
-                          badges is a list of [className, label] tuples.
+                          badges is a list of { className, label } objects.
                           Valid className values: "b-product", "b-model",
                           "b-research", "b-policy", "b-open", "b-security", "tag"
                           body is 1–2 sentences. url is real https.
