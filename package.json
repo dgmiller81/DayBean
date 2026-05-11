@@ -24,18 +24,18 @@
     "node": ">=20"
   },
   "dependencies": {
-    "@ai-sdk/anthropic": "^3.0.74",
-    "@ai-sdk/openai": "^3.0.58",
-    "@prisma/client": "^5.22.0",
-    "ai": "^6.0.174",
+    "@ai-sdk/anthropic": "^3.0.76",
+    "@ai-sdk/openai": "^3.0.63",
+    "@prisma/client": "^7.8.0",
+    "ai": "^6.0.177",
     "argon2": "^0.44.0",
     "iron-session": "^8.0.4",
-    "next": "^15.5.15",
-    "react": "^19.2.5",
-    "react-dom": "^19.2.5",
+    "next": "^16.2.6",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6",
     "server-only": "^0.0.1",
     "use-debounce": "^10.1.1",
-    "zod": "^4.4.2"
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.2.4",
